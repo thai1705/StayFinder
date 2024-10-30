@@ -1,4 +1,4 @@
-import './App.css';   
+  
 import MenuAdmin from './components/AdminApp/MenuAdmin';
 import { Outlet } from 'react-router-dom';
 
