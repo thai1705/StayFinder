@@ -45,7 +45,7 @@ function Footer() {
     <div>
         <h3>PHƯƠNG THỨC THANH TOÁN</h3>
        <img width="60px" height="60px" src="/images/logomomo.webp" alt="" />
-       <img width="80px" height="60px" src="/images/logocash.png.crdownload" alt="" />
+       <img style={{objectFit: 'cover'}} width="95px" height="60px" src="/images/zalopay.png" alt="" />
     
     </div>
 

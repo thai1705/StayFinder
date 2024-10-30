@@ -13,27 +13,33 @@ function Header() {
             <Link to={"/cho-thue-nha-o"}>Cho thuê nhà ở</Link>
             <Link to={"/tim-nguoi-o-ghep"}>Tìm người ở ghép</Link>
             <Link to={"/tin-tuc"}>Tin Tức</Link>
+            <Link to={"/gioi-thieu"}>Về chúng tôi</Link>
         </div>
 
-        <div className="Header-heart">
-        <FontAwesomeIcon icon={faHeart} />
-        </div>
+        <div className='Header-jtf'>
+          <div className="Header-heart">
+          <FontAwesomeIcon icon={faHeart} />
+          </div>
+          <Link className='header-login' to={"/dang-nhap"}>
+          <div className="Header-link-login">
+              <div>Đăng nhập</div>
+          </div>
+          </Link>
+          <p style={{marginLeft: "5px", marginRight: "5px", marginTop:'6px '}}>|</p>
 
-        <div className="Header-link-login">
-            <Link to={"/dang-nhap"}>Đăng nhập</Link>
-        </div>
-        <p style={{marginLeft: "5px", marginRight: "5px", marginTop:'15px '}}>|</p>
+          <Link className='header-login' to={"/dang-ky"}>
+          <div className="Header-link-login">
+              <div>Đăng ký</div>
+          </div>
+          </Link>
+          <Link className='header-login' to="/dang-tin">
+          <div className="Header-link-dangtin">
+              <div >Đăng tin</div>
+          </div>
+          </Link>
 
-        <div className="Header-link-login">
-        <Link to={"/dang-ky"}>Đăng ký</Link>
-
-        </div>
-
-        <div className="Header-link-dangtin">
-            <Link to="/dang-tin">Đăng tin</Link>
-        </div>
-
-    </div>
+      </div>
+      </div>
 
 </header>
   )

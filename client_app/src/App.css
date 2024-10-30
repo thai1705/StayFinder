@@ -1,4 +1,6 @@
-
+* {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
 
 
 footer{
@@ -14,6 +16,11 @@ footer{
   font-size: 14px;
   padding: 0px 20px;
   background-color: white;
+  justify-content: space-between;
+}
+
+.Header-link {
+  width: 100%;
 }
 
 .Header-link a{
@@ -47,9 +54,21 @@ transition: .25s;
   align-items: center;
   font-size: 21px;
   border-radius: 7px;
-  margin-left: 294px;
   transition: all 0.3s ease;
   margin-right: 10px;
+}
+
+.header-login {
+  color: black;
+}
+.header-login:hover {
+  color: black;
+}
+
+.Header-jtf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
   .Header-heart:hover{
