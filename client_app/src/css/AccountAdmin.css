@@ -1,0 +1,106 @@
+.container {
+    width: 90%;
+    margin: 20px auto;
+    max-width: 1200px;
+  }
+
+  .search-bar {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    height: 47px;
+  }
+
+  .search-bar button {
+    padding: 10px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+
+  .header {
+    text-align: center;
+    background-color: #f44336;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .account-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .account-table thead {
+    background-color: #f44336;
+    color: #fff;
+  }
+
+  .account-table th,
+  .account-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .account-table img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .account-table .status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9em;
+  }
+
+  .status.online {
+    background-color: #4caf50;
+  }
+
+  .status.offline {
+    background-color: #777;
+  }
+
+  .status.locked {
+    background-color: #f44336;
+  }
+
+  .edit-btn {
+    padding: 5px 10px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .pagination .active {
+    background-color: #f44336;
+    color: #fff;
+  }

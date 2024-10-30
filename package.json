@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "antd": "^5.20.6",
+    "link": "^2.1.1",
+    "react-router-dom": "^6.26.2",
+    "to": "^0.2.9"
+  }
+}
