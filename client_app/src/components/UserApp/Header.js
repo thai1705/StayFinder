@@ -6,7 +6,7 @@ function Header() {
   return (
     <header >
     <div className="Header">
-      <Link to={'/'}>  <img width="145px" height="120px" style={{marginRight: "20px"}} src="/images/logo-removebg-preview.png" alt="" /> </Link>
+      <Link to={'/'}>  <img width="145px" height="auto" style={{marginRight: "20px"}} src="/images/logo-removebg-preview.png" alt="" /> </Link>
         <div className="Header-link">
             <Link to={"/cho-thue-phong-tro"}>Cho thuê phòng trọ</Link>
             <Link to={"/cho-thue-can-ho"}>Cho thuê căn hộ</Link>

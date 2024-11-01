@@ -12,6 +12,7 @@ footer{
 /* Header Header Header */
 .Header{
   display: flex;
+  max-height: 100px;
   align-items: center;
   font-size: 14px;
   padding: 0px 20px;

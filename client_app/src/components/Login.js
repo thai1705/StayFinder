@@ -15,7 +15,7 @@ function Login() {
                     <div className="column column--bg">
                         <div className="headerpro">
                             <div className="logo-pro">
-                                <Link to={'/'}><img className="img-header" src="/images/logo.png" alt=""/></Link>
+                                <Link to={'/'}><img className="img-header" src="/images/logo-removebg-preview.png" alt=""/></Link>
                             </div>
                         </div>
                         <img className="bg-img" src="https://codetheworld.io/wp-content/uploads/2024/03/tokyo.jpg" alt=""/>
@@ -23,7 +23,7 @@ function Login() {
                     <div className="column">
                         
                         <div className="logo-container">  
-                            <Link to={'/'}><img src="/images/logo.png" alt="Logo" className="logopro"/></Link>  
+                            <Link to={'/'}><img src="/images/logo-removebg-preview.png" alt="Logo" className="logopro"/></Link>  
                         </div> 
 
                         <div className="form-btnn">
