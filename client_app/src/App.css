@@ -115,6 +115,14 @@ transition: .25s;
 
   }
 
+  .Header-dangtin{
+    color: black;
+  }
+
+  .Header-dangtin:hover {
+    color: black;
+  }
+
   .Header-link-dangtin a{
       text-decoration: none;
       color: black;

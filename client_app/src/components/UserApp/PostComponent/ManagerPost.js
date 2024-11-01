@@ -126,19 +126,19 @@ export default function ManagerPost() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={item.id}>
-              <td>{index + 1}</td>
-              <td>{item.type}</td>
-              <td>{item.title}</td>
-              <td>{item.image}</td>
-              <td>{item.postedDate}</td>
-              <td>{item.expiryDate}</td>
-              <td>{item.status}</td>
-              <td>⋮</td>
-            </tr>
-          ))}
-        </tbody>
+            {data.map((item, index) => (
+              <tr key={item.id}>
+                <td>{index + 1}</td>
+                <td>{item.loaiTin}</td>
+                <td>{item.tieuDe}</td>
+                <td>{item.anh}</td>
+                <td>{item.ngayDang}</td>
+                <td>{item.ngayHetHan}</td>
+                <td>{item.trangThai}</td>
+                <td>⋮</td>
+              </tr>
+            ))}
+          </tbody>
       </table>
     </div>
     </div>

@@ -34,7 +34,7 @@ function Header() {
           </Link>
           <Link className='header-login' to="/dang-tin">
           <div className="Header-link-dangtin">
-              <div >Đăng tin</div>
+              <div className='Header-dangtin'>Đăng tin</div>
           </div>
           </Link>
 

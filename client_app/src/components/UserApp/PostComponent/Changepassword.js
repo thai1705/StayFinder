@@ -5,7 +5,7 @@ import "../../../css/Changepassword.css";
 export default function Changepassword() {
   return (
     <div className="listnewform">
-      <aside className="sidebar">
+      <aside className="sidebar-tuyen">
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar"></div>
@@ -29,13 +29,16 @@ export default function Changepassword() {
             </div>
 
             <div className="account-info">
-              <span>Mã tài khoản</span>
-              <div className="account-code">
+            <div className="account-code">
+                <div className="account-code-title">
+                  <span>Mã tài khoản</span>
+                </div>
+                <div className="account-code-code">
                 <span>#PS33630</span>
                 <button className="copy-button">
-                  {" "}
-                  <i class="fa-regular fa-copy"></i>
+                  <i className="fa-regular fa-copy"></i>
                 </button>
+                </div>
               </div>
             </div>
 
