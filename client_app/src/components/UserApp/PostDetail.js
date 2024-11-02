@@ -1,20 +1,10 @@
-<<<<<<< HEAD
-import React from 'react'
-
-function PostDetail() {
-  return (
-    <div>PostDetail</div>
-  )
-}
-
-export default PostDetail
-=======
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 function PostDetail() {
   return (
-    <div className='container post-detail-container'>
+    <div style={{width: '90%'}} className='container post-detail-container'>
       <div className='col-8'>
       <div className='carousel-wrapper'>
         <div id="slider" className="carousel">
@@ -37,10 +27,10 @@ function PostDetail() {
   </div>
 </div>
           <button className="carousel-control-prev" type="button" data-bs-target="#slider" data-bs-slide="prev">
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span className="carousel-control-prev-icon" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
           </button>
           <button className="carousel-control-next" type="button" data-bs-target="#slider" data-bs-slide="next">
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span className="carousel-control-next-icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
           </button>
           <div className="carousel-indicators">
             <div data-bs-target="#slider" data-bs-slide-to="0" className="active slideimg">
@@ -222,7 +212,7 @@ function PostDetail() {
         </div>
       </div>
       <div className='viewed-news'>
-        <div className='viewed-news-title'>Tin đã xem</div>
+        <div className='viewed-news-title'>Tin dành cho bạn</div>
         <div className='viewed-news-list-post'>
           <div className='viewed-news-post'>
             <div className='viewed-news-post-img'>
@@ -324,10 +314,161 @@ function PostDetail() {
                       </div>
             </div>
           </div>
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
+          
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
+          <div className='viewed-news-post'>
+            <div className='viewed-news-post-img'>
+              <img src='/images/anhbd.webp' alt=''/>
+            </div>
+            <div className='viewed-news-post-content'>
+              <div className='viewed-news-post-title'>Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ,
+                2 phòng iyfkftgfuf6
+              </div>
+              <div className='viewed-news-post-center'>
+              <div className='viewed-news-post-price'>10 triệu</div>
+              <div className='viewed-news-post-acreage'>20 m²</div>
+              </div>
+              <div className='viewed-news-post-address'>
+                Hóc Môn, Hồ Chí Minh
+              </div>
+              <div className='viewed-news-post-footer'>
+                      <div className='viewed-news-post-date'>
+                        Hôm Nay
+                      </div>
+                      <div className='viewed-news-post-love'>
+                        <i class="fa-regular fa-heart"></i>
+                        </div>
+                      </div>
+            </div>
+          </div>
         </div>
       </div>
       </div>
-      <div className='col-4 user-post'>
+      <div height='50%' className='col-4 user-post'>
         <div className='user-information-post'>
           <div className='user-information-post-img'>
             <img src='/images/anhbd.webp' alt=''/>
@@ -343,7 +484,7 @@ function PostDetail() {
           </div>
           <div className='user-information-post-zalo'>
           <img src='/images/zalo-icon.jpg' alt='' />
-          <div className='user-information-post-zalo-nam'>Trường Vương</div>
+          <div className='user-information-post-zalo-nam'>Donald Trump</div>
           </div>
           </div>
           
@@ -387,4 +528,4 @@ function PostDetail() {
 }
 
 export default PostDetail;
->>>>>>> 123d2a426e60895d4e15bcd299fc4777dc4f2c13
+

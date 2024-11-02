@@ -24,6 +24,7 @@ import PostNew from './components/UserApp/PostComponent/PostNew';
 import Changepassword from './components/UserApp/PostComponent/Changepassword';
 import Account from './components/UserApp/PostComponent/Account';
 import ManagerPost from './components/UserApp/PostComponent/ManagerPost';
+import PostDetail from './components/UserApp/PostDetail';
 
 //===========================ADMIN==============================
 
@@ -32,6 +33,7 @@ import ManagePost from './components/AdminApp/ManagePosts';
 import CategoryManagement from './components/AdminApp/CategoryManagement';
 import AccountAdmin from './components/AdminApp/AccountAdmin';
 import OrderManagement from './components/AdminApp/OrderManagement';
+
 
 
 
@@ -50,7 +52,7 @@ root.render(
           <Route path="/gioi-thieu" element={<Introduce />} /> 
           <Route path="/nhan-tin" element={<Messinger />} /> 
           <Route path="/cho-thue-nha-o" element={<PostHouse />} />  
-          <Route path="/cho-thue-nha-o/:id" element={<PostHouse />} />  
+          <Route path="chi-tiet-bai-dang/:id" element={<PostDetail />} />  
           <Route path="/cho-thue-phong-tro" element={<PostRoomSale />} />  
           <Route path="/cho-thue-can-ho" element={<PostApartment />} />  
           <Route path="/tim-nguoi-o-ghep" element={<PostRommate />} />  

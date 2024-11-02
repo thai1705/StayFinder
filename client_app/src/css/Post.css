@@ -155,6 +155,7 @@
   padding-top: 10px;
 }
 .container{
+  width: 90%;
   display: flex;
 }
 
@@ -463,10 +464,15 @@ padding-right: 20px;
 }
 
 .carousel-control-prev {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   left: 10px;
 }
 
 .carousel-control-next {
+  display: flex;
+  justify-content: center;
   right: 10px;
 }
 
@@ -715,13 +721,12 @@ padding-right: 20px;
   border-radius: 10%;
   width: 32px;
   height: 32px;
-  
+  display: flex;
+  justify-content: center;
 }
 .viewed-news-post-love i{
   align-items: center;
   justify-content: center;
-  margin-top: 7px;
-  margin-left: 7px;
 }
 .viewed-news-post-date{
   font-size: 13px;
@@ -735,7 +740,8 @@ padding-right: 20px;
 .viewed-news-list-post{
   display: flex;
   flex-wrap: wrap;
-  gap: 55px;
+  gap: 17px;
+  width: 135%;
 }
 .user-information-post{
   border: 1px solid rgb(189, 187, 187);
@@ -765,19 +771,19 @@ padding-right: 20px;
   display: flex;
   margin: 20px 0px;
   border: 1px solid gray;
-  height: 50px;
   padding: 0 auto;
   align-items: center;
   background-color: #fff;
   justify-content: flex-start;
   gap: 90px;
-  padding-left: 50px;
+  padding: 5px;
   border-radius: 7px;
 }
 
 .user-information-post-zalo img{
-  width: 25px;
-  height: 25px;
+  width: 27px;
+  height: 27px;
+  margin-left: 10px;
 }
 .user-information-post-contact{
   padding: 10px 20px;
@@ -786,12 +792,24 @@ padding-right: 20px;
   width: 30px;
   height: 30px;
   font-size: 20px;
+  margin-left: 10px;
 }
+
+.user-information-post-phone-number {
+  margin-right: 10px;
+}
+
 .user-information-post-chat i{
   width: 30px;
   height: 30px;
-  font-size: 20px
+  font-size: 20px;
+  margin-left: 10px;
 }
+
+.user-information-post-chat-title{
+  margin-left: 17px;
+}
+
 .suggest-commune-post{
   margin-top: 25px;
   border: 1px solid rgb(189, 187, 187);
