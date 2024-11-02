@@ -10,7 +10,7 @@ function Resigter() {
                 <div class="column column--bg">
                     <div className="headerpro">
                         <div className="logo-pro">
-                            <Link to={'/'}><img className="img-header" src="/images/logo.png" alt=""/></Link>
+                            <Link to={'/'}><img className="img-header" src="/images/logo-removebg-preview.png" alt=""/></Link>
                         </div>
                     </div>
                     <img class="bg-img" src="https://codetheworld.io/wp-content/uploads/2024/03/tokyo.jpg" alt=""/>
@@ -18,7 +18,7 @@ function Resigter() {
                 <div class="column">
                     
                     <div style={{ paddingTop: "159px"  }} class="logo-container">  
-                    <Link to={'/'}><img className="logopro" src="/images/logo.png" alt=""/></Link>
+                    <Link to={'/'}><img className="logopro" src="/images/logo-removebg-preview.png" alt=""/></Link>
                     </div> 
                     <div class="form">
                         <div class="form_login">Đăng ký</div>
