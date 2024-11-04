@@ -47,7 +47,7 @@
 }
 
 .form-menu .select-menu {
-  width: 190px;
+  width: 160px;
   padding: 10px 15px; /* Adjust padding for consistency */
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -87,7 +87,20 @@
 }
 
 
-
+.container-post{
+  width: 100%;
+  display: flex;
+  background-color: #fff;
+  justify-content: space-between;
+  padding:15px 0px 15px 0px ;
+}
+.form-list-filter{
+  width: 30%;
+  
+}
+.post-list-render{
+  width: 65%;
+}
 .path ol {
   list-style: none;
   display: flex;
@@ -165,12 +178,18 @@
   border-radius: 8px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   margin: 15px 0; 
+  height: 230px;
   overflow: hidden; 
+  display: flex;
   transition: box-shadow 0.3s ease-in-out;
 
 }
 .post-row:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+}
+.img-post{
+  width: 42%;
+  height: 100%;
 }
 .img-post img {
   width: 100%;     
@@ -188,6 +207,7 @@
 }
 .list-infor-acreage{
   color: red;
+  font-size: 15px;
 }
 .grid-row {
   display: flex;
@@ -234,7 +254,8 @@
   gap: 27px;
 }
 .list-home.grid-view .post-row {
-  width: 230px;
+  width: 250px;
+  height: auto;
   display: block;
   flex-wrap: wrap;
   margin-bottom: 20px;
@@ -291,13 +312,13 @@
   color: #333;
  }
 
- .list-home.grid-view .post-row .information .footer {
-  padding-right: 5px;
+ .list-home.grid-view .post-row .information .footer-post {
+  padding:0;
  }
 .information {
   flex: 1;
   padding-left: 10px;
- 
+ padding-top: 5px ;
   border-left: 0px;
 }
 
@@ -367,19 +388,24 @@
 .list-infor{
   display: flex;
   list-style: none;
-
-  
+  margin-top: 7px;
 }
 .item{
   display: flex;
   align-items: center;
+  font-size: 15px;
   margin-right: 20px;
 
 }
+.item i{
+  font-size: 15px;
+}
 .list-infor li{
 padding-right: 20px;
-
-  
+}
+.list-infor-price{
+  color: red;
+  font-size: 15px;
 }
 .icon{
   color:rgb(155, 155, 155);
@@ -388,18 +414,38 @@ padding-right: 20px;
   display: flex;
   align-items: center;
   margin-top: 5px;
+  margin-top: 10px;
 
 }
 .location i{
   padding-right: 5px;
 }
 .content{
-  margin-top: 5px;
+  margin-top: 15px;
+  font-size: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Hiển thị tối đa 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  
+  
+}
+.footer-post {
+  display:flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  align-items: center;
+  margin-right: 10px;
 }
 .date{
+  font-size: 17px;
+  font-weight: bold;
   color:rgb(150, 150, 150);
 }
 .love{
+  font-size: 20px;
   color:rgb(150, 150, 150);
 }
 .love:active{
@@ -409,6 +455,7 @@ padding-right: 20px;
   color:#004E7F;
   font-weight: 600;
   font-size:17px;
+ 
 }
 
 

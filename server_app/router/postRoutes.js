@@ -47,7 +47,6 @@ app.post('/them-bai-viet-moi', upload.fields([{ name: 'image', maxCount: 10 }, {
           video: videoFiles,
           rentaltype,
           posttype,
-          phonenumber,
           statuspost
       });
 

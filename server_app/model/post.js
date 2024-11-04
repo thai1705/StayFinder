@@ -3,6 +3,7 @@ const category = require('./rentaltype');
 const posttype = require('./posttype');
 const user = require('./user');
 const RentalType = require('./rentaltype');
+const setExpireDate = require('../middleware/setExpireDate'); // Import middleware
 
 const postSchema = new mongoose.Schema({
   title: { type: String, required: true },           // Tiêu đề bài đăng
@@ -22,27 +23,28 @@ ward: {
     name: { type: String, required: true }
 },
   address: { type: String, required: true },          // Địa chỉ cụ thể
-  bathroom: { type: Number, required: true },         // Số phòng tắm
-  bedroom: { type: Number, required: true },          // Số phòng ngủ
-  attic: { type: String, required: true },            // Có tầng trệt hay không
-  floor: { type: Number, required: true },            // Số tầng
+  bathroom: { type: Number, default: 0  },         // Số phòng tắm
+  bedroom: { type: Number, default: 0  },          // Số phòng ngủ
+  attic: { type: Boolean,default: 0  },           // Có tầng trệt hay không
+  floor: { type: Number, default: 0  },            // Số tầng
   image: [String],                                    // Link hình ảnh phòng trọ
   video: [String],                                    // Link video
   
   rentaltype: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'RentalType', 
-    required: true 
+    type: String,
+      enum: ['cho-thue-phong-tro', 'tim-nguoi-o-ghep', 'cho-thue-can-ho','cho-thue-nha-o'], // Các loại tin có thể
+      default: 'cho-thue-phong-tro'
+    
   },                                                  // Tham chiếu đến danh mục tin
   
   posttype: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'PostType', 
-    required: true 
-  },                                                  // Tham chiếu đến thể loại tin
+    type: String,
+    enum: ['thuong', 'vip1', 'vip2'], // Các loại tin có thể, thêm các loại tin VIP
+    default: 'thuong'
+  },                                                   // Tham chiếu đến thể loại tin
   
   createdAt: { type: Date, default: Date.now },       // Ngày tạo bài đăng
-
+  expireDate: { type: Date },                         // Ngày hết hạn của bài đăng
   statuspost: { 
     type: String, 
     enum: [
@@ -53,10 +55,12 @@ ward: {
       "Sắp hết hạn",         // 5
       "Hết hạn"              // 6
     ], 
+    default:'Chưa thanh toán',
     required: true 
   },                                                  // Trạng thái bài đăng
   
   isDeleted: { type: Boolean, default: false }        // Đánh dấu xóa bài viết, dễ khôi phục
 });
+postSchema.pre('save', setExpireDate);
 
 module.exports = mongoose.model('Post', postSchema);

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function PostDetail() {
   return (
-    <div style={{width: '90%'}} className='container post-detail-container'>
+    <div className='container post-detail-container'>
       <div className='col-8'>
       <div className='carousel-wrapper'>
         <div id="slider" className="carousel">

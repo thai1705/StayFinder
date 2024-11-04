@@ -5,7 +5,7 @@ import '../../css/Home.css'
 function Home() {
 
   return (
-    <main style={{padding: "0px 184px", backgroundColor:'#f2f2f280', paddingTop:'20px', paddingBottom:'20px'}}>
+    <div className=''>
  {/* Gợi ý khu vực  */}
 
 <h5 style={{marginBottom:'15px', fontSize: '20px'}}>Gợi ý khu vực</h5>
@@ -57,7 +57,7 @@ function Home() {
   <NewPost /> 
   <Post />  */}
 
-</main>
+</div>
 
 
   )

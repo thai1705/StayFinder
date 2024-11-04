@@ -46,8 +46,8 @@ function PostApartment() {
 
 
 
-      <div class='container'>
-            <div className='col-8'>
+      <div class='container-post'>
+            <div className='post-list-render'>
               <div className='border-bottom border-1 border-gray pb-3'>
                 <div className='path pb-1'>
                   <ol >
@@ -59,7 +59,7 @@ function PostApartment() {
                     </li>
                   </ol>
                 </div>
-                <div className='title-list'>Danh sách phòng trọ trên Toàn Quốc</div>
+                <div className='title-list'>Danh sách căn hộ trên Toàn Quốc</div>
               </div>
               <div className='filter-menu row mt-3 '>
 
@@ -124,7 +124,7 @@ function PostApartment() {
                       <a href='/cho-thue-can-ho/:id' className='text-decoration-none '>căn hộ khải hoàn prime mặt tiền lê văn lưong kế cầu
                       long kiếng ck 14%</a>
                       <div className='list-infor'>
-                       <li className='text-danger'> 450 triệu</li>
+                       <li className='list-infor-price'> 450 triệu</li>
                        <li className='list-infor-acreage'> 60 m²</li>
                        <li className='item'>
                         <div className='number'>2</div>
@@ -148,7 +148,7 @@ function PostApartment() {
                       <div className='content'>
                       <p>Đây là cấn hộ khải hoàn prime mặt tiền lê văn lưong kế cấp. Long kiếng ck 14%.</p>
                       </div>
-                      <div className='footer d-flex justify-content-between'>
+                      <div className='footer-post'>
                       <div className='date'>
                         <p>Hôm Nay</p>
                       </div>
@@ -169,7 +169,7 @@ function PostApartment() {
                       <a href='/cho-thue-can-ho/:id' className='text-decoration-none '>căn hộ khải hoàn prime mặt tiền lê văn lưong kế cầu
                       long kiếng ck 14%</a>
                       <div className='list-infor'>
-                       <li className='text-danger'> 450 triệu</li>
+                       <li className='list-infor-price'> 450 triệu</li>
                        <li className='list-infor-acreage'> 60 m²</li>
                        <li className='item'>
                         <div className='number'>2</div>
@@ -193,7 +193,7 @@ function PostApartment() {
                       <div className='content'>
                       <p>Đây là cấn hộ khải hoàn prime mặt tiền lê văn lưong kế cấp. Long kiếng ck 14%.</p>
                       </div>
-                      <div className='footer d-flex justify-content-between'>
+                      <div className='footer-post d-flex justify-content-between'>
                       <div className='date'>
                         <p>Hôm Nay</p>
                       </div>
@@ -214,7 +214,7 @@ function PostApartment() {
                       <a href='/cho-thue-can-ho/:id' className='text-decoration-none '>căn hộ khải hoàn prime mặt tiền lê văn lưong kế cầu
                       long kiếng ck 14%</a>
                       <div className='list-infor'>
-                       <li className='text-danger'> 450 triệu</li>
+                       <li className='list-infor-price'> 450 triệu</li>
                        <li className='list-infor-acreage'> 60 m²</li>
                        <li className='item'>
                         <div className='number'>2</div>
@@ -238,7 +238,7 @@ function PostApartment() {
                       <div className='content'>
                       <p>Đây là cấn hộ khải hoàn prime mặt tiền lê văn lưong kế cấp. Long kiếng ck 14%.</p>
                       </div>
-                      <div className='footer d-flex justify-content-between'>
+                      <div className='footer-post d-flex justify-content-between'>
                       <div className='date'>
                         <p>Hôm Nay</p>
                       </div>
@@ -259,7 +259,7 @@ function PostApartment() {
                       <a href='/cho-thue-phong-tro/:id' className='text-decoration-none '>căn hộ khải hoàn prime mặt tiền lê văn lưong kế cầu
                       long kiếng ck 14%</a>
                       <div className='list-infor'>
-                       <li className='text-danger'> 450 triệu</li>
+                       <li className='list-infor-price'> 450 triệu</li>
                        <li className='list-infor-acreage'> 60 m²</li>
                        <li className='item'>
                         <div className='number'>2</div>
@@ -283,7 +283,7 @@ function PostApartment() {
                       <div className='content'>
                       <p>Đây là cấn hộ khải hoàn prime mặt tiền lê văn lưong kế cấp. Long kiếng ck 14%.</p>
                       </div>
-                      <div className='footer d-flex justify-content-between'>
+                      <div className='footer-post d-flex justify-content-between'>
                       <div className='date'>
                         <p>Hôm Nay</p>
                       </div>
@@ -296,7 +296,7 @@ function PostApartment() {
                   </div>
                   </div>
                 </div>
-            <div className='col-md-4 form-list'>
+            <div className='form-list-filter'>
               <div className='list-filter'>
                 <ul className='filters' >
                   <li>
