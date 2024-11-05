@@ -59,7 +59,10 @@ ward: {
     required: true 
   },                                                  // Trạng thái bài đăng
   
-  isDeleted: { type: Boolean, default: false }        // Đánh dấu xóa bài viết, dễ khôi phục
+  isDeleted: { type: Boolean, default: false },        // Đánh dấu xóa bài viết, dễ khôi phục
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Tham chiếu đến người dùng
+    phone: { type: String, required: true },
+    username: { type: String, required: true },
 });
 postSchema.pre('save', setExpireDate);
 

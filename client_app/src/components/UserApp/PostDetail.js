@@ -1,99 +1,109 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import AxiosInstance from '../../lib/Axiosintance';
+import { useParams } from 'react-router-dom';
 
 function PostDetail() {
+  const { id } = useParams();
+  const [post,setPost]=useState({
+    media: [], // Dữ liệu media sẽ chứa các video và hình ảnh
+    image: [], // Danh sách hình ảnh
+    video: [], // Danh sách video
+  })
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const result = await AxiosInstance().get(`/chi-tiet-bai-dang/${id}`);
+        setPost(result);
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+      }
+    };
+
+ fetchProduct();
+    
+  }, [id]);
+  // Hàm định dạng ngày
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('vi-VN', options);
+  };
+  const renderPostType = (type) => {
+    switch (type) {
+      case 'thuong':
+        return 'Tin Thường';
+      case 'vip1':
+        return 'Tin Vip 1';
+      case 'vip2':
+        return 'Tin Vip 2';
+      default:
+        return 'Loại tin không xác định';
+    }
+  };
+ 
+
   return (
     <div className='container post-detail-container'>
       <div className='col-8'>
       <div className='carousel-wrapper'>
-        <div id="slider" className="carousel">
-      
-          <div className="carousel-inner">
-  <div className="carousel-item active">
-    <img src="/images/anhbd.webp" alt="" />
-  </div>
-  <div className="carousel-item">
-    <img src="/images/anhbd.webp" alt="" />
-  </div>
-  <div className="carousel-item">
-    <img src="/images/anhbd.webp" alt="" />
-  </div>
-  <div className="carousel-item">
-    <img src="/images/anhbd.webp" alt="" />
-  </div>
-  <div className="carousel-item">
-    <img src="/images/anhbd.webp" alt="" />
-  </div>
-</div>
+      <div id="slider" className="carousel slide" data-bs-ride="carousel">
+      <div className="carousel-inner">
+              {/* Render video nếu có, sau đó render hình ảnh */}
+              {post.video.length > 0 && post.video.map((vid, index) => (
+                <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={`video-${index}`}>
+                  <video video controls width="100%" height="100%">
+                    <source src={`http://localhost:8000/video/${vid}`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ))}
+              {post.image.length > 0 && post.image.map((img, index) => (
+                <div className={`carousel-item ${post.video.length === 0 && index === 0 ? 'active' : ''}`} key={`image-${index}`}>
+                  <img src={`http://localhost:8000/img/${img}`} alt={`Slide ${index}`} />
+                </div>
+              ))}
+              </div>
           <button className="carousel-control-prev" type="button" data-bs-target="#slider" data-bs-slide="prev">
             <span className="carousel-control-prev-icon" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
           </button>
           <button className="carousel-control-next" type="button" data-bs-target="#slider" data-bs-slide="next">
             <span className="carousel-control-next-icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
           </button>
-          <div className="carousel-indicators">
-            <div data-bs-target="#slider" data-bs-slide-to="0" className="active slideimg">
-            <img src="/images/anhbd.webp" alt="" />
-            </div>
-            <div data-bs-target="#slider" data-bs-slide-to="1" className="slideimg">
-              <img src="/images/anhbd.webp" alt="" />
-            </div>
-            <div data-bs-target="#slider" data-bs-slide-to="2" className="slideimg">
-              <img src="/images/anhbd.webp" alt="" />
-            </div>
-            <div data-bs-target="#slider" data-bs-slide-to="3" className="slideimg">
-              <img src="/images/anhbd.webp" alt="" />
-            </div>
-            <div data-bs-target="#slider" data-bs-slide-to="4" className="slideimg">
-              <img src="/images/anhbd.webp" alt="" />
-            </div>
-          </div>
+          
         </div>
       </div>
       <div className='body-information'>
-        <div class='title-content-post'>Phòng trọ có DuPlex 4  đến 5 người ở  mới Xây, Giá 
-        Bao Rẻ</div>
+        <div class='title-content-post'>{post.title}</div>
         <div class='address-post'>
-          Đường Nguyễn Thị X, Xã Bình Tĩnh, Huyện Bình Minh, Tp Hồ Chí Minh
+        {post.address}
         </div>
         <div className='big-information'>
           <div className='big-price'>
             <div className='big-price-head'>Mức giá</div>
-            <div className='big-price-body'>2 triệu/tháng</div>
+            <div className='big-price-body'>{post.price}/tháng</div>
           </div>
           <div className='big-acreage'>
             <div className='big-acreage-head'>Diện tích</div>
-            <div className='big-acreage-body'>40 m²</div>
+            <div className='big-acreage-body'>{post.area} m²</div>
           </div>
           <div className='big-bedrrom'>
             <div className='big-bedrrom-head'>Phòng ngủ</div>
-            <div className='big-bedrrom-body'>2 PN</div>
+            <div className='big-bedrrom-body'>{post.bedroom} PN</div>
           </div>
         </div>
         <div className='description-information'>
           <div className='description-information-title'>
             Thông tin mô tả
           </div>
-          <div className='description-information-content'>
-           Bán Nhà sổ Hồng Riêng đường nguyễn thị thủ gần trường pham văn sáng Xtt Hóc Môn
-           Dt:4x10 trệt lửng 2 phòng ngủ đường nhựa xe tải đậu cửa
-           Giá bán hạ:2 tỷ bớt lộc
-           SHR đã có sẵn sang tên trong 1 nốt nhạc
-           Đường xá thông thoáng di chuyển không kẹt xe
-           Điện , nước có sẵn vào là ở và sinh hoạt ngay được
-           Thích hợp để ở hoặc cho thuê
-           Hỗ trợ ngân hàng lên đến 50%
-           Trường , chợ , quán xá phòng gym... có sẵn xung quanh , đến các địa điểm này không quá 10p
-           Liên hệ Đạt ngay để xem sổ xem nhà !
-           Chỉ bán trong tuần , chủ gồng không nổi.
+          <div className='description-information-content' dangerouslySetInnerHTML={{ __html: post.description }} >
+          
           </div>
         </div>
         <div className='characteristic'>
           <div className='characteristic-title'>
           Đặc điểm bất động sản
           </div>
-          <div className='post-type-small'>Loại tin đăng: Cho thuê phòng trọ</div>
+          <div className='post-type-small'>Loại tin đăng: {post.rentaltype}</div>
           <div className="information-container">
   <div className="column-post">
     <div className="small-acreage">
@@ -103,7 +113,7 @@ function PostDetail() {
         </div>
         <div className="acreage-icon-name">Diện tích</div>
       </div>
-      <div className="number-acreage">40 m²</div>
+      <div className="number-acreage">{post.area} m²</div>
     </div>
 
     <div className="small-price">
@@ -113,7 +123,7 @@ function PostDetail() {
         </div>
         <div className="price-icon-name">Mức giá</div>
       </div>
-      <div className="number-price">10 triệu/tháng</div>
+      <div className="number-price">{post.price}/tháng</div>
     </div>
     <div className="small-bedroom">
     <div className="bedroom-icon-group">
@@ -136,7 +146,7 @@ function PostDetail() {
       </div>
     <div className="bathroom-icon-name">Số phòng vệ sinh</div>
       </div>
-      <div className="number-bathroom">1 phòng</div>
+      <div className="number-bathroom">{post.bathroom} phòng</div>
     </div>
 
     <div className="small-floor">
@@ -146,7 +156,7 @@ function PostDetail() {
       </div>
       <div className="floor-icon-name">Số tầng</div>
       </div>
-      <div className="number-floor">1 tầng</div>
+      <div className="number-floor">{post.floor} tầng</div>
     </div>
 
     <div className="small-attic">
@@ -156,7 +166,7 @@ function PostDetail() {
       </div>
       <div className="attic-icon-name">Gác lửng</div>
       </div>
-      <div className="number-attic">Có</div>
+      <div className="number-attic">{post.attic ? 'Có' : 'Không'}</div>
     </div>
   </div>
 </div>
@@ -181,7 +191,7 @@ function PostDetail() {
             Ngày đăng
           </div>
           <div className='date-post-number'>
-            19/05/2024
+          {formatDate(post.createdAt)}
           </div>
         </div>
         <div className='expiration-date'>
@@ -189,7 +199,7 @@ function PostDetail() {
             Ngày hết hạn
           </div>
           <div className='expiration-date-number'>
-            25/05/2024
+          {post.expireDate ? formatDate(post.expireDate) : 'Không giới hạn thời gian'}
           </div>
         </div>
         <div className='news-type-post'>
@@ -197,7 +207,7 @@ function PostDetail() {
             Loại tin
           </div>
           <div className='news-type-post-content'>
-            Tin nổi bật
+          {renderPostType(post.posttype)}
           </div>
         </div>
         <div className='news-code-post'>
@@ -205,7 +215,7 @@ function PostDetail() {
             Mã Tin
           </div>
           <div className='news-code-post-number'>
-            A3412322
+          {post && post._id ? post._id.substring(0, 8).toUpperCase() : 'N/A'}
           </div>
         </div>
       </div>
@@ -476,7 +486,7 @@ function PostDetail() {
           <div className='user-information-post-contact'>
           <div className='user-information-post-phone'>
           <i class="bi bi-telephone"></i>
-          <div className='user-information-post-phone-number'>0333333624</div>
+          <div className='user-information-post-phone-number'>{post.phone}</div>
           </div>
           <div className='user-information-post-chat'>
           <i class="bi bi-chat"></i>
@@ -484,7 +494,7 @@ function PostDetail() {
           </div>
           <div className='user-information-post-zalo'>
           <img src='/images/zalo-icon.jpg' alt='' />
-          <div className='user-information-post-zalo-nam'>Donald Trump</div>
+          <div className='user-information-post-zalo-nam'>{post.username}</div>
           </div>
           </div>
           

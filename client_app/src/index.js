@@ -8,7 +8,7 @@ import AppAdmin from './AppAdmin';
 // import 'bootstrap-icons/font/bootstrap-icons.css';  
 import Home from './components/UserApp/Home'; 
 import Login from './components/Login'; 
-import Resigter from './components/Resigter';  
+import Resigter from './components/Register';  
 import News from './components/UserApp/News';  
 import PostHouse from './components/UserApp/PostHouse';  
 import PostRoomSale from './components/UserApp/PostRoomSale';

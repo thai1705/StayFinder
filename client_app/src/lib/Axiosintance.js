@@ -1,6 +1,9 @@
+
 import axios from 'axios';
 
 const AxiosInstance = (contentType = 'application/json') => {
+    const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
     const axiosInstance = axios.create({
         baseURL: 'http://localhost:8000/'
     });
@@ -8,7 +11,7 @@ const AxiosInstance = (contentType = 'application/json') => {
     axiosInstance.interceptors.request.use(
         async (config) => {
             config.headers = {
-                'Authorization': `Bearer ${''}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': contentType
             }

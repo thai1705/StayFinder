@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import "../../../css/PostNew.css";
+import Menu from "../PostComponent/Menu"
 import { Link } from "react-router-dom";
 import ReactQuill from 'react-quill'; 
 import 'react-quill/dist/quill.snow.css';
 import AxiosInstance from '../../../lib/Axiosintance'
 import axios from 'axios';
 import { Button, message, Select } from "antd";
+import { jwtDecode } from 'jwt-decode';
 
 const { Option } = Select;
 
@@ -34,7 +36,9 @@ export default function PostNew() {
     video: null,
     rentaltype: '', // ID của RentalType
     posttype: '', // ID của PostType
-    
+    userId: '', // User ID
+    phone: '', // User phone
+    username: '',
     
   });
 
@@ -58,6 +62,24 @@ export default function PostNew() {
   useEffect(() => {
     fetchProvinces(); // Fetch provinces on component mount
   }, []);
+    // Decode JWT token to get user information
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          setPost(prevPost => ({
+            ...prevPost,
+            userId: decoded.userId, 
+            phone: decoded.phone, 
+            username: decoded.username, 
+          }));
+        } catch (error) {
+          console.error("Invalid token", error);
+          message.error('Vui lòng đăng nhập lại.');
+        }
+      }
+    }, []);
 
   const handleProvinceChange = async (value) => {
     const selectedProvince = provinces.find(province => province.code === value);
@@ -138,6 +160,10 @@ const handleVideoChange = (e) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!post.userId) {
+      message.error('Vui lòng đăng nhập để tiếp tục.');
+      return;
+    }
     try {
         const formData = new FormData();
         formData.append('title', post.title);
@@ -152,7 +178,9 @@ const handleVideoChange = (e) => {
         formData.append('bedroom', post.bedroom);
         formData.append('attic', post.attic);
         formData.append('floor', post.floor);
-
+        formData.append('userId', post.userId);
+        formData.append('phone', post.phone);
+        formData.append('username', post.username);
         // Thêm từng tệp hình ảnh vào formData
         if (post.image) {
             post.image.forEach(file => {
@@ -186,99 +214,11 @@ const handleVideoChange = (e) => {
 
   return (
     <div className="listnewform">
-      <aside className="sidebar-tuyen">
-        <div className="profile-card">
-          <div className="profile-header">
-            <div className="profile-avatar"></div>
-            <div className="profile-name">Nguyen van A</div>
-          </div>
-          <div className="profile-content">
-            <div className="profile-stats">
-              <div className="profile-stat">
-                <span>Số lần được đăng:</span>
-                <span>15 tin</span>
-              </div>
-              <div className="profile-stat">
-                <span>Loại tin đăng:</span>
-                <span>Tin nổi bật</span>
-              </div>
-              <div className="profile-stat">
-                <span>Tin đã đăng:</span>
-                <span>5 / 15 tin</span>
-              </div>
-            </div>
-
-            <div className="account-info">
-            <div className="account-code">
-                <div className="account-code-title">
-                  <span>Mã tài khoản</span>
-                </div>
-                <div className="account-code-code">
-                <span>#PS33630</span>
-                <button className="copy-button" onClick={copy}>
-                  <i className="fa-regular fa-copy"></i>
-                </button>
-                </div>
-              </div>
-            </div>
-
-            <button className="buy-button">
-              Mua Tin{" "}
-              <i
-                className="fa-solid fa-wallet"
-                style={{ color: "#ffffff" }}
-              ></i>
-            </button>
-          </div>
-        </div>
-        <nav className="sidebar-menu">
-          <ul>
-            <li>
-              <i className="fa-solid fa-list"></i>
-              <Link to="/quan-li-tin-dang">Quản lý tin đăng</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-list"></i>
-              <Link to="/quan-li-up-tin-tu-dong">Quản lý up tin tự động</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-pen-to-square"></i>
-              <Link to="/dang-tin">Đăng tin</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-calendar-days"></i>
-              <Link to="/transaction-history">Lịch sử giao dịch</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-user"></i>
-              <Link to="/tai-khoan">Thông tin cá nhân</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-lock"></i>
-              <Link to="/doi-mat-khau">Đổi mật khẩu</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-bell"></i>
-              <Link to="/notifications">Thông báo</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-suitcase"></i>
-              <Link to="/pricing">Bảng giá dịch vụ</Link>
-            </li>
-            <li>
-              <i className="fa-solid fa-circle-question"></i>
-              <Link to="/support">Liên hệ & trợ giúp</Link>
-            </li>
-            <hr />
-            <li>
-              <i className="fa-solid fa-right-from-bracket"></i>
-              <Link to="/logout">Đăng xuất</Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
+      <aside>
+        <Menu />
+      </aside>  
       <form className="post-form" onSubmit={handleSubmit}>
+
         <h3>THÔNG TIN</h3>
         <div className="form-filter">
         <div className="form-group">
@@ -328,6 +268,7 @@ const handleVideoChange = (e) => {
               ))}
             </Select>
           </div>
+
 
           <div className="form-group">
             <label htmlFor="address">Địa chỉ chính xác</label>
@@ -434,30 +375,28 @@ const handleVideoChange = (e) => {
 
         <div className="form-group">
           <label htmlFor="description">Mô tả *</label>
-          <ReactQuill   
+          <ReactQuill
             className="reactquill-description"
             id="description"
             name="description"
-            maxLength="5000" 
-            
-              value={post.description}
-              onChange={handleDescriptionChange}
-            modules={{  
-              toolbar: [  
-                [{ header: [1, 2, false] }],  
-                ['bold', 'italic', 'underline'],  
-                [{ list: 'ordered'}, { list: 'bullet' }],   
-                ['blockquote', 'code-block'],
+
+            maxLength="5000"
+            modules={{
+              toolbar: [
+                [{ header: [1, 2, false] }],
+                ["bold", "italic", "underline"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["blockquote", "code-block"],
                 [{ font: [] }],
                 [{ color: [] }, { background: [] }],
-                ['link', 'unlink'],
+                ["link", "unlink"],
                 [{ align: [] }],
-                [{ list: 'check' }],
-                ['image','video'],  
-                ['clean']   
-              ],  
-            }}   
-          />  
+                [{ list: "check" }],
+                ["image", "video"],
+                ["clean"],
+              ],
+            }}
+          />
         </div>
 
         <div className="form-group">

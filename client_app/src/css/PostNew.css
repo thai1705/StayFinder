@@ -8,7 +8,7 @@
   background-color: #fff;
   padding: 20px;
   border-right: 1px solid #ccc;
-  gap: 20px;  
+  gap: 20px;
 }
 * {
   box-sizing: border-box;
@@ -35,7 +35,7 @@ body {
   border-radius: 8px 8px 0 0;
 }
 
-.account-code-code{
+.account-code-code {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -88,12 +88,12 @@ body {
 
 .copy-button {
   background-color: transparent;
-  color:#000000 ;
+  color: #000000;
   border: none;
   cursor: pointer;
 }
-.copy-button:hover {  
-  background-color:#e0e0e0;
+.copy-button:hover {
+  background-color: #e0e0e0;
 }
 .buy-button {
   background-color: #e53935;
@@ -250,7 +250,7 @@ form-filter label {
   flex-wrap: wrap;
 }
 
-.reactquill-description{
+.reactquill-description {
   height: 150px;
   padding-bottom: 50px;
 }
@@ -264,19 +264,19 @@ form-filter label {
   border-radius: 10px;
   background: #ebf0fd;
 }
-.payment-info-row{
+.payment-info-row {
   font-size: 1.2rem;
   padding-bottom: 10px;
   border-bottom: 2px solid #becbeb;
 }
-.payment-info-row{
+.payment-info-row {
   display: flex;
   padding-bottom: 8px;
   margin-bottom: 8px;
   border-bottom: 1px solid #becbeb;
-} 
+}
 
-.payment-row-padding-right{
+.payment-row-padding-right {
   padding-right: 10px;
   font-weight: 400;
 }
@@ -285,17 +285,27 @@ form-filter label {
   padding: 10px 15px 15px 15px;
   margin-bottom: 20px;
   font-size: 20px;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .payment-row {
   width: 100%;
   padding-bottom: 8px;
   margin-bottom: 10px;
-  border-bottom: 1px solid #D9D9D9;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .payment-row-none {
   border: none;
 }
 
+.logout-btn {
+  background-color: white;
+  color: red;
+  font-size: 17px;
+  padding: 0;
+}
+
+.logout-btn:hover {
+  background: none;
+}

@@ -1,7 +1,5 @@
-// import NewPost from './Newpost';
+
 import '../../css/Home.css'
-// import HotPost from './Hotpost';
-// import Post from './Post';
 function Home() {
 
   return (

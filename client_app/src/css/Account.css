@@ -83,7 +83,7 @@
   text-decoration: none;
 }
 
-button {
+.save-btn {
   padding: 10px 20px;
   font-size: 16px;
   background-color: red;
@@ -93,7 +93,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.save-btn:hover {
   background-color: darkred;
 }
 .image-upload {

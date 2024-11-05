@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';  
 import '../../css/Post.css'
 import AxiosInstance from '../../lib/Axiosintance';
+import { Link } from 'react-router-dom'; 
 function PostRoomSale() {
   const [viewMode, setViewMode] = useState('row');  
   const handleViewModeChange = (mode) => {
@@ -157,8 +158,9 @@ function PostRoomSale() {
                     </div>
                     <div className='col-7 information'>
                       <div className='item-name'>
-                        
-                      <a href='/cho-thue-can-ho/:id' className='text-decoration-none '>{post.title}</a>
+                      <Link to={`/chi-tiet-bai-dang/${post._id}`}>
+                      <a href='' className='text-decoration-none '>{post.title}</a>
+                      </Link>
                       <div className='list-infor'>
                        <li className='list-infor-price'> {formatCurrency(post.price)}/tháng</li>
                        <li className='list-infor-acreage'>{post.area} m²</li>
