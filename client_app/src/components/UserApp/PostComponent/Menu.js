@@ -1,22 +1,53 @@
-import React from 'react'
-import { Link, useNavigate } from "react-router-dom"; // Thêm
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from "react-router-dom";
 import "../../../css/PostNew.css";
 
 
 export default function Menu() {
+  const [username, setUsername] = useState(null);
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:8000/api/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {  
+          if (!res.ok) {
+            localStorage.removeItem("token");
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data && data.username) {
+            setUsername(data.username); 
+          }
+        })
+        .catch((error) =>
+          console.error("Lỗi khi fetch thông tin người dùng:", error)
+        );
+    }
+  }, []);
     const navigate = useNavigate(); // Khai báo useNavigate
 
     const handleLogout = () => {
-      localStorage.removeItem("username");
-      navigate("/dang-nhap");
+      localStorage.removeItem("token"); 
+      setUsername(null); 
+     
+      navigate("/"); 
+      window.location.reload();
     };
+    
   return (
     <div className="listnewform">
       <aside className="sidebar-tuyen">
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar"></div>
-            <div className="profile-name">Nguyen van A</div>
+            <div className="profile-name">{username}</div>
           </div>
           <div className="profile-content">
             <div className="profile-stats">
@@ -64,7 +95,7 @@ export default function Menu() {
               <Link to="/quan-li-tin-dang">Quản lý tin đăng</Link>
             </li>
             <li>
-              <i className="fa-solid fa-pen-to-square"></i>
+            <i className="fa-solid fa-pen-to-square"></i>
               <Link to="/dang-tin">Đăng tin</Link>
             </li>
             <li>

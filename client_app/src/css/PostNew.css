@@ -2,6 +2,20 @@
   display: flex;
   background-color: rgba(242, 242, 242, 0.5);
 }
+:where(.css-dev-only-do-not-override-ni1kz0).ant-row {
+  display: block;
+}
+:where(.css-dev-only-do-not-override-ni1kz0).ant-form-item .ant-form-item-label {
+  text-align: justify;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.custom-select {
+  width: 100%;
+  height: 38px;
+}
 
 .sidebar-tuyen {
   width: 320px;

@@ -10,6 +10,7 @@ const uri = "mongodb://127.0.0.1:27017/StudyFinder";
 // Import routes
 const postRoutes = require("./router/postRoutes");
 const AuthRoute = require("./router/AuthRoute");
+const messageRoutes = require('./router/messageRoutes');
 
 // Middleware
 app.use(cors());  // Kích hoạt CORS cho toàn bộ ứng dụng
@@ -24,6 +25,7 @@ app.use("/video", express.static(__dirname + "/public/video"));
 
 // Routes
 app.use("/api/auth", AuthRoute);
+app.use('/api', messageRoutes);
 app.use(postRoutes);
 
 // Connect to MongoDB
