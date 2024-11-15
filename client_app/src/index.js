@@ -33,6 +33,7 @@ import ManagePost from './components/AdminApp/ManagePosts';
 import CategoryManagement from './components/AdminApp/CategoryManagement';
 import AccountAdmin from './components/AdminApp/AccountAdmin';
 import OrderManagement from './components/AdminApp/OrderManagement';
+import ChatBubble from './components/UserApp/ChatBubble';
 
 
 
@@ -46,6 +47,7 @@ root.render(
       <Route path="/" element={<Index />} >  
         <Route path="/" element={<Home />} />  
           <Route path="/dang-nhap" element={<Login />} />  
+          <Route path="/chat/:chatId" element={<ChatBubble />} />
           <Route path="/dang-ky" element={<Resigter />} />  
           <Route path="/tin-tuc" element={<News />} />
           <Route path="/lien-he" element={<Contact />} /> 

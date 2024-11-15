@@ -92,7 +92,7 @@
   display: flex;
   background-color: #fff;
   justify-content: space-between;
-  padding:15px 0px 15px 0px ;
+  padding:15px ;
 }
 .form-list-filter{
   width: 30%;
@@ -817,6 +817,7 @@ padding-right: 20px;
 .user-information-post-chat{
   display: flex;
   margin: 20px 0px;
+  cursor: pointer;
   border: 1px solid gray;
   padding: 0 auto;
   align-items: center;

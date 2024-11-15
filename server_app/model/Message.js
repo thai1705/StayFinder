@@ -4,9 +4,11 @@ const MessageSchema = new mongoose.Schema({
   id_chat: { type: Number, required: true },  
   id_sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  
   id_receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  
-  message_content: { type: String, required: true },  
+  message_content: { type: String, default: "" },  
+  post_title: { type: String, default: "" },
   time_send: { type: Date, default: Date.now },  
   create_at: { type: Date, default: Date.now },  
+  sendingStatus: { type: String, default: "Đã gửi" },
 });  
 
-module.exports = mongoose.model('Message', MessageSchema);
+module.exports = mongoose.model('Message', MessageSchema);  
