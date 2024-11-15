@@ -18,6 +18,8 @@ const userSchema = new mongoose.Schema({
     type: Number,
     enum: [0, 1, 2],
   },
+  createdAt: { type: Date, default: Date.now },
+  lastLogin: { type: Date },
   
 });
 

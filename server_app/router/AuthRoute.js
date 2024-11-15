@@ -97,6 +97,42 @@ router.get("/profile", authMiddleware , async (req, res) => {
 
 });
 
+// đổi mật khẩu
+router.post("/change-password", authMiddleware, async (req, res) => {
+  try {
+    const { current_password, new_password } = req.body;
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = await bcrypt.compare(current_password, user.password);
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ message: "Current password is incorrect." });
+    }
+
+    // Kiểm tra độ mạnh của mật khẩu mới
+    if (new_password.length < 8) {
+      return res
+        .status(400)
+        .json({ message: "Mật khẩu mới phải dài ít nhất 8 ký tự." });
+    }
+
+    // Mã hóa và cập nhật mật khẩu mới
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Mật khẩu đã được thay đổi thành công." });
+  } catch (error) {
+    console.error("Error in change-password route:", error.message); // Thêm lỗi chi tiết
+    res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
+  }
+});
+
 // Cập nhật thông tin tài khoản  
 router.put("/update", authMiddleware, async (req, res) => {  
   const { username, email, phone, avatar } = req.body;  
