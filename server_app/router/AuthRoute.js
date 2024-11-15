@@ -5,7 +5,6 @@ const User = require("../model/user");
 const authMiddleware = require("../middleware/auth");
 const router = express.Router();
 
-
 // Route đăng ký
 router.post("/register", async (req, res) => {
   const { username, email, password, phone } = req.body;
@@ -64,14 +63,14 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email hoặc mật khẩu không đúng!" });
     }
 
-      // Tạo token JWT
-      const token = jwt.sign(
-        { userId: user._id, username: user.username, phone: user.phone }, // Thêm username và phone vào payload
-        "your_jwt_secret_key",
-        {
-          expiresIn: "1h",
-        }
-      );
+    // Tạo token JWT
+    const token = jwt.sign(
+      { userId: user._id, username: user.username, phone: user.phone }, // Thêm username và phone vào payload
+      "your_jwt_secret_key",
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.json({ message: "Đăng nhập thành công!", token });
   } catch (err) {
@@ -81,25 +80,20 @@ router.post("/login", async (req, res) => {
 });
 
 // xem toàn bộ thông tin người dùng
-router.get("/profile", authMiddleware , async (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("-password"); 
+    const user = await User.findById(req.user.userId).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng!" });
     }
-    res.json(user); 
-
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Lỗi server!" });
   }
-
-
 });
 
 // thay đổi thông tin tài khoản
-
-
 
 module.exports = router;
