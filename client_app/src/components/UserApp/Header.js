@@ -60,7 +60,7 @@ function Header() {
 
           {username ? (
             <div className="header-username">
-              <Link to={"/tai-khoan"}><span>Xin chào, {username}</span></Link>
+              <Link to={"/tai-khoan"}><span>{username}</span></Link>
               
             </div>
           ) : (

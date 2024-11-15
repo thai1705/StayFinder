@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "../../../css/PostNew.css";
-import Menu from "../PostComponent/Menu"
+import Menu from "../PostComponent/Menu";
 import { Link } from "react-router-dom";
-import ReactQuill from 'react-quill'; 
-import 'react-quill/dist/quill.snow.css';
-import AxiosInstance from '../../../lib/Axiosintance'
-import axios from 'axios';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import AxiosInstance from "../../../lib/Axiosintance";
+import axios from "axios";
 import { Form, message, Select, Input, Button } from "antd";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 const { Option } = Select;
-
-
 
 export default function PostNew() {
   const [text, setText] = useState("#PS33630");
@@ -20,28 +18,26 @@ export default function PostNew() {
   const [wards, setWards] = useState([]);
 
   const [post, setPost] = useState({
-    title: '',
-    description: '',
-    price: '',
-    area: '',
-    province: '', // Lưu tên tỉnh
-    district: '', // Lưu tên quận
-    ward: '', // Lưu tên phường
-    address: '',
-    bathroom: '',
-    bedroom: '',
+    title: "",
+    description: "",
+    price: "",
+    area: "",
+    province: "", // Lưu tên tỉnh
+    district: "", // Lưu tên quận
+    ward: "", // Lưu tên phường
+    address: "",
+    bathroom: "",
+    bedroom: "",
     attic: false,
-    floor: '',
+    floor: "",
     image: null,
     video: null,
-    rentaltype: '', // ID của RentalType
-    posttype: '', // ID của PostType
-    userId: '', // User ID
-    phone: '', // User phone
-    username: '',
-    
+    rentaltype: "", // ID của RentalType
+    posttype: "", // ID của PostType
+    userId: "", // User ID
+    phone: "", // User phone
+    username: "",
   });
-
 
   const copy = () => {
     navigator.clipboard.writeText(text); // Sao chép mã tài khoản
@@ -50,51 +46,58 @@ export default function PostNew() {
 
   const fetchProvinces = async () => {
     try {
-      const response = await axios.get('https://provinces.open-api.vn/api/?depth=1');
+      const response = await axios.get(
+        "https://provinces.open-api.vn/api/?depth=1"
+      );
       setProvinces(response.data || []);
     } catch (error) {
       console.error("Error fetching provinces:", error); // Log detailed error information
-      message.error('Lỗi khi lấy danh sách tỉnh/thành phố');
+      message.error("Lỗi khi lấy danh sách tỉnh/thành phố");
     }
   };
-  
 
   useEffect(() => {
     fetchProvinces(); // Fetch provinces on component mount
   }, []);
-    // Decode JWT token to get user information
-    useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          setPost(prevPost => ({
-            ...prevPost,
-            userId: decoded.userId, 
-            phone: decoded.phone, 
-            username: decoded.username, 
-          }));
-        } catch (error) {
-          console.error("Invalid token", error);
-          message.error('Vui lòng đăng nhập lại.');
-        }
+  // Decode JWT token to get user information
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setPost((prevPost) => ({
+          ...prevPost,
+          userId: decoded.userId,
+          phone: decoded.phone,
+          username: decoded.username,
+        }));
+      } catch (error) {
+        console.error("Invalid token", error);
+        message.error("Vui lòng đăng nhập lại.");
       }
-    }, []);
+    }
+  }, []);
 
   const handleProvinceChange = async (value) => {
-    const selectedProvince = provinces.find(province => province.code === value);
-    setPost(prev => ({ ...prev, province: { name: selectedProvince.name, code: selectedProvince.code } })); // Lưu tên và mã tỉnh
+    const selectedProvince = provinces.find(
+      (province) => province.code === value
+    );
+    setPost((prev) => ({
+      ...prev,
+      province: { name: selectedProvince.name, code: selectedProvince.code },
+    })); // Lưu tên và mã tỉnh
     setDistricts([]);
     setWards([]);
 
     try {
-      const response = await axios.get(`https://provinces.open-api.vn/api/p/${value}?depth=2`);
+      const response = await axios.get(
+        `https://provinces.open-api.vn/api/p/${value}?depth=2`
+      );
       setDistricts(response.data.districts || []);
     } catch (error) {
       console.error("Error fetching districts:", error); // Log detailed error information
-      message.error('Lỗi khi lấy danh sách huyện');
+      message.error("Lỗi khi lấy danh sách huyện");
     }
-    
   };
   const handleDescriptionChange = (value) => {
     setPost((prevPost) => ({
@@ -104,26 +107,33 @@ export default function PostNew() {
   };
 
   const handleDistrictChange = async (value) => {
-    const selectedDistrict = districts.find(district => district.code === value);
-    setPost(prev => ({
+    const selectedDistrict = districts.find(
+      (district) => district.code === value
+    );
+    setPost((prev) => ({
       ...prev,
       district: { name: selectedDistrict.name, code: selectedDistrict.code }, // Lưu tên và mã huyện
-      ward: ''
+      ward: "",
     }));
     setWards([]);
 
     try {
-      const response = await axios.get(`https://provinces.open-api.vn/api/d/${value}?depth=2`);
+      const response = await axios.get(
+        `https://provinces.open-api.vn/api/d/${value}?depth=2`
+      );
       setWards(response.data.wards || []);
     } catch (error) {
-      message.error('Lỗi khi lấy danh sách xã');
+      message.error("Lỗi khi lấy danh sách xã");
     }
   };
 
   const handleWardChange = (value) => {
-    const selectedWard = wards.find(ward => ward.code === value);
+    const selectedWard = wards.find((ward) => ward.code === value);
     if (selectedWard) {
-      setPost(prev => ({ ...prev, ward: { name: selectedWard.name, code: selectedWard.code } })); // Lưu tên và mã phường
+      setPost((prev) => ({
+        ...prev,
+        ward: { name: selectedWard.name, code: selectedWard.code },
+      })); // Lưu tên và mã phường
     }
   };
 
@@ -131,84 +141,92 @@ export default function PostNew() {
     const { id, value, type, checked } = e.target;
     setPost((prevPost) => ({
       ...prevPost,
-      [id]: type === 'checkbox' ? checked : value
+      [id]: type === "checkbox" ? checked : value,
     }));
   };
-  
+
   const handleFileChange = (e) => {
     const selectedImages = Array.from(e.target.files);
-    const currentTotal = selectedImages.length + (post.video ? post.video.length : 0);
+    const currentTotal =
+      selectedImages.length + (post.video ? post.video.length : 0);
 
     if (currentTotal > 5) {
-        message.error("Bạn chỉ được tải lên tối đa 5 file bao gồm cả ảnh và video.");
+      message.error(
+        "Bạn chỉ được tải lên tối đa 5 file bao gồm cả ảnh và video."
+      );
     } else {
-        setPost(prev => ({ ...prev, image: selectedImages }));
+      setPost((prev) => ({ ...prev, image: selectedImages }));
     }
-};
+  };
 
-const handleVideoChange = (e) => {
+  const handleVideoChange = (e) => {
     const selectedVideos = Array.from(e.target.files);
-    const currentTotal = selectedVideos.length + (post.image ? post.image.length : 0);
+    const currentTotal =
+      selectedVideos.length + (post.image ? post.image.length : 0);
 
     if (currentTotal > 5) {
-        message.error("Bạn chỉ được tải lên tối đa 5 file bao gồm cả ảnh và video.");
+      message.error(
+        "Bạn chỉ được tải lên tối đa 5 file bao gồm cả ảnh và video."
+      );
     } else {
-        setPost(prev => ({ ...prev, video: selectedVideos }));
+      setPost((prev) => ({ ...prev, video: selectedVideos }));
     }
-};
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!post.userId) {
-      message.error('Vui lòng đăng nhập để tiếp tục.');
+      message.error("Vui lòng đăng nhập để tiếp tục.");
       return;
     }
     try {
-        const formData = new FormData();
-        formData.append('title', post.title);
-        formData.append('description', post.description);
-        formData.append('price', post.price);
-        formData.append('area', post.area);
-        formData.append('province', JSON.stringify(post.province));
-        formData.append('district', JSON.stringify(post.district));
-        formData.append('ward', JSON.stringify(post.ward));
-        formData.append('address', post.address);
-        formData.append('bathroom', post.bathroom);
-        formData.append('bedroom', post.bedroom);
-        formData.append('attic', post.attic);
-        formData.append('floor', post.floor);
-        formData.append('userId', post.userId);
-        formData.append('phone', post.phone);
-        formData.append('username', post.username);
-        // Thêm từng tệp hình ảnh vào formData
-        if (post.image) {
-            post.image.forEach(file => {
-                formData.append('image', file); // Thêm tệp hình ảnh vào formData
-            });
-        }
+      const formData = new FormData();
+      formData.append("title", post.title);
+      formData.append("description", post.description);
+      formData.append("price", post.price);
+      formData.append("area", post.area);
+      formData.append("province", JSON.stringify(post.province));
+      formData.append("district", JSON.stringify(post.district));
+      formData.append("ward", JSON.stringify(post.ward));
+      formData.append("address", post.address);
+      formData.append("bathroom", post.bathroom);
+      formData.append("bedroom", post.bedroom);
+      formData.append("attic", post.attic);
+      formData.append("floor", post.floor);
+      formData.append("userId", post.userId);
+      formData.append("phone", post.phone);
+      formData.append("username", post.username);
+      // Thêm từng tệp hình ảnh vào formData
+      if (post.image) {
+        post.image.forEach((file) => {
+          formData.append("image", file); // Thêm tệp hình ảnh vào formData
+        });
+      }
 
-        // Thêm từng tệp video vào formData
-        if (post.video) {
-            post.video.forEach(file => {
-                formData.append('video', file); // Thêm tệp video vào formData
-            });
-        }
+      // Thêm từng tệp video vào formData
+      if (post.video) {
+        post.video.forEach((file) => {
+          formData.append("video", file); // Thêm tệp video vào formData
+        });
+      }
 
-        formData.append('rentaltype', post.rentaltype);
-        formData.append('posttype', post.posttype);
-        
-        
+      formData.append("rentaltype", post.rentaltype);
+      formData.append("posttype", post.posttype);
 
-        // Console để kiểm tra dữ liệu trong formData
-        console.log('Dữ liệu gửi đi:', Array.from(formData.entries()));
+      // Console để kiểm tra dữ liệu trong formData
+      console.log("Dữ liệu gửi đi:", Array.from(formData.entries()));
 
-        await AxiosInstance('multipart/form-data').post('/them-bai-viet-moi', formData)
+      await AxiosInstance("multipart/form-data").post(
+        "/them-bai-viet-moi",
+        formData
+      );
 
-        alert('Bài viết đang chờ xét duyệt!');
-
+      alert("Bài viết đang chờ xét duyệt!");
     } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error.response ? error.response.data : error);
+      console.error(
+        "Lỗi khi thêm sản phẩm:",
+        error.response ? error.response.data : error
+      );
     }
   };
 
@@ -216,157 +234,176 @@ const handleVideoChange = (e) => {
     <div className="listnewform">
       <aside>
         <Menu />
-      </aside>  
+      </aside>
       <form className="post-form" onSubmit={handleSubmit}>
-
         <h3>THÔNG TIN</h3>
         <div className="form-filter">
-        <div className="form-group">
-          <Form.Item label='Tỉnh/thành phố'
-            name='province'
-            rules={[{ required: true, message: 'Vui lòng chọn Tỉnh/thành phố' }]}
-          >
-            <Select
-              className="custom-select"
-              placeholder="Chọn Tỉnh/Thành Phố"
-              onChange={handleProvinceChange}
+          <div className="form-group">
+            <Form.Item
+              label="Tỉnh/thành phố"
+              name="province"
+              rules={[
+                { required: true, message: "Vui lòng chọn Tỉnh/thành phố" },
+              ]}
             >
-              {provinces.map(province => (
-                <Select.Option key={province.code} value={province.code}>
-                  {province.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Tỉnh/Thành Phố"
+                onChange={handleProvinceChange}
+              >
+                {provinces.map((province) => (
+                  <Select.Option key={province.code} value={province.code}>
+                    {province.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item name="district" label='Quận huyện'
-            rules={[{ required: true, message: 'Vui lòng chọn Quận/Huyện!' }]} >
-
-            
-            <Select className="custom-select"
-              placeholder="Chọn Quận/Huyện"
-              onChange={handleDistrictChange}
+            <Form.Item
+              name="district"
+              label="Quận huyện"
+              rules={[{ required: true, message: "Vui lòng chọn Quận/Huyện!" }]}
             >
-              {districts.map(district => (
-                <Select.Option key={district.code} value={district.code}>
-                  {district.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Quận/Huyện"
+                onChange={handleDistrictChange}
+              >
+                {districts.map((district) => (
+                  <Select.Option key={district.code} value={district.code}>
+                    {district.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-          <Form.Item name='ward' label='Phường/Xã'
-           rules={[{ required: true, message: 'Vui lòng chọn Phường/Xã!' }]}
-           >
-            <Select
-              className="custom-select"
-              placeholder="Chọn Phường/Xã"
-              onChange={handleWardChange}
-              style={{ width: '100%' }}
+            <Form.Item
+              name="ward"
+              label="Phường/Xã"
+              rules={[{ required: true, message: "Vui lòng chọn Phường/Xã!" }]}
             >
-              {wards.map(ward => (
-                <Select.Option key={ward.code} value={ward.code}>
-                  {ward.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Phường/Xã"
+                onChange={handleWardChange}
+                style={{ width: "100%" }}
+              >
+                {wards.map((ward) => (
+                  <Select.Option key={ward.code} value={ward.code}>
+                    {ward.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
-
           <div className="form-group">
-            <Form.Item label='Địa chỉ chính xác'>
-            <Input
-              className="custom-select"
-              type="text"
-              id="address"
-              value={post.address}
-              onChange={handleInputChange}
-              placeholder="Nhập địa chỉ chính xác..."
-            />
+            <Form.Item label="Địa chỉ chính xác">
+              <Input
+                className="custom-select"
+                type="text"
+                id="address"
+                value={post.address}
+                onChange={handleInputChange}
+                placeholder="Nhập địa chỉ chính xác..."
+              />
             </Form.Item>
           </div>
         </div>
 
         <div className="form-filter">
           <div className="form-group">
-            <Form.Item name='category' label='Chuyên mục cho thuê'
-             rules={[{ required: true, message: 'Vui lòng chọn mục cho thuê!' }]}
+            <Form.Item
+              name="category"
+              label="Chuyên mục cho thuê"
+              rules={[
+                { required: true, message: "Vui lòng chọn mục cho thuê!" },
+              ]}
             >
-          <select className='custom-select' id="rentaltype" value={post.rentaltype} onChange={handleInputChange}>  {/* onChange={handleInputChange} */}
-              <option value="">Chọn chuyên mục</option>
-              <option value="cho-thue-phong-tro">Cho thuê phòng trọ </option>
-              <option value="cho-thue-can-ho">Cho thuê căn hộ</option>
-              <option value="cho-thue-nha-o">Cho thuê nhà ở</option>
-              <option value="tim-nguoi-o-ghep">Tìm người ở ghép</option>
-            </select>
+              <select
+                className="custom-select"
+                id="rentaltype"
+                value={post.rentaltype}
+                onChange={handleInputChange}
+              >
+                {" "}
+                {/* onChange={handleInputChange} */}
+                <option value="">Chọn chuyên mục</option>
+                <option value="cho-thue-phong-tro">Cho thuê phòng trọ </option>
+                <option value="cho-thue-can-ho">Cho thuê căn hộ</option>
+                <option value="cho-thue-nha-o">Cho thuê nhà ở</option>
+                <option value="tim-nguoi-o-ghep">Tìm người ở ghép</option>
+              </select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item label='Giá' name='price'
-             rules={[{ required: true, message: 'Vui lòng chọn giá!' }]}
+            <Form.Item
+              label="Giá"
+              name="price"
+              rules={[{ required: true, message: "Vui lòng chọn giá!" }]}
             >
-            <Input
-             className="custom-select"
-              id="price"
-              value={post.price}
-              onChange={handleInputChange}
-              placeholder="Nhập giá..."
-            />
+              <Input
+                className="custom-select"
+                id="price"
+                value={post.price}
+                onChange={handleInputChange}
+                placeholder="Nhập giá..."
+              />
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item label='Diện tích (m²)'>
-            <Input
-             className="custom-select"
-              id="area"
-              value={post.area}
-              onChange={handleInputChange}
-              required
-              placeholder="Nhập diện tích..."
-            />
+            <Form.Item label="Diện tích (m²)">
+              <Input
+                className="custom-select"
+                id="area"
+                value={post.area}
+                onChange={handleInputChange}
+                required
+                placeholder="Nhập diện tích..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
-            <Form.Item label='Số nhà vệ sinh'>
-            <Input
-            className='custom-select'
-              id="bathroom"
-              value={post.bathroom}
-              onChange={handleInputChange}
-              required
-              placeholder="Nhập số nhà vệ sinh..."
-            />
+            <Form.Item label="Số nhà vệ sinh">
+              <Input
+                className="custom-select"
+                id="bathroom"
+                value={post.bathroom}
+                onChange={handleInputChange}
+                required
+                placeholder="Nhập số nhà vệ sinh..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
-            <Form.Item label='Số phòng ngủ'
-            name='bedroom'
-            rules={[{ required: true, message: 'Vui lòng chọn giá!' }]}
+            <Form.Item
+              label="Số phòng ngủ"
+              name="bedroom"
+              rules={[{ required: true, message: "Vui lòng chọn giá!" }]}
             >
-            <Input
-              id="bedroom"
-              value={post.bedroom}
-              onChange={handleInputChange}
-              placeholder="Nhập số phòng ngủ..."
-            />
+              <Input
+                id="bedroom"
+                value={post.bedroom}
+                onChange={handleInputChange}
+                placeholder="Nhập số phòng ngủ..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
-            <Form.Item label='Số gác lửng'>
-            <Input
-              type="checkbox"
-              id="attic"
-              value={post.attic}
-              onChange={handleInputChange}
-              placeholder="Nhập số gác lửng..."
-            />
+            <Form.Item label="Số gác lửng">
+              <Input
+                type="checkbox"
+                id="attic"
+                value={post.attic}
+                onChange={handleInputChange}
+                placeholder="Nhập số gác lửng..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
@@ -382,10 +419,9 @@ const handleVideoChange = (e) => {
         </div>
 
         <div className="form-group">
-          <Form.Item label='Tiêu đề'>
-         
+          <Form.Item label="Tiêu đề">
             <Input
-            className='custom-select'
+              className="custom-select"
               type="text"
               id="title"
               value={post.title}
@@ -393,8 +429,8 @@ const handleVideoChange = (e) => {
               required
               placeholder="Nhập tiêu đề..."
             />
-            </Form.Item>
-          </div>
+          </Form.Item>
+        </div>
 
         <div className="form-group">
           <label htmlFor="description">Mô tả *</label>
@@ -402,7 +438,6 @@ const handleVideoChange = (e) => {
             className="reactquill-description"
             id="description"
             name="description"
-
             maxLength="5000"
             modules={{
               toolbar: [
@@ -425,29 +460,28 @@ const handleVideoChange = (e) => {
         <div className="form-group">
           <label htmlFor="images">Hình ảnh</label>
           <input
-             type="file"
-             id="image"
-             name="image" // Thêm name
-             onChange={handleFileChange}
-             multiple
-             accept="image/*"
-             required
+            type="file"
+            id="image"
+            name="image" // Thêm name
+            onChange={handleFileChange}
+            multiple
+            accept="image/*"
+            required
           />
           <p>Tối đa 6 ảnh với tin thường và 16 ảnh với tin VIP.</p>
         </div>
 
         <div className="form-group">
-            <label htmlFor="video">Video *</label>
-            <input
-  type="file"
-  id="video"
-  name="video" // Thêm name
-  onChange={handleVideoChange}
-  multiple
-  accept="video/*"
-  
-/>
-          </div>
+          <label htmlFor="video">Video *</label>
+          <input
+            type="file"
+            id="video"
+            name="video" // Thêm name
+            onChange={handleVideoChange}
+            multiple
+            accept="video/*"
+          />
+        </div>
 
         <h3>Liên hệ</h3>
         <div className="form-group">
@@ -473,13 +507,17 @@ const handleVideoChange = (e) => {
         <h3>Chọn gói đăng tin</h3>
         <div className="form-group">
           <label htmlFor="adType">Loại tin *</label>
-          <select id="posttype" value={post.posttype} onChange={handleInputChange} required>
-    <option value="">Chọn loại tin</option>
-    <option value="vip1">Tin Vip 1 (30.000/ngày)</option>
-    <option value="vip2">Tin Vip 2 (20.000/ngày)</option>
-    <option value="thuong">Tin thường (10.000/ngày)</option>
-</select>
-
+          <select
+            id="posttype"
+            value={post.posttype}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Chọn loại tin</option>
+            <option value="vip1">Tin Vip 1 (30.000/ngày)</option>
+            <option value="vip2">Tin Vip 2 (20.000/ngày)</option>
+            <option value="thuong">Tin thường (10.000/ngày)</option>
+          </select>
         </div>
 
         <div className="form-group">

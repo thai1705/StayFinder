@@ -3,7 +3,7 @@ import '../../css/Home.css'
 function Home() {
 
   return (
-    <div className=''>
+    <div className='PostApartment_container'>
  {/* Gợi ý khu vực  */}
 
 <h5 style={{marginBottom:'15px', fontSize: '20px'}}>Gợi ý khu vực</h5>
