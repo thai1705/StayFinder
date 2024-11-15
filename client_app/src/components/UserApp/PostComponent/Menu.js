@@ -1,10 +1,13 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import "../../../css/PostNew.css";
 
 export default function Menu() {
+  const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -13,7 +16,7 @@ export default function Menu() {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => {  
+        .then((res) => {
           if (!res.ok) {
             localStorage.removeItem("token");
             return;
@@ -22,9 +25,9 @@ export default function Menu() {
         })
         .then((data) => {
           if (data && data.username) {
-
+            console.log("Avatar path:", data.avatar);
             setUsername(data.username);
-
+            setAvatar(data.avatar || "default-avatar.jpg");
           }
         })
         .catch((error) =>
@@ -32,23 +35,31 @@ export default function Menu() {
         );
     }
   }, []);
-    const navigate = useNavigate(); // Khai báo useNavigate
 
-    const handleLogout = () => {
-      localStorage.removeItem("token"); 
-      setUsername(null); 
-     
-      navigate("/"); 
-      window.location.reload();
-    };
-    
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUsername(null);
+    setAvatar(null);
+    navigate("/");
+    window.location.reload();
+  };
+
+  // Xử lý đường dẫn avatar
+  const avatarUrl = avatar
+    ? `http://localhost:8000/${avatar
+        .replace("public\\", "")
+        .replace(/\\/g, "/")}`
+    : "default-avatar.jpg";
+
 
   return (
     <div className="listnewform">
       <aside className="sidebar-tuyen">
         <div className="profile-card">
           <div className="profile-header">
-            <div className="profile-avatar"></div>
+            <div className="profile-avatar">
+              <img src={avatarUrl} alt="" />
+            </div>
             <div className="profile-name">{username}</div>
           </div>
           <div className="profile-content">
@@ -97,7 +108,7 @@ export default function Menu() {
               <Link to="/quan-li-tin-dang">Quản lý tin đăng</Link>
             </li>
             <li>
-            <i className="fa-solid fa-pen-to-square"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
               <Link to="/dang-tin">Đăng tin</Link>
             </li>
             <li>
@@ -136,7 +147,9 @@ export default function Menu() {
     </div>
 
 
+
   );
 }
+
 
 

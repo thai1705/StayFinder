@@ -552,6 +552,16 @@ app.post('/luu-bai-dang', authMiddleware, async (req, res) => {
   }
 });
 
+// Lấy tổng số bài đăng  
+app.get('/lay-tong-so-bai-dang', async (req, res) => {  
+  try {  
+    // Đếm tổng số bài đăng chưa bị xóa  
+    const totalPosts = await Post.countDocuments({ isDeleted: false });  
+    res.json({ totalPosts });  
+  } catch (error) {  
+    res.status(500).json({ error: 'Lỗi khi lấy tổng số bài đăng.' });  
+  }  
+});
 
 app.get('/bai-dang-da-luu', authMiddleware, async (req, res) => {
   try {

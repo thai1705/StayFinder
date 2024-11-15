@@ -37,6 +37,8 @@ app.use("/api/auth", AuthRoute);
 app.use("/api", messageRoutes);
 app.use(postRoutes);
 
+// Cấu hình multer để lưu file ảnh vào thư mục "uploads" với tên duy nhất
+
 // Connect to MongoDB
 mongoose
   .connect(uri)
