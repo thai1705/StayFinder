@@ -1,10 +1,23 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const multer = require('multer');
 const User = require("../model/user");
 const authMiddleware = require("../middleware/auth");
 const router = express.Router();
 
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 // Route đăng ký
 router.post("/register", async (req, res) => {
   const { username, email, password, phone } = req.body;
@@ -80,21 +93,18 @@ router.post("/login", async (req, res) => {
 }); 
 
 // xem toàn bộ thông tin người dùng
-router.get("/profile", authMiddleware , async (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("-password"); 
+    const user = await User.findById(req.user.userId).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng!" });
     }
-    res.json(user); 
-
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Lỗi server!" });
   }
-
-
 });
 
 // đổi mật khẩu
@@ -133,35 +143,57 @@ router.post("/change-password", authMiddleware, async (req, res) => {
   }
 });
 
-// Cập nhật thông tin tài khoản  
-router.put("/update", authMiddleware, async (req, res) => {  
-  const { username, email, phone, avatar } = req.body;  
-  try {  
-    const user = await User.findById(req.user.userId);  
-    if (!user) {  
-      return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
-    }  
+//   try {
+//     const user = await User.findById(req.user.userId).select("-password");
 
-    if (email && email !== user.email) {  
-      const existingUser = await User.findOne({ email });  
-      if (existingUser) {  
-        return res.status(400).json({ message: "Email đã được sử dụng!" });  
-      }  
-    }  
+//     if (!user) {
+//       return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+//     }
+//     res.json(user);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Lỗi server!" });
+//   }
+// });
 
-    user.username = username || user.username;  
-    user.email = email || user.email;  
-    user.phone = phone || user.phone;  
-    user.avatar = avatar || user.avatar;  
+// Cập nhật thông tin tài khoản
+router.put(
+  "/update",
+  authMiddleware,
+  upload.single("avatar"),
+  async (req, res) => {
+    const { username, email, phone } = req.body;
+    try {
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+      }
 
-    await user.save();  
+      if (email && email !== user.email) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email đã được sử dụng!" });
+        }
+      }
 
-    res.json({ message: "Cập nhật thông tin thành công!", user });  
-  } catch (err) {  
-    console.error(err);  
-    res.status(500).json({ message: "Lỗi server!", error: err.message });  
-  }  
-});  
+      user.username = username || user.username;
+      user.email = email || user.email;
+      user.phone = phone || user.phone;
+
+      // Nếu có file avatar được upload thì cập nhật đường dẫn của avatar
+      if (req.file) {
+        user.avatar = req.file.path; // Lưu đường dẫn của file avatar vào database
+      }
+
+      await user.save();
+
+      res.json({ message: "Cập nhật thông tin thành công!", user });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Lỗi server!", error: err.message });
+    }
+  }
+);
 
 // Route lấy tất cả người dùng  
 router.get("/users", authMiddleware, async (req, res) => {  
