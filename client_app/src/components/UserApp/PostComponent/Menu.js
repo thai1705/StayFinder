@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
-
 import "../../../css/PostNew.css";
 
 export default function Menu() {
@@ -14,9 +13,7 @@ export default function Menu() {
           Authorization: `Bearer ${token}`,
         },
       })
-
-        .then((res) => {
-
+        .then((res) => {  
           if (!res.ok) {
             localStorage.removeItem("token");
             return;
@@ -25,7 +22,9 @@ export default function Menu() {
         })
         .then((data) => {
           if (data && data.username) {
+
             setUsername(data.username);
+
           }
         })
         .catch((error) =>
@@ -33,15 +32,16 @@ export default function Menu() {
         );
     }
   }, []);
+    const navigate = useNavigate(); // Khai báo useNavigate
 
-  const navigate = useNavigate(); // Khai báo useNavigate
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUsername(null);
-    navigate("/");
-    window.location.reload();
-  };
+    const handleLogout = () => {
+      localStorage.removeItem("token"); 
+      setUsername(null); 
+     
+      navigate("/"); 
+      window.location.reload();
+    };
+    
 
   return (
     <div className="listnewform">
@@ -135,6 +135,8 @@ export default function Menu() {
       </aside>
     </div>
 
+
   );
 }
+
 

@@ -5,7 +5,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import ChatBubble from "../ChatBubble";
 import "../../../css/PostDetail.css";
-
+import OpenStreetMap from "../OpenStreetMap";
 const socket = io("http://localhost:8000");
 
 function PostDetail() {
@@ -20,7 +20,7 @@ function PostDetail() {
   const [isSending, setIsSending] = useState(false);
   const [isLoginRequired, setIsLoginRequired] = useState(false);
   const [loginToastClass, setLoginToastClass] = useState("");
-
+ 
   const [post, setPost] = useState({
     media: [], // Dữ liệu media sẽ chứa các video và hình ảnh
     image: [], // Danh sách hình ảnh
@@ -73,12 +73,14 @@ function PostDetail() {
     }
   }, [post]); // Chạy khi post thay đổi
 
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter
       handleSendMessage(); // Gửi tin nhắn
     }
   };
+
 
   const handleSendMessage = async () => {
     console.log("Sending message:", messageContent);
@@ -182,6 +184,39 @@ function PostDetail() {
         return "Loại tin không xác định";
     }
   };
+  const [currentIndex, setCurrentIndex] = useState(0);
+  //chuyển ảnh slide
+  useEffect(() => {
+    if (post.video.length > 0) {
+      setCurrentIndex(0); // Đặt active slide cho video nếu có
+    } else if (post.image.length > 0) {
+      setCurrentIndex(0); // Đặt active slide cho ảnh nếu không có video
+    }
+  }, [post]);
+  // Xử lý khi người dùng nhấn nút "next"
+  const handleNext = () => {
+    if (currentIndex < post.video.length + post.image.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentIndex(0); // Quay lại slide đầu tiên
+    }
+  };
+
+  // Xử lý khi người dùng nhấn nút "prev"
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      setCurrentIndex(post.video.length + post.image.length - 1); // Quay lại slide cuối
+    }
+  };
+  // Tạo các slide video và ảnh
+  const slides = [
+    ...post.video.map((vid) => ({ type: "video", content: vid })),
+    ...post.image.map((img) => ({ type: "image", content: img })),
+  ];
+
+
 
   return (
     <div className="container post-detail-container">
@@ -192,58 +227,59 @@ function PostDetail() {
         </div>
       )}
       <div className="col-8">
-        <div className="carousel-wrapper">
+      <div className="carousel-wrapper">
           <div id="slider" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
-              {/* Render video nếu có, sau đó render hình ảnh */}
-              {post.video.length > 0 &&
-                post.video.map((vid, index) => (
-                  <div
-                    className={`carousel-item ${index === 0 ? "active" : ""}`}
-                    key={`video-${index}`}
-                  >
-                    <video video controls width="100%" height="100%">
+              {slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`carousel-item ${
+                    index === currentIndex ? "active" : ""
+                  }`}
+                >
+                  {slide.type === "video" ? (
+                    <video controls width="100%" height="auto">
                       <source
-                        src={`http://localhost:8000/video/${vid}`}
+                        src={`http://localhost:8000/video/${slide.content}`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
                     </video>
-                  </div>
-                ))}
-              {post.image.length > 0 &&
-                post.image.map((img, index) => (
-                  <div
-                    className={`carousel-item ${
-                      post.video.length === 0 && index === 0 ? "active" : ""
-                    }`}
-                    key={`image-${index}`}
-                  >
+                  ) : (
                     <img
-                      src={`http://localhost:8000/img/${img}`}
+                      src={`http://localhost:8000/img/${slide.content}`}
                       alt={`Slide ${index}`}
+                      className="d-block w-100"
                     />
-                  </div>
-                ))}
+                  )}
+                </div>
+              ))}
             </div>
+
             <button
               className="carousel-control-prev"
               type="button"
-              data-bs-target="#slider"
-              data-bs-slide="prev"
+              onClick={handlePrev}
             >
-              <span className="carousel-control-prev-icon" aria-hidden="true">
-                <i class="fas fa-chevron-left"></i>
+              <span
+                className="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span className="visually-hidden">
+                <i class="fa fa-arrow-left"></i>
               </span>
             </button>
             <button
               className="carousel-control-next"
               type="button"
-              data-bs-target="#slider"
-              data-bs-slide="next"
+              onClick={handleNext}
             >
-              <span className="carousel-control-next-icon" aria-hidden="true">
-                <i class="fas fa-chevron-right"></i>
+              <span
+                className="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span className="visually-hidden">
+                <i class="fa fa-arrow-right"></i>
               </span>
             </button>
           </div>
@@ -345,18 +381,8 @@ function PostDetail() {
             </div>
 
             <div className="map-post">
-              <div className="map-post-title">Xem trên bản đồ</div>
-              <iframe
-                title="map-post"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4436614899205!2d106.6252534745119!3d10.85382108929969!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752bee0b0ef9e5%3A0x5b4da59e47aa97a8!2zQ8O0bmcgVmnDqm4gUGjhuqduIE3hu4FtIFF1YW5nIFRydW5n!5e0!3m2!1svi!2s!4v1684984988242!5m2!1svi!2s"
-                width="100%"
-                height="250px"
-                style={{ border: "0" }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                frameBorder="0"
-              ></iframe>
+            <div className="map-post-title">Xem trên bản đồ</div>
+            <OpenStreetMap address={post.address} />
             </div>
             <div className="all-information-post">
               <div className="date-post">
@@ -645,16 +671,22 @@ function PostDetail() {
           <div className="user-information-post-contact">
             <div className="user-information-post-phone">
               <i class="bi bi-telephone"></i>
+
               <div className="user-information-post-phone-number">
                 {post.phone}
               </div>
+
             </div>
             <div
               className="user-information-post-chat"
               onClick={handleStartChat}
             >
               <i class="bi bi-chat"></i>
-              <div className="user-information-post-chat-title">Nhắn Tin</div>
+
+              <div className="user-information-post-chat-title">
+                Nhắn Tin {/* {post.userId} */}
+              </div>
+
               {isMessageSent && (
                 <div className={`toast ${toastClass}`}>
                   Gửi tin nhắn thành công!

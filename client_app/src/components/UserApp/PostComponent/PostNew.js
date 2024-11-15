@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../../../css/PostNew.css";
 import Menu from "../PostComponent/Menu";
 import { Link } from "react-router-dom";
-
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import AxiosInstance from "../../../lib/Axiosintance";
@@ -13,6 +12,7 @@ import {
   handleFileChange,
   handleVideoChange,
 } from "../../UserApp/Post_list_component/utils";
+
 
 const { Option } = Select;
 
@@ -353,7 +353,6 @@ export default function PostNew() {
               className="custom-select"
               placeholder="Chọn Tỉnh/Thành Phố"
               onChange={handleProvinceChange}
-
             >
               {provinces.map(province => (
                 <Select.Option key={province.code} value={province.code}>
@@ -372,7 +371,6 @@ export default function PostNew() {
             <Select className="custom-select"
               placeholder="Chọn Quận/Huyện"
               onChange={handleDistrictChange}
-
             >
               {districts.map(district => (
                 <Select.Option key={district.code} value={district.code}>
@@ -420,7 +418,6 @@ export default function PostNew() {
 
         <div className="form-filter">
           <div className="form-group">
-
             <Form.Item name='category' label='Chuyên mục cho thuê'
              rules={[{ required: true, message: 'Vui lòng chọn mục cho thuê!' }]}
             >
@@ -436,7 +433,6 @@ export default function PostNew() {
           </div>
 
           <div className="form-group">
-
             <Form.Item label='Giá' name='price'
              rules={[{ required: true, message: 'Vui lòng chọn giá!' }]}
             >
@@ -445,6 +441,7 @@ export default function PostNew() {
               id="price"
               value={post.price}
               onChange={handleInputChange}
+              placeholder="Nhập giá..."
             />
             </Form.Item>
           </div>
@@ -509,7 +506,6 @@ export default function PostNew() {
         </div>
 
         <div className="form-group">
-
           <Form.Item label='Tiêu đề'>
          
             <Input

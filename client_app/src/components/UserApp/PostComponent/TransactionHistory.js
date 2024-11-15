@@ -9,11 +9,9 @@ const TransactionHistory = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 7;
-  
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = transactions.slice(indexOfFirstPost, indexOfLastPost);
-
   const totalPages = Math.ceil(transactions.length / postsPerPage);
 
   const handleNextPage = () => {
@@ -95,7 +93,7 @@ const TransactionHistory = () => {
               currentPosts.map((transaction) => (
                 <tr key={transaction._id}>
                   <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-                  <td>{transaction.postId.title}</td>
+                  <td>{transaction.postId?.title || 'Không xác định'}</td>
                   <td>{transaction.amount} VND</td>
                   <td>{transaction.status}</td>
                   <td>{transaction.paymentMethod}</td>
