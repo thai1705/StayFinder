@@ -39,7 +39,7 @@ function AccountAdmin() {
         setTimeout(() => {
           setLoading(false);
           setIsLoadingUsers(false);
-        }, 500);
+        }, 300);
       }
       const storedUserRole = localStorage.getItem("role");
       setCurrentUser({ role: parseInt(storedUserRole, 10) });
@@ -352,7 +352,7 @@ function AccountAdmin() {
       <div class="container-tuyen">
         {isLoadingUsers && (
           <div className="overlay">
-            <div className="spinner"></div>
+            <div></div>
           </div>
         )}
         <div class="search-bar">
@@ -360,7 +360,7 @@ function AccountAdmin() {
             type="text"
             placeholder="Nhập tên người dùng cần tìm..."
             value={searchTerm}
-            onChange={handleSearch} // gán hàm tìm kiếm vào sự kiện onChange
+            onChange={handleSearch} 
           />
         </div>
 
@@ -386,7 +386,11 @@ function AccountAdmin() {
                 <tr key={user._id}>
                   <td>
                     <img
-                      src={user.avatar || "defaultAvatar.png"}
+                      src={`http://localhost:8000/img/${
+                        user.avatar
+                          ? user.avatar.replace(/^public\\img\\/, "")
+                          : "defaultAvatar.png"
+                      }`}
                       alt="Avatar"
                     />
                   </td>
@@ -420,9 +424,7 @@ function AccountAdmin() {
                       <span className="slider round"></span>
                     </label>
                   </td>
-                  <td>
-                  {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
+                  <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                   {currentUser?.role === 0 && (
                     <td className="chekboxrole">
                       <label className="switch">
@@ -459,14 +461,14 @@ function AccountAdmin() {
             <>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1} // Khóa nút bên trái nếu đang ở trang 1
+                disabled={currentPage === 1} 
               >
                 &lt;
               </button>
               {renderPagination()}
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages} // Khóa nút bên phải nếu đang ở trang cuối
+                disabled={currentPage === totalPages} 
               >
                 &gt;
               </button>

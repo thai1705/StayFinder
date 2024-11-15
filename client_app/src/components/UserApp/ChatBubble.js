@@ -36,22 +36,22 @@ const ChatBubble = () => {
       socket.current.disconnect(); // Ngắt kết nối khi component rời khỏi
     };
   }, []);
-  useEffect(() => {  
-    socket.current.on("messageReceived", (message) => {  
-      console.log("Received message: ", message);  
-      // Chỉ tăng unreadCount nếu tin nhắn không phải là của người gửi  
-      if (message.id_sender._id !== userId) {  
-        setMessages((prevMessages) => {  
-          const exists = prevMessages.some((msg) => msg._id === message._id);  
-          if (!exists) {  
-            return [...prevMessages, message];  
-          }  
-          return prevMessages;  
-        });  
-        // Tăng unreadCount chỉ khi tin nhắn mới được thêm  
-        setUnreadCount((prevCount) => prevCount + 1);  
-      }  
-    });  
+  useEffect(() => {
+    socket.current.on("messageReceived", (message) => {
+      console.log("Received message: ", message);
+      // Chỉ tăng unreadCount nếu tin nhắn không phải là của người gửi
+      if (message.id_sender._id !== userId) {
+        setMessages((prevMessages) => {
+          const exists = prevMessages.some((msg) => msg._id === message._id);
+          if (!exists) {
+            return [...prevMessages, message];
+          }
+          return prevMessages;
+        });
+        // Tăng unreadCount chỉ khi tin nhắn mới được thêm
+        setUnreadCount((prevCount) => prevCount + 1);
+      }
+    });
   }, [userId]);
 
   const handleSendMessage = () => {
@@ -82,12 +82,12 @@ const ChatBubble = () => {
     setNewMessage(""); // Reset ô nhập
     scrollToBottom(); // Cuộn xuống dưới
   };
-  const handleKeyDown = (event) => {  
-    if (event.key === "Enter") {  
-      event.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter  
-      handleSendMessage(); // Gửi tin nhắn  
-    }  
-  }; 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter
+      handleSendMessage(); // Gửi tin nhắn
+    }
+  };
 
   useEffect(() => {
     if (selectedConversation && selectedConversation.id_chat) {
@@ -167,15 +167,15 @@ const ChatBubble = () => {
       console.error("Error fetching conversations:", error);
     }
   };
-  const handleConversationSelect = (conversation) => {  
-    setSelectedConversation(conversation);  
-    setShowInput(true);  
-    setIsVisible(true);  
-    setIsLoading(true);  
-    
-    setUnreadCount(0); // Reset khi chọn cuộc hội thoại  
-    socket.current.emit("joinChat", conversation.id_chat);  
-    fetchMessages(conversation.id_chat);  
+  const handleConversationSelect = (conversation) => {
+    setSelectedConversation(conversation);
+    setShowInput(true);
+    setIsVisible(true);
+    setIsLoading(true);
+
+    setUnreadCount(0); // Reset khi chọn cuộc hội thoại
+    socket.current.emit("joinChat", conversation.id_chat);
+    fetchMessages(conversation.id_chat);
   };
 
   const handleMessageClick = (messageId) => {
@@ -219,7 +219,6 @@ const ChatBubble = () => {
         <div className="chat-bubble" onClick={() => setShowInput(true)}>
           {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
           <div className="chat-icon">💬</div>
-          
         </div>
       ) : selectedConversation ? (
         <div
@@ -231,12 +230,18 @@ const ChatBubble = () => {
           }}
         >
           <div className="header-chat">
-          
             <div className="chat-avt-name">
               {isLoadingAvatar ? (
                 <div className="spinner"></div>
               ) : recipient && recipient.avatar ? (
-                <img className="avatar" src={recipient.avatar} alt="Avatar" />
+                <img
+                  className="avatar"
+                  src={`http://localhost:8000/img/${recipient.avatar.replace(
+                    /^public\\img\\/,
+                    ""
+                  )}`}
+                  alt="Avatar"
+                />
               ) : (
                 <img
                   className="avatar"
@@ -334,18 +339,19 @@ const ChatBubble = () => {
                 <div>
                   <img
                     className="conversation-avatar"
-                    src={
-                      conversation.avatar || "/images/placeholder-avatar.png"
-                    }
-                    alt="none"
+                    src={`http://localhost:8000/img/${
+                      conversation.avatar
+                        ? conversation.avatar.replace(/^public\\img\\/, "")
+                        : "/images/placeholder-avatar.png"
+                    }`}
+                    alt="Avatar"
                   />
                 </div>
                 <div className="conversation-user">{conversation.username}</div>
-                {conversation.unreadCount > 0 && (  
-            <span className="badge">{conversation.unreadCount}</span>  
-          )} 
+                {conversation.unreadCount > 0 && (
+                  <span className="badge">{conversation.unreadCount}</span>
+                )}
               </div>
-              
             ))
           )}
         </div>

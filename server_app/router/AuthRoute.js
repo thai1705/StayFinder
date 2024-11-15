@@ -308,5 +308,36 @@ router.put("/update-role/:id", authMiddleware, async (req, res) => {
   }  
 });
 
+// Route tính tổng số người dùng  
+router.get("/count", authMiddleware, async (req, res) => {  
+  try {  
+    // Tính tổng số người dùng  
+    const userCount = await User.countDocuments(); // Sử dụng countDocuments để đếm số lượng tài liệu trong collection  
+
+    res.json({ totalUsers: userCount }); // Trả về tổng số người dùng  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!" });  
+  }  
+});
+
+router.get("/new-users-count", authMiddleware, async (req, res) => {  
+  try {  
+
+    const oneDayAgo = new Date();  
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1); 
+
+
+    const newUserCount = await User.countDocuments({  
+      createdAt: { $gte: oneDayAgo }, 
+    });  
+
+    res.json({ newUsersCount: newUserCount }); 
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!" });  
+  }  
+});  
+
 
 module.exports = router;
