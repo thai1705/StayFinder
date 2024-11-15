@@ -7,6 +7,7 @@ const statuspost = require('../model/statuspost');
 const authMiddleware = require('../middleware/auth.js');
 const querystring = require('querystring');
 const crypto = require('crypto');  
+const User = require('../model/user.js')
 const Transaction = require('../model/Transaction'); 
 const SavedPost = require('../model/savedPost.js');
 const https = require('https');
@@ -86,6 +87,9 @@ app.post('/them-bai-viet-moi', authMiddleware, upload.fields([{ name: 'image', m
       orderId
     });
     await newPost.save();
+    await User.findByIdAndUpdate(req.userId, {
+      $inc: { postCount: 1 },
+    });
  const newTransaction = new Transaction({
   userId,
   postId: newPost._id,

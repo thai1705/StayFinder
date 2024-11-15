@@ -1,41 +1,156 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import AxiosInstance from "../../../lib/Axiosintance";
 import { useParams } from "react-router-dom";
-import OpenStreetMap from "../OpenStreetMap";
+import axios from "axios";
+import io from "socket.io-client";
+import ChatBubble from "../ChatBubble";
+import "../../../css/PostDetail.css";
+
+const socket = io("http://localhost:8000");
+
 function PostDetail() {
   const { id } = useParams();
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMessageSent, setIsMessageSent] = useState(false);
+  const [toastClass, setToastClass] = useState("");
+  const [messageContent, setMessageContent] = useState(""); // Để lưu trữ nội dung tin nhắn
+  const [showMessageInput, setShowMessageInput] = useState(false);
+  const [messageInputClass, setMessageInputClass] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [isLoginRequired, setIsLoginRequired] = useState(false);
+  const [loginToastClass, setLoginToastClass] = useState("");
+
   const [post, setPost] = useState({
     media: [], // Dữ liệu media sẽ chứa các video và hình ảnh
     image: [], // Danh sách hình ảnh
     video: [], // Danh sách video
   });
-  const formatCurrency = (value) => {
-    // Kiểm tra nếu value không phải là chuỗi, trả về giá trị mặc định
-    if (typeof value !== "string") {
-      return "0"; // Hoặc một giá trị khác mà bạn muốn
+
+  const handleStartChat = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // Nếu chưa đăng nhập, hiển thị thông báo yêu cầu đăng nhập
+      setIsLoginRequired(true);
+      setLoginToastClass("show-toast");
+      setTimeout(() => {
+        setIsLoginRequired(false);
+        setLoginToastClass("");
+      }, 3500); // Thời gian hiển thị toast
+      return;
     }
 
-    // Chuyển đổi chuỗi giá trị thành số
-    const numericValue = parseFloat(value.replace(/\./g, "").replace(",", "."));
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/create-chat",
+        {
+          userId: post.userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (isNaN(numericValue)) {
-      // Kiểm tra nếu numericValue không phải là số
-      return "0"; // Hoặc một giá trị khác mà bạn muốn
-    }
+      const chatId = response.data.chatId;
+      console.log("Chat ID Created:", chatId);
 
-    if (numericValue >= 1000000000) {
-      // Nếu số lớn hơn hoặc bằng 1 tỷ
-      return (numericValue / 1000000000).toFixed(0) + " tỷ"; // Định dạng tỷ
-    } else if (numericValue >= 1000000) {
-      // Nếu số lớn hơn hoặc bằng 1 triệu
-      return (numericValue / 1000000).toFixed(0) + " triệu"; // Định dạng triệu
-    } else if (numericValue >= 1000) {
-      // Nếu số lớn hơn hoặc bằng 1 ngàn
-      return (numericValue / 1000).toFixed(0) + " ngàn"; // Định dạng ngàn
-    } else {
-      return numericValue.toString(); // Nếu số nhỏ hơn 1000, trả về như một chuỗi
+      setSelectedConversation({ id_chat: chatId, userId: post.userId });
+      setIsOpen(true);
+      socket.emit("joinChat", chatId);
+
+      setShowMessageInput(true);
+      setMessageInputClass("");
+    } catch (error) {
+      console.error("Error creating chat:", error);
     }
+  };
+  useEffect(() => {
+    if (post && post.title) {
+      console.log("Post title updated:", post.title);
+    }
+  }, [post]); // Chạy khi post thay đổi
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter
+      handleSendMessage(); // Gửi tin nhắn
+    }
+  };
+
+  const handleSendMessage = async () => {
+    console.log("Sending message:", messageContent);
+    console.log("Post title:", post.title);
+    console.log("Post img:", post.image);
+
+    if (!post.title || post.title.trim() === "") {
+      console.error("Post title is missing or empty!");
+      return; // Nếu không có title, không gửi tin nhắn
+    }
+    try {
+      const token = localStorage.getItem("token");
+
+      // Gửi tin nhắn
+      const response = await axios.post(
+        "http://localhost:8000/api/messages",
+        {
+          id_chat: selectedConversation.id_chat,
+          id_receiver: post.userId,
+          message_content: messageContent,
+          post_title: post.title,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Message sent successfully:", response.data);
+
+      setShowMessageInput(false);
+
+      setMessageContent("");
+
+      // Hiển thị thông báo gửi thành công
+      setIsMessageSent(true);
+
+      // Bật spinner
+      setTimeout(() => {
+        setIsMessageSent(false);
+        setToastClass("toast-fade-out");
+        window.location.reload();
+      }, 2500);
+
+      setTimeout(() => {
+        setIsSending(true);
+        setTimeout(() => {
+          setIsSending(false);
+        }, 2000);
+      }, 2500);
+
+      setTimeout(() => {
+        setToastClass("toast-fade-out");
+      }, 2500);
+
+      setTimeout(() => {
+        setIsMessageSent(false);
+        setToastClass("");
+      }, 3500);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const handleCloseMessageInput = () => {
+    setMessageInputClass("slide-up");
+
+    setTimeout(() => {
+      setShowMessageInput(false);
+      setMessageInputClass("");
+    }, 500);
   };
 
   useEffect(() => {
@@ -68,96 +183,67 @@ function PostDetail() {
     }
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (post.video.length > 0) {
-      setCurrentIndex(0); // Đặt active slide cho video nếu có
-    } else if (post.image.length > 0) {
-      setCurrentIndex(0); // Đặt active slide cho ảnh nếu không có video
-    }
-  }, [post]);
-
-  // Xử lý khi người dùng nhấn nút "next"
-  const handleNext = () => {
-    if (currentIndex < post.video.length + post.image.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setCurrentIndex(0); // Quay lại slide đầu tiên
-    }
-  };
-
-  // Xử lý khi người dùng nhấn nút "prev"
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    } else {
-      setCurrentIndex(post.video.length + post.image.length - 1); // Quay lại slide cuối
-    }
-  };
-
-  // Tạo các slide video và ảnh
-  const slides = [
-    ...post.video.map((vid) => ({ type: "video", content: vid })),
-    ...post.image.map((img) => ({ type: "image", content: img })),
-  ];
-
   return (
-    <div className="post-detail-container">
-      <div className="post-right-container">
+    <div className="container post-detail-container">
+      {showMessageInput && <div className="overlay overlay-visible" />}
+      {isSending && (
+        <div className="overlay overlay-visible">
+          <div className="spinner"></div>
+        </div>
+      )}
+      <div className="col-8">
         <div className="carousel-wrapper">
           <div id="slider" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
-              {slides.map((slide, index) => (
-                <div
-                  key={index}
-                  className={`carousel-item ${
-                    index === currentIndex ? "active" : ""
-                  }`}
-                >
-                  {slide.type === "video" ? (
-                    <video controls width="100%" height="auto">
+              {/* Render video nếu có, sau đó render hình ảnh */}
+              {post.video.length > 0 &&
+                post.video.map((vid, index) => (
+                  <div
+                    className={`carousel-item ${index === 0 ? "active" : ""}`}
+                    key={`video-${index}`}
+                  >
+                    <video video controls width="100%" height="100%">
                       <source
-                        src={`http://localhost:8000/video/${slide.content}`}
+                        src={`http://localhost:8000/video/${vid}`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
                     </video>
-                  ) : (
+                  </div>
+                ))}
+              {post.image.length > 0 &&
+                post.image.map((img, index) => (
+                  <div
+                    className={`carousel-item ${
+                      post.video.length === 0 && index === 0 ? "active" : ""
+                    }`}
+                    key={`image-${index}`}
+                  >
                     <img
-                      src={`http://localhost:8000/img/${slide.content}`}
+                      src={`http://localhost:8000/img/${img}`}
                       alt={`Slide ${index}`}
-                      className="d-block w-100"
                     />
-                  )}
-                </div>
-              ))}
+                  </div>
+                ))}
             </div>
-
             <button
               className="carousel-control-prev"
               type="button"
-              onClick={handlePrev}
+              data-bs-target="#slider"
+              data-bs-slide="prev"
             >
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">
-                <i class="fa fa-arrow-left"></i>
+              <span className="carousel-control-prev-icon" aria-hidden="true">
+                <i class="fas fa-chevron-left"></i>
               </span>
             </button>
             <button
               className="carousel-control-next"
               type="button"
-              onClick={handleNext}
+              data-bs-target="#slider"
+              data-bs-slide="next"
             >
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">
-                <i class="fa fa-arrow-right"></i>
+              <span className="carousel-control-next-icon" aria-hidden="true">
+                <i class="fas fa-chevron-right"></i>
               </span>
             </button>
           </div>
@@ -168,9 +254,7 @@ function PostDetail() {
           <div className="big-information">
             <div className="big-price">
               <div className="big-price-head">Mức giá</div>
-              <div className="big-price-body">
-                {formatCurrency(post.price)}/tháng
-              </div>
+              <div className="big-price-body">{post.price}/tháng</div>
             </div>
             <div className="big-acreage">
               <div className="big-acreage-head">Diện tích</div>
@@ -212,9 +296,7 @@ function PostDetail() {
                     </div>
                     <div className="price-icon-name">Mức giá</div>
                   </div>
-                  <div className="number-price">
-                    {formatCurrency(post.price)}/tháng
-                  </div>
+                  <div className="number-price">{post.price}/tháng</div>
                 </div>
                 <div className="small-bedroom">
                   <div className="bedroom-icon-group">
@@ -264,7 +346,17 @@ function PostDetail() {
 
             <div className="map-post">
               <div className="map-post-title">Xem trên bản đồ</div>
-              <OpenStreetMap address={post.address} />
+              <iframe
+                title="map-post"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4436614899205!2d106.6252534745119!3d10.85382108929969!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752bee0b0ef9e5%3A0x5b4da59e47aa97a8!2zQ8O0bmcgVmnDqm4gUGjhuqduIE3hu4FtIFF1YW5nIFRydW5n!5e0!3m2!1svi!2s!4v1684984988242!5m2!1svi!2s"
+                width="100%"
+                height="250px"
+                style={{ border: "0" }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                frameBorder="0"
+              ></iframe>
             </div>
             <div className="all-information-post">
               <div className="date-post">
@@ -545,7 +637,7 @@ function PostDetail() {
           </div>
         </div>
       </div>
-      <div className="user-post">
+      <div height="50%" className="col-4 user-post">
         <div className="user-information-post">
           <div className="user-information-post-img">
             <img src="/images/anhbd.webp" alt="" />
@@ -557,12 +649,40 @@ function PostDetail() {
                 {post.phone}
               </div>
             </div>
-            <div className="user-information-post-chat">
+            <div
+              className="user-information-post-chat"
+              onClick={handleStartChat}
+            >
               <i class="bi bi-chat"></i>
-              <Link to></Link>
-              <div className="user-information-post-chat-title">
-                Nhắn Tin {post.userId}
-              </div>
+              <div className="user-information-post-chat-title">Nhắn Tin</div>
+              {isMessageSent && (
+                <div className={`toast ${toastClass}`}>
+                  Gửi tin nhắn thành công!
+                </div>
+              )}
+              {isLoginRequired && (
+                <div className={`toast ${loginToastClass}`}>
+                  Vui lòng đăng nhập để gửi tin nhắn!
+                </div>
+              )}
+              {showMessageInput && (
+                <div className={`message-input-wrapper ${messageInputClass}`}>
+                  <a className="close-btn" onClick={handleCloseMessageInput}>
+                    <i style={{ width: "12px" }} className="fas fa-times"></i>
+                  </a>
+                  <div style={{ paddingBottom: "15px" }}>{post.title}</div>
+                  <div>
+                    <input
+                      type="text"
+                      value={messageContent}
+                      onChange={(e) => setMessageContent(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Nhập tin nhắn..."
+                    />
+                    <button onClick={handleSendMessage}>Gửi</button>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="user-information-post-zalo">
               <img src="/images/zalo-icon.jpg" alt="" />
@@ -606,6 +726,13 @@ function PostDetail() {
             </div>
           </ul>
         </div>
+        {isOpen && selectedConversation && (
+          <ChatBubble
+            id_chat={selectedConversation.id_chat}
+            userId={selectedConversation.userId}
+            onClose={() => setIsOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

@@ -28,7 +28,6 @@ import PostDetail from './components/UserApp/Post_list_component/PostDetail';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 //===========================ADMIN==============================
-
 import HomeAdmin from './components/AdminApp/HomeAdmin';
 import ManagePost from './components/AdminApp/ManagePosts';
 import CategoryManagement from './components/AdminApp/CategoryManagement';
@@ -38,10 +37,7 @@ import Payment from './components/UserApp/Payment';
 import TransactionHistory from './components/UserApp/PostComponent/TransactionHistory';
 import PostProvince from './components/UserApp/Post_list_component/PostProvince';
 import UpdatePost from './components/UserApp/PostComponent/UpdatePost';
-
-
-
-
+import ChatBubble from './components/UserApp/ChatBubble';
 const root = ReactDOM.createRoot(document.getElementById('root'));  
 const stripePromise = loadStripe('pk_test_51QIXc5Gui79K0O8g32wUjEQt6TXJTUp8jxVyKk1HupexrNJaqrfCDbJiWrH7sSfA1iaL9b6EDXVXr2YgAYNc3DgV00sReAVhS');
 root.render(  
@@ -52,6 +48,7 @@ root.render(
       <Route path="/" element={<Index />} >  
         <Route path="/" element={<Home />} />  
           <Route path="/dang-nhap" element={<Login />} />  
+          <Route path="/chat/:chatId" element={<ChatBubble />} />
           <Route path="/dang-ky" element={<Resigter />} />  
           <Route path="/tin-tuc" element={<News />} />
           <Route path="/lien-he" element={<Contact />} /> 

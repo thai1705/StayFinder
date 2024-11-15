@@ -1,14 +1,11 @@
   /* Main Main Main */
 
-.Home_container{
-width: 90%;
-margin: 0 auto;
-}
+
   /* Gợi ý khu vực */
 .item1 {
     position: relative;
     grid-area: sg;
-    width: 465px;
+    width: 100%;
     cursor: pointer;
 }
 

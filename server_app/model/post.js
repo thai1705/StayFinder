@@ -60,6 +60,7 @@ const postSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Tham chiếu đến người dùng
   phone: { type: String, required: true },
   username: { type: String, required: true },
+  postCount: { type: Number, default: 0 },
 });
 postSchema.pre("save", setExpireDate);
 

@@ -70,6 +70,7 @@ const FilterMenu = ({ onFilter }) => {
         onChange={setRentalType}
         placeholder="Chọn loại hình"
       >
+        <Option value="">Loại hình cho thuê</Option>
         <Option value="cho-thue-phong-tro">Cho thuê phòng trọ</Option>
         <Option value="tim-nguoi-o-ghep">Tìm người ở ghép</Option>
         <Option value="cho-thue-can-ho">Cho thuê căn hộ</Option>
@@ -80,6 +81,7 @@ const FilterMenu = ({ onFilter }) => {
         onChange={setSelectedProvince}
         placeholder="Chọn tỉnh/thành phố"
       >
+        <Option value="">Chọn tỉnh để lọc</Option>
         {provinces.map((province) => (
           <Option key={province.code} value={province.code}>
             {province.name}
@@ -92,6 +94,7 @@ const FilterMenu = ({ onFilter }) => {
         onChange={setPrice}
         placeholder="Chọn giá"
       >
+        <Option value="">Lọc theo giá</Option>
         <Option value="0-2000000">Dưới 2 triệu</Option>
         <Option value="2000000-5000000">2 triệu - 5 triệu</Option>
         <Option value="5000000-10000000">5 triệu - 10 triệu</Option>
@@ -103,6 +106,7 @@ const FilterMenu = ({ onFilter }) => {
         onChange={setArea}
         placeholder="Chọn diện tích"
       >
+        <Option value="">Loại theo diện tích</Option>
         <Option value="0-25">Dưới 25 m²</Option>
         <Option value="25-50">25 m² - 50 m²</Option>
         <Option value="50-100">50 m² - 100 m²</Option>

@@ -76,8 +76,6 @@ const CategoryManagement = () => {
             <th>STT</th>
             <th>Tên danh mục</th>
             <th>Trạng thái</th>
-            <th>Sửa</th>
-            <th>Xóa</th>
           </tr>
         </thead>
         <tbody>

@@ -160,11 +160,11 @@ export default function ManagerPost() {
         </table>
         <div className="pagination">
           <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-            Trang trước
+          <i class="fa-solid fa-circle-chevron-left"></i>
           </button>
-          <span>Trang {currentPage} / {totalPages}</span>
+          <span> {currentPage} / {totalPages}</span>
           <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-            Trang sau
+          <i class="fa-solid fa-circle-chevron-right"></i>
           </button>
         </div>
       </div>

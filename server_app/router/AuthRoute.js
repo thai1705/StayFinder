@@ -63,21 +63,22 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email hoặc mật khẩu không đúng!" });
     }
 
-    // Tạo token JWT
-    const token = jwt.sign(
-      { userId: user._id, username: user.username, phone: user.phone }, // Thêm username và phone vào payload
-      "your_jwt_secret_key",
-      {
-        expiresIn: "1h",
-      }
-    );
 
-    res.json({ message: "Đăng nhập thành công!", token });
+      // Tạo token JWT
+      const token = jwt.sign(
+        { userId: user._id, username: user.username, phone: user.phone, role: user.role }, // Thêm username và phone vào payload
+        "your_jwt_secret_key",
+        {
+          expiresIn: "1h",
+        }
+      );
+
+    res.json({ message: "Đăng nhập thành công!", token, userId: user._id, role: user.role});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Lỗi server" });
   }
-});
+}); 
 
 // xem toàn bộ thông tin người dùng
 router.get("/profile", authMiddleware, async (req, res) => {
@@ -94,6 +95,149 @@ router.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// thay đổi thông tin tài khoản
+// Cập nhật thông tin tài khoản  
+router.put("/update", authMiddleware, async (req, res) => {  
+  const { username, email, phone, avatar } = req.body;  
+  try {  
+    const user = await User.findById(req.user.userId);  
+    if (!user) {  
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
+    }  
+
+
+    if (email && email !== user.email) {  
+      const existingUser = await User.findOne({ email });  
+      if (existingUser) {  
+        return res.status(400).json({ message: "Email đã được sử dụng!" });  
+      }  
+    }  
+
+    user.username = username || user.username;  
+    user.email = email || user.email;  
+    user.phone = phone || user.phone;  
+    user.avatar = avatar || user.avatar;  
+
+    await user.save();  
+
+    res.json({ message: "Cập nhật thông tin thành công!", user });  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!", error: err.message });  
+  }  
+});  
+
+// Route lấy tất cả người dùng  
+router.get("/users", authMiddleware, async (req, res) => {  
+  try {  
+    const currentUserId = req.user.userId;   
+    const currentUser = await User.findById(currentUserId);   
+
+    let users;  
+    if (currentUser.role === 0) {  
+      users = await User.find({ _id: { $ne: currentUserId } }).select("-password");  
+    } else if (currentUser.role === 1) {  
+      users = await User.find({ role: 2, _id: { $ne: currentUserId } }).select("-password");  
+    } else {  
+      return res.status(403).json({ message: "Bạn không có quyền truy cập!" });  
+    }  
+
+    res.json(users);  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!" });  
+  }  
+});
+
+router.delete("/users/:id", authMiddleware, async (req, res) => {  
+  const { id } = req.params;  
+
+  try {  
+    // Tìm người dùng theo ID  
+    const user = await User.findById(id);  
+    if (!user) {  
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
+    }  
+
+
+    // if (req.user.userId !== id && req.user.role !== 1) {  
+    //   return res.status(403).json({ message: "Bạn không có quyền xóa người dùng này!" });  
+    // }  
+
+    // Xóa người dùng  
+    await User.findByIdAndDelete(id);  
+    res.json({ message: "Xóa người dùng thành công!" });  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!", error: err.message });  
+  }  
+});  
+
+
+// Cập nhật trạng thái tài khoản  
+router.put("/update-status/:id", authMiddleware, async (req, res) => {  
+  const { id } = req.params;  
+  const { status } = req.body;  
+
+  try {  
+    // Kiểm tra xem trạng thái có hợp lệ không  
+    if (status !== 0 && status !== 1 && status !== 2) {  
+      return res.status(400).json({ message: "Trạng thái không hợp lệ!" });  
+    }  
+
+    // Tìm người dùng theo ID  
+    const user = await User.findById(id);  
+    if (!user) {  
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
+    }  
+
+    // Kiểm tra quyền chỉnh sửa (nếu cần)  
+    // Ví dụ: chỉ cho phép admin (role = 1) chỉnh sửa trạng thái của người dùng khác  
+    // if (req.user.role !== 1 && req.user.userId !== id) {  
+    //   return res.status(403).json({ message: "Bạn không có quyền chỉnh sửa trạng thái người dùng này!" });  
+    // }  
+
+    // Cập nhật trạng thái người dùng  
+    user.status = status;  
+    await user.save();  
+
+    res.json({ message: "Cập nhật trạng thái thành công!", user });  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!", error: err.message });  
+  }  
+});
+
+// Cập nhật vai trò người dùng 
+router.put("/update-role/:id", authMiddleware, async (req, res) => {  
+  const { id } = req.params;   
+  const { role } = req.body;
+
+  try {  
+    // Kiểm tra vai trò có hợp lệ không  
+    if (role !== 0 && role !== 1 && role !== 2) {  
+      return res.status(400).json({ message: "Vai trò không hợp lệ!" });  
+    }  
+
+    // Tìm người dùng theo ID  
+    const user = await User.findById(id);  
+    if (!user) {  
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
+    }  
+
+    if (req.user.role !== 0) {  
+      return res.status(403).json({ message: "Bạn không có quyền chỉnh sửa vai trò người dùng này!" });  
+    }  
+
+    // Cập nhật vai trò người dùng  
+    user.role = role; // Cập nhật vai trò  
+    await user.save();  
+
+    res.json({ message: "Cập nhật vai trò thành công!", user });  
+  } catch (err) {  
+    console.error(err);  
+    res.status(500).json({ message: "Lỗi server!", error: err.message });  
+  }  
+});
+
 
 module.exports = router;

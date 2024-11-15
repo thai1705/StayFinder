@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Thêm
+
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from "react-router-dom";
+
 import "../../../css/PostNew.css";
 
 export default function Menu() {
@@ -12,7 +14,9 @@ export default function Menu() {
           Authorization: `Bearer ${token}`,
         },
       })
+
         .then((res) => {
+
           if (!res.ok) {
             localStorage.removeItem("token");
             return;
@@ -29,6 +33,7 @@ export default function Menu() {
         );
     }
   }, []);
+
   const navigate = useNavigate(); // Khai báo useNavigate
 
   const handleLogout = () => {
@@ -37,6 +42,7 @@ export default function Menu() {
     navigate("/");
     window.location.reload();
   };
+
   return (
     <div className="listnewform">
       <aside className="sidebar-tuyen">
@@ -91,7 +97,7 @@ export default function Menu() {
               <Link to="/quan-li-tin-dang">Quản lý tin đăng</Link>
             </li>
             <li>
-              <i className="fa-solid fa-pen-to-square"></i>
+            <i className="fa-solid fa-pen-to-square"></i>
               <Link to="/dang-tin">Đăng tin</Link>
             </li>
             <li>
@@ -128,5 +134,7 @@ export default function Menu() {
         </nav>
       </aside>
     </div>
+
   );
 }
+

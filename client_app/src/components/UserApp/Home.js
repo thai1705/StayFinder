@@ -63,27 +63,19 @@ function Home() {
     fetchAllPost();
   }, [provinceQuery]);
   return (
-    <div className="Home_container">
-      <div>
-        {/* Gợi ý khu vực */}
-        <h5 style={{ marginBottom: "15px", fontSize: "20px" }}>
-          Gợi ý khu vực
-        </h5>
+    <div className='PostApartment_container'>
+ {/* Gợi ý khu vực  */}
 
-        <div className="Main-GYKV">
-          <div className="item1">
-            <h5>TP HỒ CHÍ MINH</h5>
-            <div className="item_shadow">
-              <Link to="/lay-danh-sach-bai-dang-theo-tinh?province=Thành phố Hồ Chí Minh">
-                <img
-                  src="/images/anhsg.jpg"
-                  width="100%"
-                  height="314px"
-                  alt=""
-                />
-              </Link>
-            </div>
-          </div>
+<h5 style={{marginBottom:'15px', fontSize: '20px'}}>Gợi ý khu vực</h5>
+
+    <div className="Main-GYKV">
+    <div className="item1">
+        <h5>TP HỒ CHÍ MINH</h5>
+        <div className='item_shadow'>
+        <img src="/images/anhsg.jpg" width="450px" height="314px" alt="" />
+        <div></div>
+        </div>
+    </div>
 
           <div className="item2">
             <h6>HÀ NỘI</h6>
@@ -91,7 +83,7 @@ function Home() {
               <Link to="/lay-danh-sach-bai-dang-theo-tinh?province=Thành phố Hà Nội">
                 <img
                   src="/images/anhhn.jpg"
-                  width="314px"
+                  width="313px"
                   height="148px"
                   alt=""
                 />
@@ -105,7 +97,7 @@ function Home() {
               <Link to="/lay-danh-sach-bai-dang-theo-tinh?province=Tỉnh Bình Dương">
                 <img
                   src="/images/anhbd.webp"
-                  width="314px"
+                  width="313px"
                   height="148px"
                   alt=""
                 />
@@ -119,7 +111,7 @@ function Home() {
               <Link to="/lay-danh-sach-bai-dang-theo-tinh?province=Tỉnh Đồng Nai">
                 <img
                   src="/images/anhdn.jpg"
-                  width="314px"
+                  width="313px"
                   height="148px"
                   alt=""
                 />
@@ -133,7 +125,7 @@ function Home() {
               <Link to="/lay-danh-sach-bai-dang-theo-tinh?province=Thành phố Đà Nẵng">
                 <img
                   src="/images/anhdanang.jpg"
-                  width="314px"
+                  width="313px"
                   height="148px"
                   alt=""
                 />
@@ -141,7 +133,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      
       <div className="danh-sach-tin-container">
         <div className="name-list-post-title">Tin Vip Cao Cấp</div>
         <div className="danh-sach-tip-vip-cao-cap">

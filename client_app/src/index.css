@@ -13,8 +13,9 @@ code {
     monospace;
 } */
 main{
+
   background-color:#f2f2f280;
-  padding-top:20px; 
+
   padding-bottom:20px;
   margin: 0 auto;
 }
