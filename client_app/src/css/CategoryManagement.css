@@ -112,3 +112,7 @@ th {
 .pagination a:hover {
     background-color: #ddd;
 }
+.form-add-rentaltype{
+    width: 50%;
+    margin: 0 auto;
+}

@@ -1,40 +1,102 @@
-.head_news{
-    display: flex;
-    background-color: #0095DA;
+/* News.css */  
 
-}
-.head_news_list{
-    display: flex;
-    list-style: none;
-    margin-left: 7.5rem;
-   
-}
-.head_news_list li{
-    padding: 10px 15px 0px 0px;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    justify-content: center;
+/* Tổng thể */  
+.news-wrapper {  
+    margin: 20px;  
+    padding: 20px;  
+    border: 1px solid #ccc;  
+    border-radius: 10px;  
+    background: #f9f9f9;  
+}  
 
-    font-size: 16px;
-    cursor: pointer;
-    text-transform: uppercase;
-}
-.title{
-    display: flex;
-    justify-content: space-between;
-    border: none;
+/* Bố cục */  
+#news-container {  
+    display: flex;  
+    flex-direction: row;  
+    justify-content: space-between;  
+}  
 
-}
+/* Nội dung chính */  
+#news-content {  
+    flex: 3; /* Chiếm 3 phần không gian */  
+    margin-right: 20px;  
+}  
 
-.news_name{
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    background-color: #0095DA;
-    padding: 12px;
-    
-}
-.news_name_content{
-    padding:12px;
+/* Bài viết nổi bật */  
+#featured-property {  
+    margin-bottom: 20px;  
+    border: 1px solid #ddd;  
+    border-radius: 5px;  
+    padding: 15px;  
+    background: #fff;  
+}  
+
+#featured-property img {  
+    width: 100%;  
+    height: auto;  
+    border-radius: 5px;  
+}  
+
+/* Mục tin tức mới nhất */  
+#latest-properties ul {  
+    list-style: none;  
+    padding: 0;  
+}  
+
+#latest-properties li {  
+    border-bottom: 1px solid #eee;  
+    padding: 10px 0;  
+}  
+
+#latest-properties img {  
+    float: left;  
+    margin-right: 10px;  
+    border-radius: 5px;  
+}  
+
+.readmore a {  
+    display: inline-block;  
+    margin-top: 5px;  
+    text-decoration: none;  
+    color: #007bff;  
+}  
+
+.readmore a:hover {  
+    text-decoration: underline;  
+}  
+
+/* Thanh bên */  
+#sidebar {  
+    flex: 1; /* Chiếm 1 phần không gian */  
+}  
+
+#latest-news {  
+    list-style: none;  
+    padding: 0;  
+}  
+
+#latest-news li {  
+    margin-bottom: 15px;  
+}  
+
+#latest-news img {  
+    float: left;  
+    margin-right: 10px;  
+    border-radius: 5px;  
+}  
+
+/* Xóa bỏ lề */  
+.clear {  
+    clear: both;  
+}  
+
+/* Responsive */  
+@media screen and (max-width: 768px) {  
+    #news-container {  
+        flex-direction: column;  
+    }  
+
+    #news-content {  
+        margin-right: 0;  
+    }  
 }

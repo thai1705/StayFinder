@@ -4,82 +4,94 @@
 .post-detail-container{
   gap:20px;
   display: grid;
-    
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+}
+
+.post-right-container{
+  width: 70%;
+}
+.user-post{
+  width: 30%;
 }
 .form-menu {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 15px;
-  background-color: #f9f9f9; /* Light background for better contrast */
+  gap: 16px;
+  padding: 16px;
+  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-  flex-wrap: wrap; /* Helps layout on smaller screens */
-  margin-bottom: 20px; /* Spacing below the form menu */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: auto;
 }
 
-.form-menu .form-search {
-  flex: 1; 
-  max-width: 450px;
+.form-search {
+  position: relative;
+  display: flex;
+  width: 60%;
+  height: auto;
+}
+
+.form-search i {
+  position: absolute;
+  left: 10px;
+  color: #999;
+  font-size: 16px;
+}
+
+.form-search .ant-input {
+  padding-left: 30px;
+  width: 100%;
+}
+
+.ant-select, .ant-input {
+  width: 20%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.ant-select-selector {
+  height: 40px;
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #fff;
 }
 
-.form-menu .form-search input {
+.ant-select-selection-item, .ant-select-selection-placeholder {
+  line-height: 40px;
+}
+
+.ant-btn-primary {
+  width: 5%;
+  height: 40px;
+  font-weight: bold;
+}
+
+/* CSS cho nút Reset icon */
+.ant-btn-icon-only {
+  width: 40px;
+  height: 40px;
   border: none;
+  background-color: #f9f9f9;
+  color: #888;
+  font-size: 18px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s, background-color 0.3s;
+  cursor: pointer;
+}
+
+.ant-btn-icon-only:hover {
+  color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+.ant-btn-icon-only:focus {
   outline: none;
-  padding: 12px;
-  width: 100%; 
-  font-size: 16px;
-  color: #333; 
-  margin-bottom: 0px !important;
+  box-shadow: none;
 }
-
-.form-menu .form-search i {
-  padding: 12px;
-  
- 
-}
-
-.form-menu .select-menu {
-  width: 160px;
-  padding: 10px 15px; /* Adjust padding for consistency */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: border-color 0.3s; /* Smooth transition */
-}
-
-.form-menu .select-menu:hover {
-  border-color: #ff6f61; /* Highlight on hover */
-}
-
-.form-menu button.reset {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background-color: #ff6f61; /* Button background */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s; /* Transition effects */
-}
-
-.form-menu button.reset:hover {
-  background-color: #e65550; /* Darker shade on hover */
-  transform: scale(1.05); /* Slight scale effect on hover */
-}
-
-
 
 .path {
   font-size: 13px;
@@ -88,18 +100,19 @@
 
 
 .container-post{
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
   display: flex;
-  background-color: #fff;
+
   justify-content: space-between;
   padding:15px 0px 15px 0px ;
 }
 .form-list-filter{
-  width: 30%;
+  width: 25%;
   
 }
 .post-list-render{
-  width: 65%;
+  width: 70%;
 }
 .path ol {
   list-style: none;
@@ -188,12 +201,13 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
 .img-post{
-  width: 42%;
+  width: 50%;
   height: 100%;
+  position: relative;
 }
 .img-post img {
-  width: 100%;     
-  height: 100%;    
+  height: 100%; 
+  width: 100%;   
   object-fit: cover;
   border-radius: 8px 0 0 8px; 
   
@@ -254,7 +268,7 @@
   gap: 27px;
 }
 .list-home.grid-view .post-row {
-  width: 250px;
+  width: 31%;
   height: auto;
   display: block;
   flex-wrap: wrap;
@@ -327,10 +341,11 @@
 }
 .list-filter{
   border: none;
+  
 }
 .filter{
   margin: 0;
-
+  background-color: #fff;
   list-style: none;
   border-radius: 5px;
   padding: 10px;
@@ -428,29 +443,89 @@ padding-right: 20px;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-  
-  
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word; /* Ensures long words break */
+    max-width: 100px; /* Set max-width to control label width */
+    word-wrap: break-word;
+    
 }
 .footer-post {
   display:flex;
   justify-content: space-between;
-  margin-top: 25px;
+padding: 30px 20px 0px 0px ;
   margin-bottom: 10px;
   align-items: center;
-  margin-right: 10px;
+ 
+
 }
 .date{
   font-size: 17px;
   font-weight: bold;
   color:rgb(150, 150, 150);
 }
-.love{
-  font-size: 20px;
-  color:rgb(150, 150, 150);
+.love {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s;
+  color: rgb(235, 81, 81);
 }
-.love:active{
+
+.love::before,
+.love::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  transition: all 0.3s;
+  transform: translate(-50%, -50%);
+  
+}
+
+/* Hiệu ứng hover */
+.love:hover {
+  transform: scale(1.2);
+}
+
+.love:hover::before {
+  width: 150%;
+  height: 150%;
+  background-color: rgba(240, 118, 118, 0.2); /* Màu nhấn */
+}
+
+.love:hover::after {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 118, 118, 0.2); /* Màu nền nhấn */
+  
+}
+
+/* Khi nhấn vào thì biểu tượng love sẽ đổi màu */
+.love.liked::before {
+  background-color: rgba(240, 118, 118, 0.2);
+}
+
+.love.liked i {
   color: red;
 }
+
+.love i {
+  font-size: 24px;
+  transition: color 0.3s;
+}
+
+/* Hiệu ứng nhấn (active) */
+.love:active {
+  transform: scale(0.9); /* Thu nhỏ một chút khi nhấn */
+}
+
+.love i:active {
+  transform: scale(0.9); /* Thu nhỏ một chút khi nhấn */
+}
+
 .item-name a{
   color:#004E7F;
   font-weight: 600;
@@ -718,7 +793,7 @@ padding-right: 20px;
 }
 /*---------post-viewed-------------*/
 .viewed-news-post{
-  width: 210px;
+  width: 23%;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   box-shadow: 1px 2px 2px 2px #ddd;
@@ -787,8 +862,8 @@ padding-right: 20px;
 .viewed-news-list-post{
   display: flex;
   flex-wrap: wrap;
-  gap: 17px;
-  width: 135%;
+  gap: 20px;
+  width: 100%;
 }
 .user-information-post{
   border: 1px solid rgb(189, 187, 187);
@@ -1001,4 +1076,79 @@ padding-right: 20px;
 }
 .general-provisions-content  li::before {
   content: "- "; 
+}
+
+/*--------------Danh sách bài viết home---------------------*/
+.img-post-list-home{
+  
+  height: 150px;
+  position: relative;
+  object-fit: fill;
+  
+}
+.img-post-list-home img {
+  height: 100%; 
+  width: 100%;   
+  object-fit: cover;
+  
+}
+.danh-sach-tin-thuong,
+.danh-sach-tip-vip-noi-bat,
+.danh-sach-tip-vip-cao-cap{
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 14px; 
+  padding: 15px 0px;
+}
+.list-post-container{
+  width: 19%;
+  background-color: #fff;
+  display: block;
+}
+.name-list-post-title{
+  background-color: rgb(56, 87, 180);
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px 10px 20px;
+  margin-bottom: 20px;
+}
+.post-number-position{
+  display: flex;
+  justify-content: space-between;
+}
+.post-content-infor{
+  padding: 5px;
+}
+.footer-list-post{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+.list-post-loaction{
+  padding: 5px 0px;
+  font-size: 13px;
+  color: red;
+}
+.list-post-price{
+  padding: 5px 0px;
+}
+.title-list-post{
+  font-size: 15px;
+  padding: 5px 0px;
+  color: #004E7F;
+  white-space: nowrap;           /* Không cho phép dòng mới */
+  overflow: hidden;              /* Ẩn nội dung vượt quá */
+  text-overflow: ellipsis; 
+}
+.footer-list-post .date{
+font-size: 15px;
+text-align: center;
+}
+.footer-list-post .love{
+  font-size: 18px;
+  text-align: center;
+  }
+.post-detail-container{
+  width: 90%;
+  margin: 0 auto;
 }

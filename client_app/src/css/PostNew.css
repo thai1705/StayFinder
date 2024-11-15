@@ -309,3 +309,309 @@ form-filter label {
 .logout-btn:hover {
   background: none;
 }
+.post-label:hover {
+  background-color: #ff3333; /* Darken on hover */
+  transform: scale(1.05); /* Slightly increase size on hover */
+}
+/* Style for the VIP label */
+.post-label {
+  position: absolute;
+  top: 10px;
+  background-color: #ff4d4d; /* Primary color for VIP2 label */
+  color: white;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 3px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between icon and text */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for style */
+}
+
+/* Icon style within the label */
+.post-label i {
+  font-size: 1rem; /* Adjust icon size */
+}
+
+/* Different background color for VIP1 label */
+.post-row.vip1 .post-label {
+  background-color: #c0c0c0; /* Silver color for VIP1 */
+}
+
+/* Hide label for regular posts */
+.post-row.thuong .post-label {
+  background-color: #2a89ef; /* Silver color for VIP1 */
+}
+
+.post-row.post-expired .post-label {
+  background-color: #474444; /* Red color to indicate expiration */
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+/* Container for the entire transaction history page */
+.transaction-history-container {
+  width: 70%;
+  margin: 0px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.transaction-history-container:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Styling the transaction table */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.transaction-table th,
+.transaction-table td {
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 16px;
+}
+
+.transaction-table th {
+  background-color: #4caf50;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.transaction-table td {
+  background-color: #fafafa;
+  color: #333;
+}
+
+.transaction-table tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+.transaction-table tr:nth-child(odd) td {
+  background-color: #fff;
+}
+
+/* Hover effect for rows */
+.transaction-table tr:hover td {
+  background-color: #e7f7e7;
+  cursor: pointer;
+}
+
+/* Styling for links */
+.transaction-table a {
+  color: #4caf50;
+  text-decoration: none;
+}
+
+.transaction-table a:hover {
+  color: #45a049;
+  text-decoration: underline;
+}
+
+/* Styling for empty state */
+.transaction-table td[colspan="5"] {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  padding: 20px 0;
+}
+
+/* Small responsive adjustments */
+@media (max-width: 768px) {
+  .transaction-history-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .transaction-table th, .transaction-table td {
+    padding: 10px 12px;
+  }
+
+  .transaction-table th {
+    font-size: 14px;
+  }
+
+  .transaction-table td {
+    font-size: 14px;
+  }
+}
+
+/* Loading and error states */
+.loading,
+.error {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+}
+/* Màu sắc riêng cho từng loại post-label */
+.post-label-vip2 {
+  background-color: #ff4d4d; /* Màu đỏ chính cho Tin Vip Cao Cấp */
+}
+.post-label-vip2:hover {
+  background-color: #ff3333; /* Tối màu khi hover cho VIP2 */
+}
+
+.post-label-vip1 {
+  background-color: #c0c0c0; /* Màu bạc cho Tin Vip Nổi Bật */
+}
+.post-label-vip1:hover {
+  background-color: #a8a8a8; /* Tối màu khi hover cho VIP1 */
+}
+
+.post-label-thuong {
+  background-color: #2a89ef; /* Màu xanh cho Tin Thường */
+}
+.post-label-thuong:hover {
+  background-color: #1a6fd1; /* Tối màu khi hover cho Tin Thường */
+}
+
+/* Make the page responsive */
+@media screen and (max-width: 768px) {
+  .transaction-history-container {
+    width: 95%;
+  }
+
+  aside {
+    display: none; /* Hide the menu on smaller screens */
+  }
+
+  .transaction-table th, .transaction-table td {
+    padding: 8px;
+  }
+}
+
+/* Căn chỉnh form group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Tùy chỉnh nhãn */
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Ẩn input file gốc */
+.form-group input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Container for file upload */
+.file-upload-wrapper {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.file-upload-wrapper .icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.file-upload-wrapper input[type="file"] {
+  display: none; /* Hide the file input button */
+}
+
+/* Style for the file name display */
+.file-name {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Container for preview images */
+.image-preview {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Style for each image */
+.image-preview img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect for images */
+.image-preview img:hover {
+  transform: scale(1.05);
+}
+
+.mb-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.mb-3 img,
+.mb-3 video {
+  max-width: 200px;
+  max-height: 150px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.mb-3 img:hover,
+.mb-3 video:hover {
+  border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mb-3 p {
+  font-style: italic;
+  color: #888;
+  text-align: center;
+  width: 100%;
+}
+.list-file{
+  display: flex;
+  flex-wrap: wrap;
+}
+.list-file-img{
+  width: 200px;
+  height: 150px;
+  
+}
+.list-file-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding:20px;
+}
+.list-file-img video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding:20px;
+}

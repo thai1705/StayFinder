@@ -1,0 +1,30 @@
+// utils.js
+
+// Định dạng ngày
+export const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('vi-VN', options);
+  };
+  
+  // Định dạng tiền tệ
+  export const formatCurrency = (value) => {
+    const numericValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
+    
+    if (numericValue >= 1000000000) { 
+      return (numericValue / 1000000000).toFixed(0) + " tỷ";
+    } else if (numericValue >= 1000000) {
+      return (numericValue / 1000000).toFixed(0) + " triệu";
+    } else if (numericValue >= 1000) {
+      return (numericValue / 1000).toFixed(0) + " ngàn";
+    } else {
+      return numericValue.toString();
+    }
+  };
+  
+  // Kiểm tra bài đăng hết hạn
+  export const isExpired = (expireDate) => {
+    const currentDate = new Date();
+    const postExpireDate = new Date(expireDate);
+    return postExpireDate < currentDate;
+  };
+  

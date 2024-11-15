@@ -6,7 +6,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 function Header() {
   const [username, setUsername] = useState(null);
   useEffect(() => {
-
     const token = localStorage.getItem("token");
     if (token) {
       fetch("http://localhost:8000/api/auth/profile", {
@@ -23,7 +22,7 @@ function Header() {
         })
         .then((data) => {
           if (data && data.username) {
-            setUsername(data.username); 
+            setUsername(data.username);
           }
         })
         .catch((error) =>
@@ -60,11 +59,11 @@ function Header() {
 
           {username ? (
             <div className="header-username">
-              <Link to={"/tai-khoan"}><span>Xin chào, {username}</span></Link>
-              
+              <Link to={"/tai-khoan"}>
+                <span>Xin chào, {username}</span>
+              </Link>
             </div>
           ) : (
-
             <>
               <Link className="header-login" to={"/dang-nhap"}>
                 <div className="Header-link-login">
