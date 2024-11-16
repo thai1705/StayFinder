@@ -491,6 +491,34 @@ app.get('/transaction-history/:userId', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Lỗi khi lấy lịch sử giao dịch' });
   }
 });
+
+app.get('/lay-tong-so-doanh-thu', authMiddleware, async (req, res) => {
+  try {
+    const totalRevenue = await Transaction.aggregate([
+      // Lọc tất cả giao dịch có status 'chưa thanh toán' (nếu cần, có thể thay đổi)
+      { $match: { status: 'chưa thanh toán' } },
+
+      // Cộng tất cả các giá trị của trường amount
+      {
+        $group: {
+          _id: null, // Không nhóm theo bất kỳ trường nào
+          totalAmount: { $sum: { $toDouble: "$amount" } }, // Cộng các giá trị amount
+        },
+      },
+    ]);
+
+    // Nếu có kết quả, trả về tổng doanh thu
+    if (totalRevenue.length > 0) {
+      return res.status(200).json({ totalRevenue: totalRevenue[0].totalAmount });
+    } else {
+      return res.status(404).json({ message: 'Không có giao dịch nào' });
+    }
+  } catch (error) {
+    console.error('Error fetching total revenue:', error);
+    res.status(500).json({ error: 'Lỗi khi lấy tổng doanh thu' });
+  }
+});
+
 app.get('/filtersort', async (req, res) => {
   const { sortOption } = req.query;
   console.log('sortOption:', sortOption); // Thêm dòng này để kiểm tra giá trị

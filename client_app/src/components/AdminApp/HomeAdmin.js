@@ -7,11 +7,19 @@ function HomeAdmin() {
   const [newUserCount, setNewUserCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [totalPosts, setTotalPosts] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [isLoadingRevenues, setIsLoadingRevenues] = useState(true);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [loadingPosts, setLoadingPosts] = useState(true);
+  const [loadingRevenues, setLoadingRevenues] = useState(true);
   const [loadingNewUsers, setLoadingNewUsers] = useState(true);
   const [error, setError] = useState(null);
-
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
   useEffect(() => {
     // Hàm gọi API để lấy tổng số người dùng
     const fetchUserCount = async () => {
@@ -73,6 +81,42 @@ function HomeAdmin() {
         setLoadingNewUsers(false);
       }
     };
+    // Hàm lấy tổng doanh thu
+const fetchTotalPrice = async () => {
+  setIsLoadingRevenues(true);  // Đảm bảo rằng trạng thái đang tải là true khi bắt đầu
+
+  try {
+    const response = await fetch('http://localhost:8000/lay-tong-so-doanh-thu', {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Đảm bảo có khoảng trắng sau Bearer
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Response error:", errorText);
+      throw new Error("Không thể lấy dữ liệu doanh thu");
+    }
+
+    const data = await response.json();
+    if (data.totalRevenue) {
+      setTotalRevenue(data.totalRevenue);  // Cập nhật giá trị tổng doanh thu
+    } else {
+      console.log("Không có dữ liệu giao dịch");
+      setTotalRevenue(0);  // Nếu không có dữ liệu, set giá trị là 0
+    }
+  } catch (error) {
+    console.error("Error fetching total price:", error);
+    setError(error.message);  // Nếu có lỗi thì hiển thị thông báo lỗi
+    setTotalRevenue(0);  // Đảm bảo totalRevenue luôn có giá trị hợp lý khi có lỗi
+  } finally {
+    setIsLoadingRevenues(false);  // Đảm bảo trạng thái đang tải được cập nhật
+  }
+};
+
+    
     // tổng bài đăng
     const fetchTotalPosts = async () => {
       setLoadingPosts(true);
@@ -106,6 +150,7 @@ function HomeAdmin() {
     fetchUserCount();
     fetchNewUserCount();
     fetchTotalPosts();
+    fetchTotalPrice();
   }, []);
 
   return (
@@ -190,10 +235,17 @@ function HomeAdmin() {
           </div>
         )}
         <div class="card">
-          <div class="card-icon revenue">💲</div>
-          <div class="card-title">Doanh thu</div>
-          <div class="card-value">999 VNĐ</div>
-        </div>
+  <div class="card-icon revenue">💲</div>
+  <div class="card-title">Doanh thu</div>
+  <div className="card-value">
+    {isLoadingRevenues
+      ? "Đang tải..."
+      : error
+      ? "Lỗi tải doanh thu"
+      : formatCurrency(totalRevenue)}  {/* Hiển thị doanh thu */}
+  </div>
+</div>
+
         <div class="card">
           <div class="card-icon users">👤</div>
           <div class="card-title">Người dùng</div>

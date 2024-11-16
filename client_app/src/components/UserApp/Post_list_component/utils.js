@@ -2,9 +2,13 @@
 
 // Định dạng ngày
 export const formatDate = (dateString) => {
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString('vi-VN', options);
-  };
+  if (!dateString) {
+    return "Vĩnh viễn"; // Trả về "Vĩnh viễn" nếu không có giá trị ngày
+  }
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  return new Date(dateString).toLocaleDateString('vi-VN', options);
+};
+
   
   // Định dạng tiền tệ
   export const formatCurrency = (value) => {

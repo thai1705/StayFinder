@@ -29,7 +29,7 @@ export default function ManagerPost() {
         });
         if (Array.isArray(response)) {
           const filteredPosts = response.filter(post => !post.isDeleted);
-          setPosts(response);
+          setPosts(filteredPosts );
         } else {
           console.error('Phản hồi từ API không hợp lệ hoặc không có dữ liệu:', response);
         }
