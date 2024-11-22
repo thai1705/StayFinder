@@ -13,3 +13,4 @@ const StatusPost = mongoose.model('StatusPost', statuspostSchema);
 
 // Xuất mô hình
 module.exports = StatusPost;
+

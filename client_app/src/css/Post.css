@@ -169,7 +169,7 @@
   font-size: 16px;
   color: gray;
   padding: 0 10px;
-  margin:20px 0px;
+
 }
 .filter-menu{
   display: flex;
@@ -225,8 +225,10 @@
 }
 .grid-row {
   display: flex;
-  margin: 10px 5px;
   align-items: center;
+}
+.filter-menu-number{
+  padding: 0;
 }
 
 .grid-post, .row-post {
@@ -235,7 +237,8 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  margin: 5px;
+  margin: 7px;
+  margin-top:0 ;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fff;
@@ -794,6 +797,7 @@ padding: 30px 20px 0px 0px ;
 /*---------post-viewed-------------*/
 .viewed-news-post{
   width: 23%;
+  height:100%;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   box-shadow: 1px 2px 2px 2px #ddd;
@@ -809,7 +813,6 @@ padding: 30px 20px 0px 0px ;
   text-overflow: ellipsis;
 }
 .viewed-news-post-content{
-  padding-left: 5px;
   padding: 5px 10px;
 }
 .viewed-news-post-center{
@@ -822,15 +825,24 @@ padding: 30px 20px 0px 0px ;
 .viewed-news-post-price{
   font-size: 14px;
 }
-
+.viewed-news-post-img{
+  height: 150px;
+}
 .viewed-news-post-img img{
   width: 100%;
+  height: 100%;
+ 
   border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 } 
 .viewed-news-post-address{
   font-size: 14px;
   margin-top: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Số dòng tối đa, ở đây là 2 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .viewed-news-post-footer{
   display: flex;
@@ -871,7 +883,7 @@ padding: 30px 20px 0px 0px ;
 .user-information-post{
   padding-top: 20px;
   justify-content: center;
-  background-color: #F1F3F4;
+  background-color: #ffff;
   border-radius: 8px;
 }
 .user-information-post-img{
@@ -1105,6 +1117,7 @@ padding: 30px 20px 0px 0px ;
   width: 19%;
   background-color: #fff;
   display: block;
+  box-shadow: 0 0 5px 1px #bdb5b5;
 }
 .name-list-post-title{
   background-color: rgb(56, 87, 180);
@@ -1152,4 +1165,76 @@ text-align: center;
 .post-detail-container{
   width: 90%;
   margin: 0 auto;
+}
+.form-Upgrade {  
+  max-width: 800px;  /* Tăng chiều rộng cho form */  
+  margin: 40px auto;  /* Thêm khoảng cách trên và dưới */  
+  background: #ffffff;  /* Nền trắng tinh khiết */  
+  border-radius: 16px;  /* Bo tròn góc mềm mại */  
+  box-shadow: 0 12px 60px rgba(0, 0, 0, 0.15);  /* Đổ bóng sâu hơn để có chiều sâu */  
+  padding: 50px;  /* Tăng độ đệm cho cảm giác rộng rãi */  
+  transition: box-shadow 0.3s ease;  
+  border: 1px solid #e0e0e0;  /* Khung mỏng để tạo vẻ thanh lịch */  
+}  
+
+.title-form-Upgrade {  
+  font-size: 36px;  /* Tăng cỡ chữ cho tiêu đề */  
+  font-weight: 700;  /* Đậm để thu hút sự chú ý */  
+  color: #343a40;  /* Màu tối cho độ tương phản tốt */  
+  text-align: center;  
+  margin-bottom: 20px;  /* Khoảng cách dưới tiêu đề */  
+  text-transform: uppercase;  /* Chữ in hoa để tạo sự trang trọng */  
+}  
+
+.infor-name {  
+  font-size: 22px;  /* Cỡ chữ lớn để dễ đọc */  
+  color: #495057;  
+  padding: 15px;  /* Đệm tốt hơn */  
+  border: 1px solid #ced4da;  /* Viền thiết kế thanh mảnh */  
+  border-radius: 8px;  /* Bo tròn góc */  
+  background-color: #f8f9fa;  /* Nền sáng để nổi bật */  
+  transition: border-color 0.3s;  /* Hiệu ứng chuyển tiếp cho viền */  
+}  
+
+.infor-name:focus {  
+  border-color: #007bff;  /* Màu viền khi có tiêu điểm */  
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);  /* Ánh sáng xung quanh */  
+}  
+
+.upgrade-button {  
+  background-color: #fff;  /* Màu xám thanh lịch */  
+  color: red;  
+  border: none;  /* Không viền */  
+  border-radius: 8px;  /* Góc bo tròn */   
+  cursor: pointer;  
+  transition: background-color 0.3s ease, transform 0.2s;  
+  padding: 10px 10px;
+  font-size: 12px;  /* Cỡ chữ lớn hơn cho nút */  
+}  
+.upgrade-button i{
+  background-color: #fff;
+  color: red;  
+  
+}
+.upgrade-button:hover {  
+  background-color: #fff; /* Màu tối hơn khi di chuột */  
+  transform: translateY(-2px);  /* Hiệu ứng nâng lên nhẹ nhàng */  
+}  
+
+.option-posttype p {  
+  color: #dc3545;  /* Màu đỏ để nhấn mạnh thông điệp */  
+  font-size: 16px;  /* Cỡ chữ vừa phải */  
+  text-align: center;  
+  font-weight: bold;  
+  margin-top: 15px;  
+}
+.two-option{
+  display: flex;
+  justify-content: space-between;
+}
+.option-2{
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  align-items: start;
 }

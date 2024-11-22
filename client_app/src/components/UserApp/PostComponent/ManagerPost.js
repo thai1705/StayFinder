@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';  
+import React, { useState, useEffect } from "react";
 import "../../../css/ManagerPost.css";
 import Menu from "./Menu";
-import AxiosInstance from '../../../lib/Axiosintance';
-import { jwtDecode } from 'jwt-decode';
-import { formatDate } from '../../UserApp/Post_list_component/utils';
-import { Link } from 'react-router-dom';
+import AxiosInstance from "../../../lib/Axiosintance";
+import { jwtDecode } from "jwt-decode";
+import { formatDate } from "../../UserApp/Post_list_component/utils";
+import { Link } from "react-router-dom";
+import { message } from "antd";
 
 export default function ManagerPost() {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -12,8 +13,7 @@ export default function ManagerPost() {
   const postsPerPage = 5;
   const [posts, setPosts] = useState([]);
 
-  // Lấy userId từ token
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode(token) : null;
   const userId = decodedToken ? decodedToken.userId : null;
 
@@ -24,87 +24,104 @@ export default function ManagerPost() {
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
-        const response = await AxiosInstance().get('/lay-danh-sach-bai-dang-theo-userid', {
-          params: { userId }
-        });
+        const response = await AxiosInstance().get("/lay-danh-sach-bai-dang-theo-userid", { params: { userId } });
         if (Array.isArray(response)) {
-          const filteredPosts = response.filter(post => !post.isDeleted);
-          setPosts(filteredPosts );
-        } else {
-          console.error('Phản hồi từ API không hợp lệ hoặc không có dữ liệu:', response);
+          const filteredPosts = response.filter((post) => !post.isDeleted);
+          setPosts(filteredPosts.map((post) => ({
+            ...post,
+            expireDate: post.expireDate || null, 
+          })));
         }
       } catch (error) {
-        console.error('Lỗi khi lấy bài đăng của người dùng:', error);
+        console.error("Error fetching user posts:", error);
       }
     };
 
     if (userId) fetchUserPosts();
-    else console.error('Không tìm thấy userId trong token');
+    else console.error("User ID not found in token");
   }, [userId]);
-  const toggleVisibility = async (postId, isVisible) => {
+
+  const handleRepost = async (postId, postType) => {
     try {
-      // Gọi API để thay đổi trạng thái bài đăng
-      const response = await AxiosInstance().put(`/an-hien-bai-dang/${postId}`, {
-        isVisible: !isVisible
-      });
-      if (response) {
-        // Cập nhật lại danh sách bài đăng với trạng thái mới
-        setPosts(prevPosts => prevPosts.map(post =>
-          post._id === postId ? { ...post, isVisible: !isVisible } : post
-        ));
+      const response = await AxiosInstance().put(`/dang-lai-bai-viet/${postId}`);
+      console.log("API Response:", response);
+
+      if (postType === "vip1" || postType === "vip2") {
+        if (response && response.payUrl) {
+          window.location.href = response.payUrl;
+        } else {
+          console.error("Payment link generation failed:", response);
+          message.error("Could not generate payment link.");
+        }
+      } else {
+        if (response && response.post) {
+          const { post } = response;
+          message.success("Post reposted successfully!");
+          setPosts((prevPosts) =>
+            prevPosts.map((item) =>
+              item._id === postId ? { ...item, expireDate: post.expireDate } : item
+            )
+          );
+        } else {
+          message.error("Post information missing.");
+        }
       }
     } catch (error) {
-      console.error('Lỗi khi thay đổi trạng thái bài đăng:', error);
+      console.error("Error reposting post:", error);
+      message.error("Error reposting post: " + error.message);
     }
   };
-  // Tính toán bài đăng hiển thị cho trang hiện tại
+  const toggleVisibility = async (postId, isVisible) => {
+    try {
+      const response = await AxiosInstance().put(`/an-hien-bai-dang/${postId}`, { isVisible: !isVisible });
+      if (response) {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId ? { ...post, isVisible: !isVisible } : post
+          )
+        );
+      }
+    } catch (error) {
+      message.error("Error changing post visibility: " + error.message);
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const response = await AxiosInstance().delete(`/xoa-bai-dang/${postId}`);
+      if (response.message === "Bài đăng đã bị xóa.") {
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
+      }
+    } catch (error) {
+      message.error("Error deleting post: " + error.message);
+    }
+  };
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Tính số lượng trang
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
-  const deletePost = async (postId) => {
-    try {
-      const response = await AxiosInstance().delete(`/xoa-bai-dang/${postId}`);
-      if (response.message === 'Bài đăng đã bị xóa.') {
-        setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
-      }
-    } catch (error) {
-      console.error('Lỗi khi xóa bài đăng:', error);
-    }
-  };
-  
+
   const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   return (
     <div className="listnewform">
       <aside>
         <Menu />
-      </aside> 
-      
+      </aside>
+
       <div className="data-table">
-        <div className="filter-section">
-          <input type="text" placeholder="Tìm theo ngày đăng" />
-          <input type="text" placeholder="Tìm theo danh mục" />
-          <input type="text" placeholder="Tìm theo loại tin" />
-        </div>
         <div className="tab-section">
           <span className="active-tab">Tất cả ({posts.length})</span>
-          <span>Đã cho thuê (0)</span>
-          <span>Đang hiển thị ({posts.length})</span>
-          <span>Sắp hết hạn (0)</span>
-          <span>Hết hạn (0)</span>
         </div>
         <table>
           <thead>
@@ -116,39 +133,49 @@ export default function ManagerPost() {
               <th>Ngày đăng</th>
               <th>Ngày hết hạn</th>
               <th>Trạng thái</th>
+              <th>Nâng cấp tin</th>
+              <th>Đăng lại tin</th>
               <th>Chức năng</th>
             </tr>
           </thead>
           <tbody>
             {currentPosts.length === 0 ? (
-              <tr><td colSpan="8">Không có bài đăng nào của người dùng.</td></tr>
+              <tr><td colSpan="10">Không có bài đăng nào của người dùng.</td></tr>
             ) : (
               currentPosts.map((post, index) => (
                 <tr key={post._id}>
                   <td>{indexOfFirstPost + index + 1}</td>
                   <td>{post.posttype}</td>
                   <td>{post.title}</td>
-                  <td className='img-table'>
+                  <td className="img-table">
                     {post.image.length > 0 && (
                       <img src={`http://localhost:8000/img/${post.image[0]}`} alt="" />
                     )}
                   </td>
                   <td>{formatDate(post.createdAt)}</td>
-                  <td>{formatDate(post.expireDate)}</td>
-                  <td><button 
-                      className="an-hien-button" 
-                      onClick={() => toggleVisibility(post._id, post.isVisible)}
-                    >
-                      {post.isVisible ? 'Ẩn' : 'Hiện'}
+                  <td>{ formatDate(post.expireDate)}</td>
+                  <td>
+                    <button className="an-hien-button" onClick={() => toggleVisibility(post._id, post.isVisible)}>
+                      {post.isVisible ? "Ẩn" : "Hiện"}
                     </button>
-                    </td>
+                  </td>
+                  <td>
+                    <Link to={`/nang-cap-tin-dang/${post._id}`}>
+                      <button className="upgrade-button"><i className="fa-regular fa-circle-up"></i></button>
+                    </Link>
+                  </td>
+                  <td>
+                    {post.expireDate && new Date(post.expireDate) < new Date() ? (
+                      <i className="fa-solid fa-rotate-right repost-icon" onClick={() => handleRepost(post._id, post.posttype)} title="Đăng lại bài viết"></i>
+                    ) : (
+                      <span>Hoạt động</span>
+                    )}
+                  </td>
                   <td className="action-post" onClick={() => handleToggleMenu(post._id)}>
                     ⋮
                     {activeMenu === post._id && (
                       <div className="action-menu">
-                        <Link to={`/chinh-sua-tin-dang/${post._id}`}>
-                        <button onClick={() => alert("Sửa bài đăng")}>Sửa</button>
-                        </Link>
+                        <Link to={`/chinh-sua-tin-dang/${post._id}`}><button>Sửa</button></Link>
                         <button onClick={() => deletePost(post._id)}>Xóa</button>
                       </div>
                     )}
@@ -160,11 +187,11 @@ export default function ManagerPost() {
         </table>
         <div className="pagination">
           <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          <i class="fa-solid fa-circle-chevron-left"></i>
+            <i className="fa-solid fa-circle-chevron-left"></i>
           </button>
-          <span> {currentPage} / {totalPages}</span>
+          <span>{currentPage} / {totalPages}</span>
           <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          <i class="fa-solid fa-circle-chevron-right"></i>
+            <i className="fa-solid fa-circle-chevron-right"></i>
           </button>
         </div>
       </div>

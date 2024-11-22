@@ -85,6 +85,7 @@ const TransactionHistory = () => {
               <th>Tiêu đề bài đăng</th>
               <th>Số tiền</th>
               <th>Trạng thái</th>
+              <th>Nội dung thanh toán</th>
               <th>Phương thức thanh toán</th>
             </tr>
           </thead>
@@ -96,6 +97,7 @@ const TransactionHistory = () => {
                   <td>{transaction.postId?.title || 'Không xác định'}</td>
                   <td>{transaction.amount} VND</td>
                   <td>{transaction.status}</td>
+                  <td>{transaction.orderInfo}</td>
                   <td>{transaction.paymentMethod}</td>
                 </tr>
               ))

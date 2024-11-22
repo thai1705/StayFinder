@@ -32,3 +32,32 @@ export const formatDate = (dateString) => {
     return postExpireDate < currentDate;
   };
   
+  export const renderPostLabel = (post) => {
+    if (isExpired(post.expireDate)) {
+      return (
+        <div className="post-label expired">
+          <i className="fa fa-exclamation-circle"></i> Tin đã hết hạn
+        </div>
+      );
+    }
+    switch (post.posttype) {
+      case "vip2":
+        return (
+          <div className="post-label">
+            <i className="fa fa-crown"></i> Tin Vip Cao Cấp
+          </div>
+        );
+      case "vip1":
+        return (
+          <div className="post-label">
+            <i className="fa fa-star"></i> Tin Vip Nổi Bật
+          </div>
+        );
+      default:
+        return (
+          <div className="post-label">
+            <i className="fa fa-circle"></i> Tin thường
+          </div>
+        );
+    }
+  };

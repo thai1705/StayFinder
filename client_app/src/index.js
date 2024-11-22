@@ -38,6 +38,7 @@ import TransactionHistory from './components/UserApp/PostComponent/TransactionHi
 import PostProvince from './components/UserApp/Post_list_component/PostProvince';
 import UpdatePost from './components/UserApp/PostComponent/UpdatePost';
 import ChatBubble from './components/UserApp/ChatBubble';
+import FormUpgradePost from './components/UserApp/PostComponent/formUpgradePost';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));  
 const stripePromise = loadStripe('pk_test_51QIXc5Gui79K0O8g32wUjEQt6TXJTUp8jxVyKk1HupexrNJaqrfCDbJiWrH7sSfA1iaL9b6EDXVXr2YgAYNc3DgV00sReAVhS');
@@ -68,6 +69,7 @@ root.render(
           <Route path='/doi-mat-khau' element={<Changepassword />} />
           <Route path='/tai-khoan' element={<Account />} />
           <Route path="/tin-da-luu" element={<SavedPosts />} />  
+          <Route path="/nang-cap-tin-dang/:id" element={<FormUpgradePost />} /> 
           <Route path="/payment" element={<Payment />} />
           <Route path='*' element={<NotFound />} />
         </Route>  

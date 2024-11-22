@@ -20,6 +20,10 @@ const paymentPostSchema = new mongoose.Schema({
         enum: ['cash', 'credit_card', 'paypal'], // Danh sách phương thức thanh toán
         required: true
     },
+    orderInfo: {
+        type: String, // Dữ liệu orderInfo
+        required: true
+    },
     payment_date: {
         type: Date,
         default: Date.now

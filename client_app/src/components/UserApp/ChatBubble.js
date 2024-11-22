@@ -312,7 +312,7 @@ const ChatBubble = () => {
               onKeyDown={handleKeyDown}
             />
             <button className="btn-button" onClick={handleSendMessage}>
-              Gửi
+              <i class="fa-regular fa-paper-plane"></i>
             </button>
           </div>
         </div>

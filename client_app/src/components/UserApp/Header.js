@@ -54,13 +54,16 @@ function Header() {
 
         <div className="Header-jtf">
           <div className="Header-heart">
+          <Link to={'/tin-da-luu'}>
             <FontAwesomeIcon icon={faHeart} />
-          </div>
+            </Link>
 
+          </div>
+         
           {username ? (
             <div className="header-username">
               <Link to={"/tai-khoan"}>
-                <span>Xin chào, {username}</span>
+                <span> {username}</span>
               </Link>
             </div>
           ) : (
@@ -94,6 +97,7 @@ function Header() {
           </Link>
         </div>
       </div>
+      <marquee direction="right">Hoc HTML tai VietJack - Vi du cach su dung the marquee </marquee>
     </header>
   );
 }

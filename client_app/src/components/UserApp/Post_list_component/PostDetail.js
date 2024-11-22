@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
 import ChatBubble from "../ChatBubble";
+import {  formatCurrency } from "./utils";
 import "../../../css/PostDetail.css";
 import OpenStreetMap from "../OpenStreetMap";
 const socket = io("http://localhost:8000");
@@ -20,7 +21,7 @@ function PostDetail() {
   const [isSending, setIsSending] = useState(false);
   const [isLoginRequired, setIsLoginRequired] = useState(false);
   const [loginToastClass, setLoginToastClass] = useState("");
- 
+  const [relatedPosts, setRelatedPosts] = useState([]);
   const [post, setPost] = useState({
     media: [], // Dữ liệu media sẽ chứa các video và hình ảnh
     image: [], // Danh sách hình ảnh
@@ -154,12 +155,20 @@ function PostDetail() {
       setMessageInputClass("");
     }, 500);
   };
-
+  const fetchRelatedPosts = async (provinceName) => {
+    try {
+      const result = await AxiosInstance().get(`/posts-by-province?provinceName=${provinceName}`);
+      setRelatedPosts(result); // Cập nhật danh sách bài viết cùng tỉnh
+    } catch (error) {
+      console.error("Lỗi khi lấy bài viết cùng tỉnh:", error);
+    }
+  };
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const result = await AxiosInstance().get(`/chi-tiet-bai-dang/${id}`);
         setPost(result);
+        fetchRelatedPosts(result.province.name);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
       }
@@ -167,6 +176,7 @@ function PostDetail() {
 
     fetchProduct();
   }, [id]);
+  
   // Hàm định dạng ngày
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
@@ -226,7 +236,7 @@ function PostDetail() {
           <div className="spinner"></div>
         </div>
       )}
-      <div className="col-8">
+      <div className="">
       <div className="carousel-wrapper">
           <div id="slider" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
@@ -419,247 +429,27 @@ function PostDetail() {
         <div className="viewed-news">
           <div className="viewed-news-title">Tin dành cho bạn</div>
           <div className="viewed-news-list-post">
-            <div className="viewed-news-post">
+          {relatedPosts.map((relatedPost) => (
+            <div key={relatedPost._id} className="viewed-news-post">
               <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
+                <img src={`http://localhost:8000/img/${relatedPost.image[0]}`} alt={relatedPost.title} />
               </div>
               <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
+                <div className="viewed-news-post-title">{relatedPost.title}</div>
                 <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
+                  <div className="viewed-news-post-price">{formatCurrency(relatedPost.price)}</div>
+                  <div className="viewed-news-post-acreage">{relatedPost.area} m²</div>
                 </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
+                <div className="viewed-news-post-address">{relatedPost.address}</div>
                 <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
+                  <div className="viewed-news-post-date">Hôm nay</div>
                   <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
+                    <i className="fa-regular fa-heart"></i>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="viewed-news-post">
-              <div className="viewed-news-post-img">
-                <img src="/images/anhbd.webp" alt="" />
-              </div>
-              <div className="viewed-news-post-content">
-                <div className="viewed-news-post-title">
-                  Nhà lầu 2 tầng ba xe,có đầy đủ nội thất, 2 phòng ngủ, 2 phòng
-                  iyfkftgfuf6
-                </div>
-                <div className="viewed-news-post-center">
-                  <div className="viewed-news-post-price">10 triệu</div>
-                  <div className="viewed-news-post-acreage">20 m²</div>
-                </div>
-                <div className="viewed-news-post-address">
-                  Hóc Môn, Hồ Chí Minh
-                </div>
-                <div className="viewed-news-post-footer">
-                  <div className="viewed-news-post-date">Hôm Nay</div>
-                  <div className="viewed-news-post-love">
-                    <i class="fa-regular fa-heart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+          ))}
           </div>
         </div>
       </div>

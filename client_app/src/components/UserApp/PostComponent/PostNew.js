@@ -320,7 +320,7 @@ export default function PostNew() {
         "/them-bai-viet-moi",
         formData
       );
-      console.log("Response from backend:", response.data);
+      console.log("Response from backend:", response);
       if (response && response.payUrl) {
         console.log("Response from backend:", response.payUrl);
         window.location.href = response.payUrl; // Redirect to MoMo payment

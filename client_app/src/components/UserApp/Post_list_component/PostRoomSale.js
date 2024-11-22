@@ -4,7 +4,7 @@ import AxiosInstance from "../../../lib/Axiosintance";
 import { Link } from "react-router-dom";
 import FilterMenu from "../FilterMenu";
 import Formlistfilter from "./Formlistfilter";
-import { formatDate, formatCurrency, isExpired } from "./utils";
+import { formatDate, formatCurrency, isExpired, renderPostLabel } from "./utils";
 import { handleSortChange,handleLoveClick } from "../handlePost";
 function PostRoomSale() {
   const [viewMode, setViewMode] = useState("row");
@@ -17,8 +17,6 @@ function PostRoomSale() {
     const fetchRoomSale = async () => {
       try {
         const response = await AxiosInstance().get("/lay-danh-sach-bai-dang");
-        console.log("Phản hồi từ API:", response);
-
         if (Array.isArray(response)) {
           let roomPosts = response.filter(
             (post) =>
@@ -61,7 +59,6 @@ function PostRoomSale() {
 
           if (sortedPosts.length > 0) {
             setPosts(sortedPosts);
-            console.log("Bài đăng đã sắp xếp:", sortedPosts);
           } else {
             console.error("Không có bài đăng cho thuê phòng trọ.");
           }
@@ -85,8 +82,9 @@ function PostRoomSale() {
       <FilterMenu onFilter={handleFilter} />
       <div class="container-post">
         <div className="post-list-render">
-          <div className="border-bottom border-1 border-gray pb-3">
-            <div className="path pb-1">
+        <div className="post-option">
+            <div className="two-option">
+            <div className="path option-1">
               <ol>
                 <li className="href">
                   <a href="/">Trang chủ</a>
@@ -97,15 +95,9 @@ function PostRoomSale() {
                   </a>
                 </li>
               </ol>
+              <div className="title-list">Danh sách phòng trọ trên Toàn Quốc</div>
             </div>
-            <div className="title-list">Danh sách phòng trọ trên Toàn Quốc</div>
-          </div>
-          <div className="filter-menu row mt-3 ">
-            <div className="col-md-6">
-              <p>Hiện có {post.length} có trên toàn quốc</p>
-            </div>
-
-            <div className="col-md-6 option-post">
+            <div className="option-2">
               <div className="grid-row">
                 <button
                   className={`grid-post ${viewMode === "grid" ? "active" : ""}`}
@@ -122,7 +114,9 @@ function PostRoomSale() {
               </div>
               <select
                 className="select-option"
-                onChange={(e) => handleSortChange(e.target.value)}
+                onChange={(e) =>
+                  handleSortChange(e.target.value, post, setPosts)
+                }
               >
                 <option value="">Thông thường</option>
                 <option value="newest">Tin mới nhất</option>
@@ -138,6 +132,14 @@ function PostRoomSale() {
                 <option value="areaDesc">Diện tích lớn đến bé</option>
               </select>
             </div>
+            </div>
+            
+          </div>
+          <div className="filter-menu row mt-3 ">
+            <div className="col-md-6">
+              <p>Hiện có {post.length} có trên toàn quốc</p>
+            </div>
+
           </div>
           <div
             className={`list-home ${
@@ -154,33 +156,8 @@ function PostRoomSale() {
                   }`}
                   key={post._id}
                 >
-                  <div className="img-post">
-                    {isExpired(post.expireDate) ? (
-                      <div className="post-label expired">
-                        <i
-                          className="fa fa-exclamation-circle"
-                          aria-hidden="true"
-                        ></i>{" "}
-                        Tin đã hết hạn
-                      </div>
-                    ) : post.posttype === "vip2" ? (
-                      <div className="post-label">
-                        <i className="fa fa-crown" aria-hidden="true"></i> Tin
-                        Vip Cao Cấp
-                      </div>
-                    ) : post.posttype === "vip1" ? (
-                      <div className="post-label">
-                        <i className="fa fa-star" aria-hidden="true"></i> Tin
-                        Vip Nổi Bật
-                      </div>
-                    ) : post.posttype === "thuong" ? (
-                      <div className="post-label">
-                        <i className="fa fa-circle" aria-hidden="true"></i> Tin
-                        thường
-                      </div>
-                    ) : null}
-
-                    {post.image.length > 0 && (
+                  <div className="img-post">{renderPostLabel(post)}
+                  {post.image.length > 0 && (
                       <img
                         src={`http://localhost:8000/img/${post.image[0]}`}
                         alt=""
