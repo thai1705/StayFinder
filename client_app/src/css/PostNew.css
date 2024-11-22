@@ -1,6 +1,41 @@
+.header-admin-tooltip-container {
+  display: none; 
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  padding: 5px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+}
+.header-username-container{
+  display: flex;
+  align-items: center;
+}
+.header-username-container:hover .header-admin-tooltip-container {
+  display: block; 
+}
+
+.header-admin-tooltip {
+  padding: 5px;
+}
+
+.header-admin-tooltip a {
+  color: white;
+  text-decoration: none;
+}
+
+.header-admin-tooltip a:hover {
+  text-decoration: underline;
+}
 .listnewform {
   display: flex;
   background-color: rgba(242, 242, 242, 0.5);
+
+}
+.PostApartment_container{
+  max-width: 90%;
+  margin: auto;
 }
 :where(.css-dev-only-do-not-override-ni1kz0).ant-row {
   display: block;
@@ -61,6 +96,7 @@ body {
 
 
 
+
 .profile-avatar img{
   width: 100px;
   height: 100px;
@@ -68,12 +104,18 @@ body {
   object-fit: cover;
 }
 
+
 .profile-name {
   margin-top: 10px;
   font-size: 16px;
   font-weight: bold;
 }
-
+.profile-avatar img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .profile-content {
   padding: 20px;
 }

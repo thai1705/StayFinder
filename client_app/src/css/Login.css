@@ -260,6 +260,26 @@ form {
     width: 100%;
     height: 100%;
 }
+.error-message {
+    color: #ff4d4f; /* Màu đỏ để nhấn mạnh lỗi */
+    background-color: #fff1f0; /* Màu nền nhạt cho dễ nhìn */
+    border: 1px solid #ffa39e; /* Viền cùng tông màu */
+    padding: 10px 15px; /* Khoảng cách bên trong */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Kích thước chữ */
+    margin-top: 10px; /* Khoảng cách bên trên */
+    text-align: left; /* Căn lề trái */
+  }
+  .forgot-password-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    
+}
 
 @media (max-width: 1200px) {  
     .login {  

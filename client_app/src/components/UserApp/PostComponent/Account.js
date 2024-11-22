@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../../css/Account.css";
+import "../../../css/Account.css";
 import Menu from "./Menu";
 
 export default function Account() {
   const PersonalInfoForm = () => {
     const [formData, setFormData] = useState({
+      username: "",
       username: "",
       accountCode: "",
       phone: "",
@@ -22,9 +24,12 @@ export default function Account() {
         ...formData,
         profileImage: e.target.files[0], 
         
+        profileImage: e.target.files[0], 
+        
       });
     };
 
+    
     const handleSubmit = async (e) => {
       e.preventDefault();
 
@@ -67,6 +72,7 @@ export default function Account() {
         <aside>
           <Menu />
         </aside>
+        
 
         <div className="listnewform-left">
           <form className="personal-info-form" onSubmit={handleSubmit}>
@@ -75,6 +81,7 @@ export default function Account() {
               <label htmlFor="file-input">
                 {formData.profileImage ? (
                   <img
+                    
                     src={URL.createObjectURL(formData.profileImage)}
                     alt="Profile"
                     className="uploaded-image"
@@ -99,6 +106,7 @@ export default function Account() {
                 type="text"
                 name="username"
                 value={formData.username}
+              
                 onChange={handleChange}
               />
             </div>
@@ -130,6 +138,9 @@ export default function Account() {
                 onChange={handleChange}
               />
             </div>
+            <button className="save-btn" type="submit">
+              Lưu thay đổi
+            </button>
             <button className="save-btn" type="submit">
               Lưu thay đổi
             </button>

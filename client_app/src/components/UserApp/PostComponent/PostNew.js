@@ -8,11 +8,11 @@ import AxiosInstance from "../../../lib/Axiosintance";
 import axios from "axios";
 import { Form, message, Select, Input, Button } from "antd";
 import { jwtDecode } from "jwt-decode";
+
 import {
   handleFileChange,
   handleVideoChange,
 } from "../../UserApp/Post_list_component/utils";
-
 
 const { Option } = Select;
 
@@ -80,6 +80,7 @@ export default function PostNew() {
       message.error("Lỗi khi lấy danh sách tỉnh/thành phố");
     }
   };
+
   const [paymentDetails, setPaymentDetails] = useState({
     adType: "", // Loại tin (VIP1, VIP2, Thường)
     price: 0, // Thành tiền
@@ -291,10 +292,12 @@ export default function PostNew() {
       formData.append("district", JSON.stringify(post.district));
       formData.append("ward", JSON.stringify(post.ward));
       formData.append("address", post.address);
+
       formData.append("bathroom", post.bathroom || 0);
       formData.append("bedroom", post.bedroom || 0);
       formData.append("attic", post.attic);
       formData.append("floor", post.floor || 0);
+
       formData.append("userId", post.userId);
       formData.append("phone", post.phone);
       formData.append("username", post.username);
@@ -311,6 +314,7 @@ export default function PostNew() {
           formData.append("video", file); // Thêm tệp video vào formData
         });
       }
+
       formData.append("rentaltype", post.rentaltype);
       formData.append("posttype", post.posttype);
       // Console để kiểm tra dữ liệu trong formData
@@ -343,154 +347,171 @@ export default function PostNew() {
       <form className="post-form" onSubmit={handleSubmit}>
         <h3>THÔNG TIN</h3>
         <div className="form-filter">
-
-        <div className="form-group">
-          <Form.Item label='Tỉnh/thành phố'
-            name='province'
-            rules={[{ required: true, message: 'Vui lòng chọn Tỉnh/thành phố' }]}
-          >
-            <Select
-              className="custom-select"
-              placeholder="Chọn Tỉnh/Thành Phố"
-              onChange={handleProvinceChange}
+          <div className="form-group">
+            <Form.Item
+              label="Tỉnh/thành phố"
+              name="province"
+              rules={[
+                { required: true, message: "Vui lòng chọn Tỉnh/thành phố" },
+              ]}
             >
-              {provinces.map(province => (
-                <Select.Option key={province.code} value={province.code}>
-                  {province.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Tỉnh/Thành Phố"
+                onChange={handleProvinceChange}
+              >
+                {provinces.map((province) => (
+                  <Select.Option key={province.code} value={province.code}>
+                    {province.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item name="district" label='Quận huyện'
-            rules={[{ required: true, message: 'Vui lòng chọn Quận/Huyện!' }]} >
-
-            
-            <Select className="custom-select"
-              placeholder="Chọn Quận/Huyện"
-              onChange={handleDistrictChange}
+            <Form.Item
+              name="district"
+              label="Quận huyện"
+              rules={[{ required: true, message: "Vui lòng chọn Quận/Huyện!" }]}
             >
-              {districts.map(district => (
-                <Select.Option key={district.code} value={district.code}>
-                  {district.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Quận/Huyện"
+                onChange={handleDistrictChange}
+              >
+                {districts.map((district) => (
+                  <Select.Option key={district.code} value={district.code}>
+                    {district.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-          <Form.Item name='ward' label='Phường/Xã'
-           rules={[{ required: true, message: 'Vui lòng chọn Phường/Xã!' }]}
-           >
-            <Select
-              className="custom-select"
-              placeholder="Chọn Phường/Xã"
-              onChange={handleWardChange}
-
-              style={{ width: '100%' }}
+            <Form.Item
+              name="ward"
+              label="Phường/Xã"
+              rules={[{ required: true, message: "Vui lòng chọn Phường/Xã!" }]}
             >
-              {wards.map(ward => (
-                <Select.Option key={ward.code} value={ward.code}>
-
-                  {ward.name}
-                </Select.Option>
-              ))}
-            </Select>
+              <Select
+                className="custom-select"
+                placeholder="Chọn Phường/Xã"
+                onChange={handleWardChange}
+                style={{ width: "100%" }}
+              >
+                {wards.map((ward) => (
+                  <Select.Option key={ward.code} value={ward.code}>
+                    {ward.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item label='Địa chỉ chính xác'>
-            <Input
-              className="custom-select"
-              type="text"
-              id="address"
-              value={post.address}
-              onChange={handleInputChange}
-              placeholder="Nhập địa chỉ chính xác..."
-            />
+            <Form.Item label="Địa chỉ chính xác">
+              <Input
+                className="custom-select"
+                type="text"
+                id="address"
+                value={post.address}
+                onChange={handleInputChange}
+                placeholder="Nhập địa chỉ chính xác..."
+              />
             </Form.Item>
           </div>
         </div>
 
         <div className="form-filter">
           <div className="form-group">
-            <Form.Item name='category' label='Chuyên mục cho thuê'
-             rules={[{ required: true, message: 'Vui lòng chọn mục cho thuê!' }]}
+            <Form.Item
+              name="category"
+              label="Chuyên mục cho thuê"
+              rules={[
+                { required: true, message: "Vui lòng chọn mục cho thuê!" },
+              ]}
             >
-          <select className='custom-select' id="rentaltype" value={post.rentaltype} onChange={handleInputChange}>  {/* onChange={handleInputChange} */}
-
-              <option value="">Chọn chuyên mục</option>
-              <option value="cho-thue-phong-tro">Cho thuê phòng trọ </option>
-              <option value="cho-thue-can-ho">Cho thuê căn hộ</option>
-              <option value="cho-thue-nha-o">Cho thuê nhà ở</option>
-              <option value="tim-nguoi-o-ghep">Tìm người ở ghép</option>
-            </select>
-            </Form.Item>
-          </div>
-
-          <div className="form-group">
-            <Form.Item label='Giá' name='price'
-             rules={[{ required: true, message: 'Vui lòng chọn giá!' }]}
-            >
-            <Input
-             className="custom-select"
-              id="price"
-              value={post.price}
-              onChange={handleInputChange}
-              placeholder="Nhập giá..."
-            />
+              <select
+                className="custom-select"
+                id="rentaltype"
+                value={post.rentaltype}
+                onChange={handleInputChange}
+              >
+                {" "}
+                {/* onChange={handleInputChange} */}
+                <option value="">Chọn chuyên mục</option>
+                <option value="cho-thue-phong-tro">Cho thuê phòng trọ </option>
+                <option value="cho-thue-can-ho">Cho thuê căn hộ</option>
+                <option value="cho-thue-nha-o">Cho thuê nhà ở</option>
+                <option value="tim-nguoi-o-ghep">Tìm người ở ghép</option>
+              </select>
             </Form.Item>
           </div>
 
           <div className="form-group">
-            <Form.Item label='Diện tích (m²)'>
-            <Input
-             className="custom-select"
-              id="area"
-              value={post.area}
-              onChange={handleInputChange}
-              required
-              placeholder="Nhập diện tích..."
-            />
-            </Form.Item>
-          </div>
-          <div className="form-group">
-            <Form.Item label='Số nhà vệ sinh'>
-            <Input
-            className='custom-select'
-              id="bathroom"
-              value={post.bathroom}
-              onChange={handleInputChange}
-              placeholder="Nhập số nhà vệ sinh..."
-            />
-            </Form.Item>
-          </div>
-          <div className="form-group">
-            <Form.Item label='Số phòng ngủ'
-            name='bedroom'
-            rules={[{ required: true, message: 'Vui lòng chọn giá!' }]}
+            <Form.Item
+              label="Giá"
+              name="price"
+              rules={[{ required: true, message: "Vui lòng chọn giá!" }]}
             >
-            <Input
-              id="bedroom"
-              value={post.bedroom}
-              onChange={handleInputChange}
-              placeholder="Nhập số phòng ngủ..."
-            />
+              <Input
+                className="custom-select"
+                id="price"
+                value={post.price}
+                onChange={handleInputChange}
+                placeholder="Nhập giá..."
+              />
+            </Form.Item>
+          </div>
+
+          <div className="form-group">
+            <Form.Item label="Diện tích (m²)">
+              <Input
+                className="custom-select"
+                id="area"
+                value={post.area}
+                onChange={handleInputChange}
+                required
+                placeholder="Nhập diện tích..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
-            <Form.Item label='Số gác lửng'>
-            <Input
-              type="checkbox"
-              id="attic"
-              value={post.attic}
-              onChange={handleInputChange}
-              placeholder="Nhập số gác lửng..."
-            />
+            <Form.Item label="Số nhà vệ sinh">
+              <Input
+                className="custom-select"
+                id="bathroom"
+                value={post.bathroom}
+                onChange={handleInputChange}
+                placeholder="Nhập số nhà vệ sinh..."
+              />
+            </Form.Item>
+          </div>
+          <div className="form-group">
+            <Form.Item
+              label="Số phòng ngủ"
+              name="bedroom"
+              rules={[{ required: true, message: "Vui lòng chọn giá!" }]}
+            >
+              <Input
+                id="bedroom"
+                value={post.bedroom}
+                onChange={handleInputChange}
+                placeholder="Nhập số phòng ngủ..."
+              />
+            </Form.Item>
+          </div>
+          <div className="form-group">
+            <Form.Item label="Số gác lửng">
+              <Input
+                type="checkbox"
+                id="attic"
+                value={post.attic}
+                onChange={handleInputChange}
+                placeholder="Nhập số gác lửng..."
+              />
             </Form.Item>
           </div>
           <div className="form-group">
@@ -506,10 +527,9 @@ export default function PostNew() {
         </div>
 
         <div className="form-group">
-          <Form.Item label='Tiêu đề'>
-         
+          <Form.Item label="Tiêu đề">
             <Input
-            className='custom-select'
+              className="custom-select"
               type="text"
               id="title"
               value={post.title}
@@ -517,8 +537,8 @@ export default function PostNew() {
               required
               placeholder="Nhập tiêu đề..."
             />
-            </Form.Item>
-          </div>
+          </Form.Item>
+        </div>
 
         <div className="form-group">
           <label htmlFor="description">Mô tả *</label>

@@ -6,6 +6,11 @@ const User = require("../model/user");
 const authMiddleware = require("../middleware/auth");
 const router = express.Router();
 
+const generateRandomAvatar = (name) => {
+  const baseUrl = "https://api.dicebear.com/5.x/identicon/svg";
+  const seed = encodeURIComponent(name);
+  return `${baseUrl}?seed=${seed}`;
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,6 +34,14 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Email đã được sử dụng!" });
     }
 
+    // Kiểm tra mật khẩu phải có ít nhất 8 ký tự và chữ cái đầu viết hoa
+    const passwordRegex = /^(?=[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message: "Mật khẩu phải có ít nhất 8 ký tự và chữ cái đầu phải viết hoa!",
+      });
+    }
+    
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -51,7 +64,7 @@ router.post("/register", async (req, res) => {
     res.status(201).json({ message: "Đăng ký thành công!", token, user });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Lỗi server" });
+    res.status(500).json({ message: "Vui lòng đặt lại mật khẩu khác" });
   }
 });
 
@@ -78,17 +91,17 @@ router.post("/login", async (req, res) => {
 
       // Tạo token JWT
       const token = jwt.sign(
-        { userId: user._id, username: user.username, phone: user.phone, role: user.role, status:user.status }, // Thêm username và phone vào payload
+        { userId: user._id, username: user.username, phone: user.phone, role: user.role }, 
         "your_jwt_secret_key",
         {
-          expiresIn: "1h",
+          expiresIn: "12h",
         }
       );
 
-    res.json({ message: "Đăng nhập thành công!", token, userId: user._id, role: user.role, status: user.status});
+    res.json({ message: "Đăng nhập thành công!", token, userId: user._id, role: user.role});
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Lỗi server" });
+    res.status(500).json({ message: "Lỗi đăng nhập" });
   }
 }); 
 
@@ -157,6 +170,7 @@ router.post("/change-password", authMiddleware, async (req, res) => {
 // });
 
 // Cập nhật thông tin tài khoản
+// API xử lý cập nhật avatar
 router.put(
   "/update",
   authMiddleware,
@@ -180,13 +194,15 @@ router.put(
       user.email = email || user.email;
       user.phone = phone || user.phone;
 
-      // Nếu có file avatar được upload thì cập nhật đường dẫn của avatar
       if (req.file) {
-        user.avatar = req.file.path; // Lưu đường dẫn của file avatar vào database
+        user.avatar = req.file.path; // Lưu avatar từ file upload
+      } else if (!user.avatar) {
+        user.avatar = generateRandomAvatar(user.username); // Tạo avatar ngẫu nhiên nếu không có avatar
       }
 
       await user.save();
 
+      // Trả về thông tin người dùng đã cập nhật, bao gồm avatar mới
       res.json({ message: "Cập nhật thông tin thành công!", user });
     } catch (err) {
       console.error(err);
@@ -194,6 +210,7 @@ router.put(
     }
   }
 );
+
 
 // Route lấy tất cả người dùng  
 router.get("/users", authMiddleware, async (req, res) => {  
@@ -338,6 +355,61 @@ router.get("/new-users-count", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Lỗi server!" });  
   }  
 });  
+
+// // Gửi email quên mật khẩu
+// const nodemailer = require("nodemailer");
+// const jwt = require("jsonwebtoken");
+// const User = require("../models/User"); // Mô hình User của bạn
+
+// // Cấu hình transporter để gửi email
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: "your-email@gmail.com",
+//     pass: "your-email-password",
+//   },
+// });
+
+// router.post("/forgot-password", async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     // Tìm người dùng theo email
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({ message: "Email không tồn tại!" });
+//     }
+
+//     // Tạo token xác thực cho phép thay đổi mật khẩu
+//     const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+//       expiresIn: "1h", // Token sẽ hết hạn sau 1 giờ
+//     });
+
+//     // Lưu token vào database (hoặc lưu trữ ở nơi bạn muốn)
+//     user.resetPasswordToken = token;
+//     await user.save();
+
+//     // Tạo liên kết để người dùng thay đổi mật khẩu
+//     const resetPasswordLink = `http://localhost:8000/reset-password/${token}`;
+
+//     // Cấu hình email
+//     const mailOptions = {
+//       from: "your-email@gmail.com",
+//       to: email,
+//       subject: "Đặt lại mật khẩu của bạn",
+//       text: `Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng nhấn vào liên kết sau để đặt lại mật khẩu của bạn: ${resetPasswordLink}`,
+//     };
+
+//     // Gửi email
+//     await transporter.sendMail(mailOptions);
+
+//     res.json({ message: "Email đã được gửi! Vui lòng kiểm tra email của bạn." });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Lỗi server!" });
+//   }
+// });
+
 
 
 module.exports = router;

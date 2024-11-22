@@ -51,6 +51,7 @@ export default function Changepassword() {
       setMessage("Lỗi máy chủ, vui lòng thử lại sau.");
     }
   };
+
   return (
     <div className="listnewform">
       <aside>

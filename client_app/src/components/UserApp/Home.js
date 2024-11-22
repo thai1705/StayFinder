@@ -121,9 +121,14 @@ function Home() {
   }, [tinh]);
 
   return (
+
     <div className="PostApartment_container">
+      <marquee direction="right">
+        Hoc HTML tai VietJack - Vi du cach su dung the marquee{" "}
+      </marquee>
       {/* Gợi ý khu vực  */}
       <h5 style={{ marginBottom: "15px", fontSize: "20px" }}>Gợi ý khu vực</h5>
+
 
       <div className="Main-GYKV">
         {tinh.slice(0, 5).map((province, index) => (

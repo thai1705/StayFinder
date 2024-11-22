@@ -1,6 +1,4 @@
-
 import React, { useEffect, useState } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
 import "../../../css/PostNew.css";
 
@@ -8,6 +6,7 @@ export default function Menu() {
   const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -26,6 +25,7 @@ export default function Menu() {
         .then((data) => {
           if (data && data.username) {
             console.log("Avatar path:", data.avatar);
+            
             setUsername(data.username);
             setAvatar(data.avatar || "default-avatar.jpg");
           }
@@ -34,7 +34,7 @@ export default function Menu() {
           console.error("Lỗi khi fetch thông tin người dùng:", error)
         );
     }
-  }, []);
+  }, []);  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -46,11 +46,8 @@ export default function Menu() {
 
   // Xử lý đường dẫn avatar
   const avatarUrl = avatar
-    ? `http://localhost:8000/${avatar
-        .replace("public\\", "")
-        .replace(/\\/g, "/")}`
+    ? `http://localhost:8000/${avatar.replace("public\\", "").replace(/\\/g, "/")}`
     : "default-avatar.jpg";
-
 
   return (
     <div className="listnewform">
@@ -145,11 +142,5 @@ export default function Menu() {
         </nav>
       </aside>
     </div>
-
-
-
   );
 }
-
-
-

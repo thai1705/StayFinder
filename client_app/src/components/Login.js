@@ -24,6 +24,7 @@ function Login() {
     return () => clearInterval(interval);  
   }, []);  
 
+
   const checkAccountStatus = async (userId, token) => {  
     try {  
       const response = await fetch(`http://localhost:8000/api/auth/user-status/${userId}`, {  
@@ -46,6 +47,9 @@ function Login() {
       console.error("Lỗi kiểm tra trạng thái tài khoản:", error);  
     }  
   };  
+
+        
+
 
   const handleLogout = () => {  
     // Xóa tất cả token  
