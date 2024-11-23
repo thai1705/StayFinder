@@ -5,6 +5,11 @@ function Formlistfilter() {
 
     <div className='list-filter'>
       <ul className='filters' >
+      <li>
+          <ul className='filter'>
+            <img style={{width:"100%"}} src="/images/1.png" />
+          </ul>
+        </li>
         <li>
           <ul className='filter'>
             <h5>Lọc Theo Giá Tiền</h5>

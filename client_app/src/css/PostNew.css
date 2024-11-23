@@ -33,6 +33,16 @@
   background-color: rgba(242, 242, 242, 0.5);
 
 }
+.span-color{
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .PostApartment_container{
   max-width: 90%;
   margin: auto;
@@ -369,48 +379,69 @@ form-filter label {
 .logout-btn:hover {
   background: none;
 }
-.post-label:hover {
-  background-color: #ff3333; /* Darken on hover */
-  transform: scale(1.05); /* Slightly increase size on hover */
-}
-/* Style for the VIP label */
+/* Cơ bản cho tất cả nhãn bài đăng */
 .post-label {
   position: absolute;
   top: 10px;
-  background-color: #ff4d4d; /* Primary color for VIP2 label */
-  color: white;
-  padding: 5px 10px;
+  right: 10px;
+  padding: 8px 12px;
   font-weight: bold;
-  border-radius: 3px;
-  z-index: 1;
+  border-radius: 5px;
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 5px; /* Space between icon and text */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for style */
+  gap: 8px; /* Khoảng cách giữa icon và chữ */
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: white; /* Chữ màu trắng */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Thêm hiệu ứng mượt mà khi hover */
+  opacity: 0;
+  animation: fadeIn 0.5s forwards; /* Hiệu ứng dần hiện lên khi trang được tải */
 }
 
-/* Icon style within the label */
-.post-label i {
-  font-size: 1rem; /* Adjust icon size */
+/* Hiệu ứng khi nhãn được hover */
+.post-label:hover {
+  background-color: #ffd700; /* Màu vàng khi hover */
+  cursor: pointer;
+  transform: scale(1.05); /* Tăng kích thước khi hover */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); /* Tăng độ bóng khi hover */
 }
 
-/* Different background color for VIP1 label */
-.post-row.vip1 .post-label {
-  background-color: #c0c0c0; /* Silver color for VIP1 */
+/* Nhãn khi bài đăng đã hết hạn */
+.post-label.expired {
+  background-color: #474444; /* Màu xám đen cho bài hết hạn */
+  color: white;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Hide label for regular posts */
-.post-row.thuong .post-label {
-  background-color: #2a89ef; /* Silver color for VIP1 */
+/* Nhãn cho VIP2 */
+.post-label.vip2 {
+  background-color: #ff4d4d; /* Màu đỏ tươi cho VIP2 */
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
 }
 
-.post-row.post-expired .post-label {
-  background-color: #474444; /* Red color to indicate expiration */
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
+/* Nhãn cho VIP1 */
+.post-label.vip1 {
+  background-color: #ffbc00; /* Màu vàng sáng cho VIP1 */
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
 }
+
+/* Nhãn cho bài đăng thường */
+.post-label.default {
+  background-color: #34b9eb; /* Màu xanh da trời cho bài thường */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng fade-in khi trang được tải */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+
 /* Container for the entire transaction history page */
 .transaction-history-container {
   width: 70%;

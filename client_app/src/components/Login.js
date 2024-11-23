@@ -99,8 +99,10 @@ function Login() {
           },  
           body: JSON.stringify({ status: 1 }),  
         });  
-  
+        
         navigate("/");  
+
+        
       } else {  
         setErrorMessage(data.message);  
       }  

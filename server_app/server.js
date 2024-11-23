@@ -1,6 +1,8 @@
 var express = require("express");
 require("dotenv").config();
 const http = require("http");
+const multer = require("multer");
+const path = require("path");
 const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -37,7 +39,36 @@ app.use("/api/auth", AuthRoute);
 app.use("/api", messageRoutes);
 app.use(postRoutes);
 
-// Cấu hình multer để lưu file ảnh vào thư mục "uploads" với tên duy nhất
+// Cấu hình multer để lưu ảnh vào thư mục uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads/"); // Thư mục lưu trữ tệp
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); // Lấy phần mở rộng của tệp
+    const fileName = Date.now() + ext; // Tạo tên tệp duy nhất
+    cb(null, fileName);
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/api/upload-image", upload.array("image", 5), (req, res) => {
+  console.log("Files uploaded:", req.files);
+
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No files uploaded" });
+  }
+
+  // Tạo mảng URL cho tất cả các ảnh đã tải lên
+  const imageUrls = req.files.map((file) => `/uploads/${file.filename}`);
+
+  // Kiểm tra để đảm bảo mảng URL không rỗng
+  console.log("Image URLs:", imageUrls);
+
+  // Trả về mảng URL của các ảnh đã tải lên
+  res.status(200).json({ imageUrls });
+});
 
 // Connect to MongoDB
 mongoose
@@ -59,15 +90,24 @@ io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("sendMessage", async (messageData) => {
-    if (!messageData.id_chat || !messageData.message_content) {
+    if (!messageData.id_chat) {
       console.error("Invalid message data", messageData);
       return; // Hoặc gửi phản hồi lỗi
     }
 
+    // Nếu message_content không có nhưng image_url có, hãy cho phép gửi tin nhắn
+    if (!messageData.message_content && messageData.image_url) {
+      messageData.message_content = ""; // Hoặc bạn có thể để nó undefined
+    }
+
     try {
+      // Nếu messageData.image_url là một mảng, chuyển thành chuỗi JSON
+      if (Array.isArray(messageData.image_url)) {
+        messageData.image_url = JSON.stringify(messageData.image_url); // Lưu mảng ảnh dưới dạng chuỗi JSON
+      }
+
       const message = new Message({
-        ...messageData, // Giữ lại tất cả các thuộc tính hiện có
-        sender: messageData.userId, // Thêm ID người gửi
+        ...messageData, // Lưu tất cả các thuộc tính, bao gồm image_url
       });
 
       // Lưu tin nhắn vào cơ sở dữ liệu

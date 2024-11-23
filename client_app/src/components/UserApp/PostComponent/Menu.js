@@ -2,6 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../../css/PostNew.css";
 
+// Hàm xử lý avatar giống Header
+const getAvatarUrl = (avatar, username) => {
+  if (avatar) {
+    return avatar.startsWith("http")
+      ? avatar
+      : `http://localhost:8000/${avatar.replace(/^public[\\/]/, "").replace(/\\/g, "/")}`;
+  }
+  const firstLetter = username ? username.charAt(0).toUpperCase() : "U";
+  const defaultColor = "#999999"; // Màu mặc định
+  return {
+    firstLetter,
+    color: defaultColor,
+  };
+};
+
 export default function Menu() {
   const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState(null);
@@ -24,17 +39,15 @@ export default function Menu() {
         })
         .then((data) => {
           if (data && data.username) {
-            console.log("Avatar path:", data.avatar);
-            
             setUsername(data.username);
-            setAvatar(data.avatar || "default-avatar.jpg");
+            setAvatar(data.avatar || null);
           }
         })
         .catch((error) =>
           console.error("Lỗi khi fetch thông tin người dùng:", error)
         );
     }
-  }, []);  
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -44,10 +57,7 @@ export default function Menu() {
     window.location.reload();
   };
 
-  // Xử lý đường dẫn avatar
-  const avatarUrl = avatar
-    ? `http://localhost:8000/${avatar.replace("public\\", "").replace(/\\/g, "/")}`
-    : "default-avatar.jpg";
+  const avatarData = getAvatarUrl(avatar, username);
 
   return (
     <div className="listnewform">
@@ -55,7 +65,18 @@ export default function Menu() {
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar">
-              <img src={avatarUrl} alt="" />
+              {typeof avatarData === "string" ? (
+                <img src={avatarData} alt="avatar" />
+              ) : (
+                <div className="span-color"
+                  style={{
+                    backgroundColor: avatarData.color,
+                   
+                  }}
+                >
+                  {avatarData.firstLetter}
+                </div>
+              )}
             </div>
             <div className="profile-name">{username}</div>
           </div>

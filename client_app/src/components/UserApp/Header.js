@@ -94,7 +94,7 @@ function Header() {
                   <img src={avatarData} alt="avatar" />
                 </Avatar>
               ) : (
-                <Avatar style={{ backgroundColor: avatarData.color }} size="small">
+                <Avatar style={{ backgroundColor: avatarData.color, width: '40px!' }} size="small">
                   {avatarData.firstLetter}
                 </Avatar>
               )}

@@ -1023,6 +1023,40 @@ app.get("/bai-dang-da-luu", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Lỗi khi lấy danh sách bài đăng đã lưu" });
   }
 });
+app.get("/bai-dang-yeu-thich-nhat", async (req, res) => {
+  try {
+    // Tìm tất cả các bài đăng trong bảng SavedPost, và đếm số lần mỗi bài đăng được yêu thích
+    const favoritePosts = await SavedPost.aggregate([
+      {
+        $group: {
+          _id: "$postId", // Nhóm theo postId
+          count: { $sum: 1 }, // Đếm số lần mỗi bài được lưu
+        },
+      },
+      {
+        $lookup: {
+          from: "posts", // Tên collection bài đăng
+          localField: "_id", // Trường postId trong bảng hiện tại
+          foreignField: "_id", // Trường _id trong bảng posts
+          as: "postDetails", // Đặt tên cho kết quả
+        },
+      },
+      {
+        $unwind: "$postDetails", // Giải nén mảng postDetails
+      },
+      {
+        $sort: { count: -1 }, // Sắp xếp bài đăng theo số lượt yêu thích giảm dần
+      },
+    ]);
+
+    // Trả về danh sách bài đăng cùng thống kê số người dùng yêu thích
+    res.status(200).json(favoritePosts);
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách bài đăng yêu thích nhất:", error);
+    res.status(500).json({ message: "Lỗi khi lấy danh sách bài đăng yêu thích nhất" });
+  }
+});
+
 app.put("/dang-lai-bai-viet/:postId", authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;

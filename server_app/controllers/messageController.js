@@ -5,36 +5,32 @@ const { io } = require('../server');
 
 // Gửi tin nhắn  
 exports.sendMessage = async (req, res) => {
-  const { id_chat, id_receiver, message_content, post_title} = req.body;
-  const id_sender = req.user.userId; // Lấy id_sender từ thông tin người dùng đã xác thực
+  const { id_chat, id_receiver, message_content, post_title, image_url, stickers_url } = req.body;
+  const id_sender = req.user.userId;
 
-  // Kiểm tra nếu thiếu nội dung tin nhắn
-  if (message_content === undefined) {
-    return res.status(400).json({ message: "Message content is required." });
-  }
-
+  // Kiểm tra nếu thiếu nội dung tin nhắn hoặc hình ảnh
+  // if (!message_content && !image_url && !stickers_url) { // Cập nhật điều kiện kiểm tra  
+  //   return res.status(400).json({ message: "Message content, image, or sticker is required." });  
+  // }  
 
   try {
-    // Tạo mới một tin nhắn
     const message = new Message({
       id_chat,
       id_sender,
       id_receiver,
       message_content: message_content || "", // Nếu không có nội dung, gán mặc định là chuỗi trống
-      post_title: post_title, // Lưu post_title vào message
-
+      post_title: post_title || "", // Lưu post_title vào message
+      image_url: image_url || "", 
+      stickers_url: stickers_url || "",
     });
 
-    // Lưu tin nhắn vào database
     await message.save();
-
-    // Trả về tin nhắn đã lưu
     res.status(201).json(message);
   } catch (error) {
-    // Nếu có lỗi, trả về thông báo lỗi
     res.status(400).json({ message: error.message });
   }
 };
+
 
 
 
@@ -119,3 +115,27 @@ exports.createChat = async (req, res) => {
       res.status(400).json({ message: error.message });  
   }  
 }; 
+
+// Xóa tin nhắn  
+exports.deleteMessage = async (req, res) => {  
+  const { id } = req.params; 
+  const userId = req.user.userId; 
+
+  try {  
+    // Tìm tin nhắn theo ID  
+    const message = await Message.findById(id);  
+
+    if (!message) {  
+      return res.status(404).json({ message: "Tin nhắn không tồn tại đâu." }); 
+    }  
+
+    if (message.id_sender.toString() !== userId.toString()) {  
+      return res.status(403).json({ message: "Token không đúng rồi." }); 
+    }  
+ 
+    await Message.findByIdAndDelete(id);  
+    res.status(200).json({ message: "Delete được rồi nha." }); 
+  } catch (error) {  
+    res.status(400).json({ message: error.message });
+  }  
+};

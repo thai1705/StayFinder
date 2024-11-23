@@ -1130,6 +1130,9 @@ padding: 30px 20px 0px 0px ;
   display: flex;
   justify-content: space-between;
 }
+.list-post-price{
+  padding: 5px 0px;
+}
 .post-content-infor{
   padding: 5px;
 }
@@ -1143,8 +1146,24 @@ padding: 30px 20px 0px 0px ;
   font-size: 13px;
   color: red;
 }
-.list-post-price{
-  padding: 5px 0px;
+.like-count {
+  font-size: 16px;
+  color: #ff4c4c; /* Màu đỏ cho lượt yêu thích */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.like-count i {
+  font-size: 18px; /* Kích thước biểu tượng trái tim */
+  color: #ff4c4c;
+}
+
+.like-count:hover {
+  color: #ff1a1a; /* Thay đổi màu khi hover */
 }
 .title-list-post{
   font-size: 15px;

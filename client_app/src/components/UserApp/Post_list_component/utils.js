@@ -1,5 +1,5 @@
 // utils.js
-
+import '../../../css/PostNew.css'
 // Định dạng ngày
 export const formatDate = (dateString) => {
   if (!dateString) {
@@ -43,21 +43,22 @@ export const formatDate = (dateString) => {
     switch (post.posttype) {
       case "vip2":
         return (
-          <div className="post-label">
+          <div className="post-label vip2">
             <i className="fa fa-crown"></i> Tin Vip Cao Cấp
           </div>
         );
       case "vip1":
         return (
-          <div className="post-label">
+          <div className="post-label vip1">
             <i className="fa fa-star"></i> Tin Vip Nổi Bật
           </div>
         );
       default:
         return (
-          <div className="post-label">
+          <div className="post-label default">
             <i className="fa fa-circle"></i> Tin thường
           </div>
         );
     }
   };
+  

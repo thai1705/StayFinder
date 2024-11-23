@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "../../../css/Account.css";
+import React, { useState, useEffect } from "react";
 import "../../../css/Account.css";
 import Menu from "./Menu";
 
@@ -8,12 +6,39 @@ export default function Account() {
   const PersonalInfoForm = () => {
     const [formData, setFormData] = useState({
       username: "",
-      username: "",
-      accountCode: "",
       phone: "",
       email: "",
       profileImage: null,
     });
+
+    // Hàm để lấy thông tin người dùng từ API khi trang được tải
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch('http://localhost:8000/api/auth/profile', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`, 
+            },
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            setFormData({
+              username: data.username,
+              phone: data.phone,
+              email: data.email
+            });
+          } else {
+            alert(`Lỗi: ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Có lỗi khi lấy thông tin người dùng:", error);
+        }
+      };
+
+      fetchUserData();
+    }, []); 
 
     const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,26 +47,19 @@ export default function Account() {
     const handleImageChange = (e) => {
       setFormData({
         ...formData,
-        profileImage: e.target.files[0], 
-        
-        profileImage: e.target.files[0], 
-        
+        profileImage: e.target.files[0], // Cập nhật ảnh đại diện
       });
     };
 
-    
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      const formDataToSend = new FormData(); 
-
-      formDataToSend.append("username", formData.username);
-      formDataToSend.append("accountCode", formData.accountCode);
+      const formDataToSend = new FormData();
       formDataToSend.append("phone", formData.phone);
       formDataToSend.append("email", formData.email);
-
+      
       if (formData.profileImage) {
-        formDataToSend.append("avatar", formData.profileImage); 
+        formDataToSend.append("avatar", formData.profileImage);
       }
 
       try {
@@ -52,14 +70,10 @@ export default function Account() {
           },
           body: formDataToSend,
         });
-
         const result = await response.json();
-
         if (response.ok) {
           alert("Cập nhật thông tin thành công!");
           window.location.reload();
-          console.log(result.user); 
-
         } else {
           alert(`Lỗi: ${result.message}`);
         }
@@ -67,12 +81,12 @@ export default function Account() {
         console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
       }
     };
+
     return (
       <div className="listnewform">
         <aside>
           <Menu />
         </aside>
-        
 
         <div className="listnewform-left">
           <form className="personal-info-form" onSubmit={handleSubmit}>
@@ -81,7 +95,6 @@ export default function Account() {
               <label htmlFor="file-input">
                 {formData.profileImage ? (
                   <img
-                    
                     src={URL.createObjectURL(formData.profileImage)}
                     alt="Profile"
                     className="uploaded-image"
@@ -106,7 +119,6 @@ export default function Account() {
                 type="text"
                 name="username"
                 value={formData.username}
-              
                 onChange={handleChange}
               />
             </div>
@@ -138,9 +150,6 @@ export default function Account() {
                 onChange={handleChange}
               />
             </div>
-            <button className="save-btn" type="submit">
-              Lưu thay đổi
-            </button>
             <button className="save-btn" type="submit">
               Lưu thay đổi
             </button>
