@@ -11,9 +11,13 @@
 .header-username-container{
   display: flex;
   align-items: center;
+  position: relative;
 }
 .header-username-container:hover .header-admin-tooltip-container {
   display: block; 
+}
+.header-username-container:hover .header-admin-tooltip-container {
+  display: block !important;
 }
 
 .header-admin-tooltip {
@@ -28,6 +32,7 @@
 .header-admin-tooltip a:hover {
   text-decoration: underline;
 }
+
 .listnewform {
   display: flex;
   background-color: rgba(242, 242, 242, 0.5);

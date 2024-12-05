@@ -20,6 +20,7 @@ const getAvatarUrl = (avatar, username) => {
 export default function Menu() {
   const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState(null);
+  const [_id, set_id] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function Menu() {
           if (data && data.username) {
             setUsername(data.username);
             setAvatar(data.avatar || null);
+            set_id(data._id);
           }
         })
         .catch((error) =>
@@ -53,6 +55,7 @@ export default function Menu() {
     localStorage.removeItem("token");
     setUsername(null);
     setAvatar(null);
+    set_id(null);
     navigate("/");
     window.location.reload();
   };
@@ -71,7 +74,7 @@ export default function Menu() {
                 <div className="span-color"
                   style={{
                     backgroundColor: avatarData.color,
-                   
+                    
                   }}
                 >
                   {avatarData.firstLetter}
@@ -102,9 +105,9 @@ export default function Menu() {
                   <span>Mã tài khoản</span>
                 </div>
                 <div className="account-code-code">
-                  <span>#PS33630</span>
+                  <span>{_id ? _id.slice(0,5): ""}</span>
                   <button className="copy-button">
-                    <i className="fa-regular fa-copy"></i>
+                    <i style={{color:'#000000', fontSize: '20PX'}} className="fa-regular fa-copy"></i>
                   </button>
                 </div>
               </div>

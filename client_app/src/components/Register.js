@@ -53,7 +53,7 @@ function Register() {
           <div className="headerpro">
             <div className="logo-pro">
               <Link to={'/'}>
-                <img className="img-header" src="/images/logo-removebg-preview.png" alt="" />
+                <img className="img-header" src="/images/logo111.png" alt="" />
               </Link>
             </div>
           </div>

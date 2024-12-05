@@ -7,110 +7,112 @@ import { ToastContainer, toast } from "react-toastify";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {  
-    // Kiểm tra trạng thái tài khoản mỗi 5 giây  
-    const interval = setInterval(() => {  
-      const token = localStorage.getItem("token");  
-      const userId = localStorage.getItem("userId");  
-      if (token && userId) {  
-        checkAccountStatus(userId, token);  
-      }  
-    }, 5000);  
-    
-    // Dọn dẹp interval khi component unmount  
-    return () => clearInterval(interval);  
-  }, []);  
+  useEffect(() => {
+    // Kiểm tra trạng thái tài khoản mỗi 5 giây
+    const interval = setInterval(() => {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      if (token && userId) {
+        checkAccountStatus(userId, token);
+      }
+    }, 5000);
 
+    // Dọn dẹp interval khi component unmount
+    return () => clearInterval(interval);
+  }, []);
 
-  const checkAccountStatus = async (userId, token) => {  
-    try {  
-      const response = await fetch(`http://localhost:8000/api/auth/user-status/${userId}`, {  
-        method: "GET",  
-        headers: {  
-          Authorization: `Bearer ${token}`,  
-          "Content-Type": "application/json",  
-        },  
-      });  
+  const checkAccountStatus = async (userId, token) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/auth/user-status/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const data = await response.json();  
-      if (response.ok && data.status === 2) { // Nếu trạng thái tài khoản là 2  
-        toast.error("Tài khoản của bạn đã bị khóa!", {  
-          position: "top-right",  
-          style: { backgroundColor: "#dc3545", color: "white" },  
-        });  
-        handleLogout();  
-      }  
-    } catch (error) {  
-      console.error("Lỗi kiểm tra trạng thái tài khoản:", error);  
-    }  
-  };  
+      const data = await response.json();
+      if (response.ok && data.status === 2) {
+        // Nếu trạng thái tài khoản là 2
+        toast.error("Tài khoản của bạn đã bị khóa!", {
+          position: "top-right",
+          style: { backgroundColor: "#dc3545", color: "white" },
+        });
+        handleLogout();
+      }
+    } catch (error) {
+      console.error("Lỗi kiểm tra trạng thái tài khoản:", error);
+    }
+  };
 
-        
+  const handleLogout = () => {
+    // Xóa tất cả token
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
+    localStorage.removeItem("status");
 
+    navigate("/login"); // Chuyển hướng đến trang đăng nhập
+  };
 
-  const handleLogout = () => {  
-    // Xóa tất cả token  
-    localStorage.removeItem("token");  
-    localStorage.removeItem("userId");  
-    localStorage.removeItem("role");  
-    localStorage.removeItem("status");  
-    
-    navigate("/login"); // Chuyển hướng đến trang đăng nhập  
-  };  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleSubmit = async (e) => {  
-    e.preventDefault();  
-  
-    try {  
-      const response = await fetch("http://localhost:8000/api/auth/login", {  
-        method: "POST",  
-        headers: {  
-          "Content-Type": "application/json",  
-        },  
-        body: JSON.stringify({ email, password }),  
-      });  
-  
-      const data = await response.json();  
-  
-      if (response.ok) {  
-        if (data.status === 2) {  
-          console.log('status:', data.status);  
-          toast.success("Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên!", {  
-            position: "top-right",  
-            style: { backgroundColor: "#28a745", color: "white" },  
-          });   
-          return;   
-        }  
-        console.log("Đăng nhập thành công:", data);  
-        localStorage.setItem("token", data.token);  
-        localStorage.setItem("userId", data.userId);  
-        localStorage.setItem("role", data.role);  
-        localStorage.setItem("status", data.status);   
-  
-        const userId = data.userId;  
-        await fetch(`http://localhost:8000/api/auth/update-status/${userId}`, {  
-          method: "PUT",  
-          headers: {  
-            "Content-Type": "application/json",  
-            Authorization: `Bearer ${data.token}`,  
-          },  
-          body: JSON.stringify({ status: 1 }),  
-        });  
-        
-        navigate("/");  
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        
-      } else {  
-        setErrorMessage(data.message);  
-      }  
-    } catch (error) {  
-      console.error("Lỗi:", error);  
-      setErrorMessage("Đã xảy ra lỗi trong quá trình đăng nhập.");  
-    }  
-  };  
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.status === 2) {
+          console.log("status:", data.status);
+          toast.success(
+            "Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên!",
+            {
+              position: "top-right",
+              style: { backgroundColor: "#28a745", color: "white" },
+            }
+          );
+          return;
+        }
+        console.log("Đăng nhập thành công:", data);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("status", data.status);
+
+        const userId = data.userId;
+        await fetch(`http://localhost:8000/api/auth/update-status/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+          body: JSON.stringify({ status: 1 }),
+        });
+
+        navigate("/");
+      } else {
+        setErrorMessage(data.message);
+      }
+    } catch (error) {
+      console.error("Lỗi:", error);
+      setErrorMessage("Đã xảy ra lỗi trong quá trình đăng nhập.");
+    }
+  };
 
   return (
     <div className="login-container">
@@ -120,11 +122,7 @@ function Login() {
           <div className="headerpro">
             <div className="logo-pro">
               <Link to={"/"}>
-                <img
-                  className="img-header"
-                  src="/images/logo-removebg-preview.png"
-                  alt=""
-                />
+                <img className="img-header" src="/images/logo111.png" alt="" />
               </Link>
             </div>
           </div>
@@ -177,16 +175,24 @@ function Login() {
                 <input
                   placeholder="Mật khẩu"
                   className="input-textbox"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                 <span
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <i class="bi bi-eye-slash"></i> : <i class="bi bi-eye"></i>} 
+                </span>
               </div>
               {errorMessage && (
                 <div className="error-message">{errorMessage}</div>
               )}
-              <div className="or-pass">Quên mật khẩu?</div>
+              <Link to="/dat-lai-mat-khau">
+                <div className="or-pass">Quên mật khẩu?</div>
+              </Link>
 
               <button className="btn" type="submit">
                 Đăng nhập

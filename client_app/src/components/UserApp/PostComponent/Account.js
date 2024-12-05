@@ -8,6 +8,7 @@ export default function Account() {
       username: "",
       phone: "",
       email: "",
+      _id: "",
       profileImage: null,
     });
 
@@ -27,7 +28,8 @@ export default function Account() {
             setFormData({
               username: data.username,
               phone: data.phone,
-              email: data.email
+              email: data.email,
+              _id: data._id, 
             });
           } else {
             alert(`Lỗi: ${data.message}`);
@@ -47,7 +49,7 @@ export default function Account() {
     const handleImageChange = (e) => {
       setFormData({
         ...formData,
-        profileImage: e.target.files[0], // Cập nhật ảnh đại diện
+        profileImage: e.target.files[0],
       });
     };
 
@@ -57,6 +59,7 @@ export default function Account() {
       const formDataToSend = new FormData();
       formDataToSend.append("phone", formData.phone);
       formDataToSend.append("email", formData.email);
+      formDataToSend.append("_id", formData._id);
       
       if (formData.profileImage) {
         formDataToSend.append("avatar", formData.profileImage);
@@ -126,9 +129,10 @@ export default function Account() {
               <label>Mã tài khoản</label>
               <input
                 type="text"
-                name="accountCode"
-                value={formData.accountCode}
+                name="_id"
+                value={formData._id.slice(0,5)}
                 onChange={handleChange}
+                readOnly 
               />
             </div>
             <h2>THÔNG TIN LIÊN HỆ</h2>

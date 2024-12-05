@@ -27,6 +27,9 @@ import PostRommate from './components/UserApp/Post_list_component/PostRommate';
 import PostDetail from './components/UserApp/Post_list_component/PostDetail';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+
 //===========================ADMIN==============================
 import HomeAdmin from './components/AdminApp/HomeAdmin';
 import ManagePost from './components/AdminApp/ManagePosts';
@@ -39,7 +42,6 @@ import PostProvince from './components/UserApp/Post_list_component/PostProvince'
 import UpdatePost from './components/UserApp/PostComponent/UpdatePost';
 import ChatBubble from './components/UserApp/ChatBubble';
 import FormUpgradePost from './components/UserApp/PostComponent/formUpgradePost';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));  
 const stripePromise = loadStripe('pk_test_51QIXc5Gui79K0O8g32wUjEQt6TXJTUp8jxVyKk1HupexrNJaqrfCDbJiWrH7sSfA1iaL9b6EDXVXr2YgAYNc3DgV00sReAVhS');
 root.render(  
@@ -51,7 +53,7 @@ root.render(
         <Route path="/" element={<Home />} />  
           <Route path="/dang-nhap" element={<Login />} />  
           <Route path="/chat/:chatId" element={<ChatBubble />} />
-          <Route path="/dang-ky" element={<Resigter />} />  
+          <Route path="/dang-ky" element={<Resigter />} />    
           <Route path="/tin-tuc" element={<News />} />
           <Route path="/lien-he" element={<Contact />} /> 
           <Route path="/gioi-thieu" element={<Introduce />} /> 
@@ -71,6 +73,8 @@ root.render(
           <Route path="/tin-da-luu" element={<SavedPosts />} />  
           <Route path="/nang-cap-tin-dang/:id" element={<FormUpgradePost />} /> 
           <Route path="/payment" element={<Payment />} />
+          <Route path="/dat-lai-mat-khau" element={<ForgotPassword />} />
+          <Route path="/cap-nha-lai-mat-khau/:token" element={<ResetPassword/>} />
           <Route path='*' element={<NotFound />} />
         </Route>  
         

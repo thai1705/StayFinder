@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   phone: { type: Number, required: true },
+  resetPasswordExpires: { type: Date },
 
   role: {
     type: Number,
@@ -21,10 +22,9 @@ const userSchema = new mongoose.Schema({
     enum: [0, 1, 2],
   },
   createdAt: { type: Date, default: Date.now },
-
-
   lastLogin: { type: Date }, 
-
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date }, 
 });
 
 module.exports = mongoose.model("User", userSchema);

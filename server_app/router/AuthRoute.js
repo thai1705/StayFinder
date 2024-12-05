@@ -5,6 +5,18 @@ const multer = require('multer');
 const User = require("../model/user");
 const authMiddleware = require("../middleware/auth");
 const router = express.Router();
+const nodemailer = require("nodemailer");
+
+
+// Cấu hình transporter để gửi email
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "trungtuyen21062004@gmail.com",
+    pass: "qlon dyub torx ohtd",
+  },
+});
+
 
 const generateRandomAvatar = (name) => {
   const baseUrl = "https://api.dicebear.com/5.x/identicon/svg";
@@ -23,6 +35,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+// Bảo vệ route /admin
+router.get("/admin", authMiddleware, (req, res) => {
+  res.send("Chào mừng bạn đến trang Admin!");
+});
+
 // Route đăng ký
 router.post("/register", async (req, res) => {
   const { username, email, password, phone } = req.body;
@@ -155,22 +173,6 @@ router.post("/change-password", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
   }
 });
-
-//   try {
-//     const user = await User.findById(req.user.userId).select("-password");
-
-//     if (!user) {
-//       return res.status(404).json({ message: "Không tìm thấy người dùng!" });
-//     }
-//     res.json(user);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Lỗi server!" });
-//   }
-// });
-
-// Cập nhật thông tin tài khoản
-// API xử lý cập nhật avatar
 router.put(
   "/update",
   authMiddleware,
@@ -245,9 +247,6 @@ router.delete("/users/:id", authMiddleware, async (req, res) => {
     }  
 
 
-    // if (req.user.userId !== id && req.user.role !== 1) {  
-    //   return res.status(403).json({ message: "Bạn không có quyền xóa người dùng này!" });  
-    // }  
 
     // Xóa người dùng  
     await User.findByIdAndDelete(id);  
@@ -276,13 +275,6 @@ router.put("/update-status/:id", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy người dùng!" });  
     }  
 
-    // Kiểm tra quyền chỉnh sửa (nếu cần)  
-    // Ví dụ: chỉ cho phép admin (role = 1) chỉnh sửa trạng thái của người dùng khác  
-    // if (req.user.role !== 1 && req.user.userId !== id) {  
-    //   return res.status(403).json({ message: "Bạn không có quyền chỉnh sửa trạng thái người dùng này!" });  
-    // }  
-
-    // Cập nhật trạng thái người dùng  
     user.status = status;  
     await user.save();  
 
@@ -356,59 +348,89 @@ router.get("/new-users-count", authMiddleware, async (req, res) => {
   }  
 });  
 
-// // Gửi email quên mật khẩu
-// const nodemailer = require("nodemailer");
-// const jwt = require("jsonwebtoken");
-// const User = require("../models/User"); // Mô hình User của bạn
 
-// // Cấu hình transporter để gửi email
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: "your-email@gmail.com",
-//     pass: "your-email-password",
-//   },
-// });
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
 
-// router.post("/forgot-password", async (req, res) => {
-//   const { email } = req.body;
+  try {
+    // Tìm người dùng theo email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Email không tồn tại!" });
+    }
+    
+    // Tạo token xác thực cho phép thay đổi mật khẩu
+    const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+      expiresIn: "12h", // Token sẽ hết hạn sau 12 giờ
+    });
 
-//   try {
-//     // Tìm người dùng theo email
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(400).json({ message: "Email không tồn tại!" });
-//     }
+    // Lưu token vào database (hoặc lưu trữ ở nơi bạn muốn)
+    user.resetPasswordToken = token;
+    await user.save();
 
-//     // Tạo token xác thực cho phép thay đổi mật khẩu
-//     const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
-//       expiresIn: "1h", // Token sẽ hết hạn sau 1 giờ
-//     });
+    // Tạo liên kết để người dùng thay đổi mật khẩu
+    const resetPasswordLink = `http://localhost:3500/cap-nha-lai-mat-khau/${token}`;
 
-//     // Lưu token vào database (hoặc lưu trữ ở nơi bạn muốn)
-//     user.resetPasswordToken = token;
-//     await user.save();
+    // Cấu hình email
+    const mailOptions = {
+      from: "your-email@gmail.com",
+      to: email,
+      subject: "Đặt lại mật khẩu của bạn",
+      text: `Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng nhấn vào liên kết sau để đặt lại mật khẩu của bạn: ${resetPasswordLink}`,
+    };
 
-//     // Tạo liên kết để người dùng thay đổi mật khẩu
-//     const resetPasswordLink = `http://localhost:8000/reset-password/${token}`;
+    // Gửi email
+    await transporter.sendMail(mailOptions);
 
-//     // Cấu hình email
-//     const mailOptions = {
-//       from: "your-email@gmail.com",
-//       to: email,
-//       subject: "Đặt lại mật khẩu của bạn",
-//       text: `Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng nhấn vào liên kết sau để đặt lại mật khẩu của bạn: ${resetPasswordLink}`,
-//     };
+    res.json({ message: "Email đã được gửi! Vui lòng kiểm tra email của bạn." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Lỗi server!" });
+  }
+});
 
-//     // Gửi email
-//     await transporter.sendMail(mailOptions);
+router.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { newPassword, confirmPassword } = req.body;
 
-//     res.json({ message: "Email đã được gửi! Vui lòng kiểm tra email của bạn." });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Lỗi server!" });
-//   }
-// });
+  try {
+    // Xác thực token
+    const decoded = jwt.verify(token, "your_jwt_secret_key");
+
+    // Tìm người dùng dựa trên ID trong token
+    const user = await User.findById(decoded.userId);
+    if (!user || user.resetPasswordToken !== token) {
+      return
+    }
+
+    // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Mật khẩu nhập lại không khớp." });
+    }
+
+    // Kiểm tra độ mạnh của mật khẩu mới
+    const passwordRegex = /^(?=[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res
+        .status(400)
+        .json({ message: "Mật khẩu mới phải có ít nhất 8 ký tự và chữ cái đầu viết hoa." });
+    }
+
+    // Cập nhật mật khẩu mới
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = null; // Xóa token sau khi sử dụng
+    await user.save();
+
+    res.json({ message: "Mật khẩu đã được cập nhật thành công!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Lỗi server!" });
+  }
+});
+
+
+
 
 
 

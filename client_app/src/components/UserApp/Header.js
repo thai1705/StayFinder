@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "antd";
 
 function Header() {
@@ -9,6 +7,8 @@ function Header() {
   const [avatar, setAvatar] = useState(null);
   const [role, setRole] = useState(null);
 
+
+  
   // Hàm tạo avatar ngẫu nhiên theo chữ cái đầu tiên của username
   const generateRandomAvatar = (username) => {
     if (!username) {
@@ -71,7 +71,7 @@ function Header() {
           width="145px"
           height="auto"
           style={{ marginRight: "20px" }}
-          src="/images/logo-removebg-preview.png"
+          src="/images/logo111.png"
           alt="Logo"
         />
       </Link>

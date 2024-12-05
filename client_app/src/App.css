@@ -211,6 +211,9 @@ footer {
   border-radius: 7px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 17px;
+  font-weight: bold;
+  color: black;
 }
 
 .Header-link-dangtin {
