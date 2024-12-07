@@ -15,7 +15,6 @@ export default function Changepassword() {
       return;
     }
 
-    // Lấy token từ localStorage
     const token = localStorage.getItem("token");
     if (!token) {
       setMessage("Bạn cần đăng nhập để thay đổi mật khẩu.");
@@ -24,17 +23,16 @@ export default function Changepassword() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/auth/change-password", 
+        "http://localhost:8000/api/auth/change-password",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,  
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             current_password: currentPassword,
             new_password: newPassword,
-            
           }),
         }
       );
@@ -96,7 +94,9 @@ export default function Changepassword() {
           Thay đổi
         </button>
         {message && <div className="message">{message}</div>}
-        <div className="forgot-password">Quên mật khẩu?</div>
+        <Link to="/dat-lai-mat-khau">
+          <div className="forgot-password">Quên mật khẩu?</div>
+        </Link>
       </div>
     </div>
   );

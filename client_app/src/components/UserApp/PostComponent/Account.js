@@ -57,6 +57,7 @@ export default function Account() {
       e.preventDefault();
 
       const formDataToSend = new FormData();
+      formDataToSend.append("username", formData.username);
       formDataToSend.append("phone", formData.phone);
       formDataToSend.append("email", formData.email);
       formDataToSend.append("_id", formData._id);

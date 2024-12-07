@@ -1,10 +1,13 @@
-// import { Outlet } from "react-router";
-// import { useSelector } from "react-redux";
-// import  { Navigate } from 'react-router-dom'
+import React from "react";
+import { Navigate } from "react-router-dom";
+import AccessDenied from "./AccessDenied";
 
-// const AppAdmin = () => {
-//   const daDangNhap = useSelector(state => state.auth.daDangNhap);
-//   if (!daDangNhap)  return <Navigate to="/dang-nhap"/>
-//   else return ( <Outlet/>);
-// };
-// export default AppAdmin;
+const ProtectedRoute = ({ children, role }) => {
+  console.log("role admin:", role);
+  if (role !== 0 && role !== 1) {
+    return <AccessDenied />;
+  }
+  return children;
+};
+
+export default ProtectedRoute;
